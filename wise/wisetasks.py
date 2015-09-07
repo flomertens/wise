@@ -22,78 +22,131 @@ import astropy.constants as const
 unit_c = u.core.Unit("c", const.c, doc="light speed")
 
 '''
-task documentation template:
-
-Short Description.
-
-More Description
-
-*ctx*
-    AnalysisContext object
-
-*option1*
-
-
+task documentation template: Follow numpy doc
 '''
 
 
 def build_final_dfc(ctx, merge_file, final_sep):
-    ''' Build a final seperation file from a merge file 
+    '''Build a final separation file from a merge file 
+    
+    Merge file shall be located in ctx.get_data_dir(). 
+    One final component per line, described by a list of link id separated by a ','.
 
-        Merge file shall be located in ctx.get_data_dir(). 
-        One final component per line, described by a list of link id seperated by a ','.
-
-        *merge_file*
-            Merge file name
-
-        *final_sep*
-            Name of the final separation file 
-        '''
+    Parameters
+    ----------
+    ctx : AnalysisContext
+    merge_file : str
+        Merge file name
+    final_sep : str
+        Name of the final separation file
+    '''
     merge_file = os.path.join(ctx.get_data_dir(), merge_file)
     final_sep_file = os.path.join(ctx.get_data_dir(), final_sep)
 
-    stack_img = ctx.get_stack_image()
-    ctx.pre_process(stack_img)
-    projection = ctx.get_projection(stack_img)
+    ref_img = ctx.get_ref_image()
+    ctx.pre_process(ref_img)
+    projection = ctx.get_projection(ref_img)
 
     merged_builder = matcher.MergedFeatureLinkBuilder(ctx.result.link_builder, merge_file)
 
     merged_builder.to_file(final_sep_file, projection)
 
 
-def print_beam_info(ctx):
-    ''' Print List of selected files with information on beam and pixel scales '''
-    all_data = []
+def info_files(ctx):
+    '''Print List of selected files with information on beam and pixel scales
+    
+    Parameters
+    ----------
+    ctx : AnalysisContext
+    '''
+    data_beam = []
+    header = ["File", "Date", "Shape", "Pixel scale", "Beam"]
+    data_table = []
     for file in ctx.files:
         img = ctx.open_file(file)
         beam = img.get_beam()
-        date = img.get_epoch().strftime('%Y-%m-%d')
+        date = img.get_epoch(str_format='%Y-%m-%d')
         k = ctx.get_projection(img).mean_pixel_scale()
-        b = [k * beam.bmin, k * beam.bmaj, beam.bpa]
         u = ctx.get_projection(img).get_unit()
-        data = (os.path.basename(file), date, b[0] * u, b[1] * u, b[2],
-                ctx.get_projection(img).mean_pixel_scale() * u, img.data.shape[0], img.data.shape[1])
-        all_data.append(data)
-        print "{0}: Date: {1}, Beam: {2:.3f}, {3:.3f}, {4:.2f}, Pixel: {5:.3f}, Shape: {6:d}x{7:d}".format(*data)
+        if isinstance(beam, imgutils.GaussianBeam):
+            b = [k * beam.bmin, k * beam.bmaj, beam.bpa]
+            # beam_str = "%.3f, %.3f, %.3f" % (b[0] * u, b[1] * u, b[2])
+            beam_str = "{0:.3f}, {1:.3f}, {2:.2f}".format(b[0] * u, b[1] * u, b[2])
+            data_beam.append([b[0], b[1], b[2]])
+        else:
+            beam_str = str(beam)
+        shape_str = "%sx%s" % img.data.shape
+        data_table.append([os.path.basename(file), date, shape_str, "{0:.3f}".format(k * u), beam_str])
 
-    bmin_mean = np.array([k[2].value for k in all_data]).mean()
-    bmax_mean = np.array([k[3].value for k in all_data]).mean()
-    angle_mean = np.array([k[4] for k in all_data]).mean()
-    print "Mean beam: Bmin: %.3f, Bmaj: %.3f, Angle:%.2f" % (bmin_mean, bmax_mean, angle_mean)
+    print nputils.format_table(data_table, header)
+    print "Number of files: %s" % (len(ctx.files))
+    if len(data_beam) > 0:
+        print "Mean beam: Bmin: %.3f, Bmaj: %.3f, Angle:%.2f" % tuple(np.mean(data_beam, axis=0))
 
 
-def print_delta_info(ctx, delta_time_unit=u.day, angular_velocity_unit=(u.mas / u.year),
+def set_stack_image_as_ref(ctx, nsigma=3, nsigma_connected=True):
+    stack_img = ctx.build_stack_image(preprocess=False)
+
+    bg = ctx.get_bg(stack_img)
+    ctx.pre_process(stack_img)
+
+    if nsigma > 0:
+        stack_img.data[stack_img.data < nsigma * bg.std()] = 0
+        if nsigma_connected:
+            segments = wds.SegmentedImages(stack_img)
+            segments.connected_structure()
+            stack_img.data = segments.sorted_list()[-1].get_segment_image()
+
+    ctx.set_ref_image(stack_img)
+
+
+def set_mask_from_stack_img(ctx, nsigma=3, nsigma_connected=True):
+
+    def mask_fct(ctx):
+        stack_img = ctx.build_stack_image(preprocess=False)
+
+        bg = ctx.get_bg(stack_img)
+        ctx.pre_process(stack_img)
+
+        if nsigma > 0:
+            stack_img.data[stack_img.data < nsigma * bg.std()] = 0
+            if nsigma_connected:
+                segments = wds.SegmentedImages(stack_img)
+                segments.connected_structure()
+                stack_img.data = segments.sorted_list()[-1].get_segment_image()
+
+        return stack_img
+
+    ctx.save_mask_file(mask_fct)
+
+
+def info_files_delta(ctx, delta_time_unit=u.day, angular_velocity_unit=u.mas / u.year,
                      proper_velocity_unit=unit_c):
-    ''' Print List of selected pair of files with information on velocity resolution '''
+    '''Print List of selected pair of files with information on velocity resolution 
+    
+    Parameters
+    ----------
+    ctx : AnalysisContext
+    delta_time_unit : unit, optional
+    angular_velocity_unit : unit, optional
+    proper_velocity_unit : unit, optional
+    '''
     all_delta_time = []
     all_velocity_c_px = []
     all_velocity_px = []
+    data = []
+    header = ["Date 1", "Date 2", "Delta (%s)" % delta_time_unit, 
+            "Angular vel. res. (%s)" % angular_velocity_unit, 
+            "Proper vel. res. (%s)" % proper_velocity_unit]
     for file1, file2 in nputils.pairwise(ctx.files):
         img1 = ctx.open_file(file1)
         img2 = ctx.open_file(file2)
         prj = ctx.get_projection(img1)
-        date1 = img1.get_epoch().strftime('%Y-%m-%d')
-        date2 = img2.get_epoch().strftime('%Y-%m-%d')
+        date1 = img1.get_epoch(str_format='%Y-%m-%d')
+        date2 = img2.get_epoch(str_format='%Y-%m-%d')
+        if not isinstance(date1, datetime.date):
+            print "Images have no date information"
+            return
         delta_t = ((img2.get_epoch() - img1.get_epoch()).total_seconds() * u.second).to(delta_time_unit)
         all_delta_time.append(delta_t)
 
@@ -102,21 +155,33 @@ def print_delta_info(ctx, delta_time_unit=u.day, angular_velocity_unit=(u.mas / 
         all_velocity_c_px.append(velocity_c_px)
         all_velocity_px.append(velocity_px)
 
-        data = (date1, date2, delta_t, velocity_px, velocity_c_px)
+        data.append([date1, date2, delta_t.value, velocity_px.value, velocity_c_px.value])
 
-        print "{0} -> {1}: Delta time: {2}, Velocity resolution: {3:.3f}, {4:.3f}".format(*data)
+        # print "{0} -> {1}: Delta time: {2}, Velocity resolution: {3:.3f}, {4:.3f}".format(*data)
 
     all_delta_time = nputils.quantities_to_array(all_delta_time)
     all_velocity_c_px = nputils.quantities_to_array(all_velocity_c_px)
     all_velocity_px = nputils.quantities_to_array(all_velocity_px)
 
-    print "\nMean Delta time: %s +- %s" % (np.mean(all_delta_time), np.std(all_delta_time))
+    print nputils.format_table(data, header)
+
+    print "Mean Delta time: %s +- %s" % (np.mean(all_delta_time), np.std(all_delta_time))
     print "Mean Velocity resolution: %s +- %s" % (np.mean(all_velocity_px), np.std(all_velocity_px))
     print "Mean Velocity resolution: %s +- %s" % (np.mean(all_velocity_c_px), np.std(all_velocity_c_px))
 
 
+# def info_result(ctx):
+#     pass
+
+
 def detection_all(ctx, filter=None):
-    ''' Run wds on all selected files '''
+    '''Run wds on all selected files
+    
+    Parameters
+    ----------
+    ctx : AnalysisContext
+    filter : FeatureFilter, optional
+    '''
     ctx.result = wiseutils.AnalysisResult(ctx.config)
     for file in ctx.files:
         img = ctx.open_file(file)
@@ -125,34 +190,49 @@ def detection_all(ctx, filter=None):
 
 
 def match_all(ctx, filter=None):
-    ''' Run matching on all selected files '''
+    '''Run matching on all selected files
+    
+    Parameters
+    ----------
+    ctx : AnalysisContext
+    filter : FeatureFilter, optional
+    '''
     ctx.result = wiseutils.AnalysisResult(ctx.config)
     prev_result = None
-    for file in ctx.files:
+    prev_img = None
+    for i, file in enumerate(ctx.files):
         img = ctx.open_file(file)
         res = ctx.detection(img, filter=filter)
-        ctx.result.add_detection_result(img, res)
-
         result_copy = res.copy()
 
+        ctx.result.add_detection_result(img, result_copy)
+
         if prev_result is not None:
+            print "Matching %s vs %s (%s / %s)" % (prev_img, img, i, len(ctx.files) - 1)
             match_res = ctx.match(prev_result, res)
             ctx.result.add_match_result(match_res)
 
         prev_result = result_copy
+        prev_img = img
 
 
 def save(ctx, name, coord_mode='com', measured_delta=True):
-    ''' Save current result to files
-
-        *name*
-            Prefix name for the save files '''
-    if ctx.result is None:
-        print "Warning: no result to save"
+    '''Save current result to disk
+    
+    Parameters
+    ----------
+    ctx : AnalysisContext
+    name : str
+        Prefix name for the save files
+    coord_mode : str, optional
+    measured_delta : bool, optional
+    '''
+    if not ctx.result.has_detection_result():
+        print "No result to save"
         return
 
-    stack_img = ctx.get_stack_image(preprocess=True)
-    projection = ctx.get_projection(stack_img)
+    ref_img = ctx.get_ref_image()
+    projection = ctx.get_projection(ref_img)
 
     path = os.path.join(ctx.get_data_dir(), name)
     if not os.path.exists(path):
@@ -165,18 +245,29 @@ def save(ctx, name, coord_mode='com', measured_delta=True):
 
 
 def load(ctx, name, projection=None, merge_with_previous=False, min_link_size=2):
-    ''' Load result from files
-
-        *name*
-            Prefix name for the saved files '''
+    '''Load result from files
+    
+    Parameters
+    ----------
+    ctx : AnalysisContext
+    name : str
+        Prefix name of the saved files
+    projection : Projection, optional
+        If not provided, default Projection will be used
+    merge_with_previous : bool, optional
+        If True, this result will be added to current result
+    min_link_size : int, optional
+        Filter out links with size < min_link_size
+    '''
 
     if projection is None:
-        stack_img = ctx.get_stack_image(preprocess=True)
-        projection = ctx.get_projection(stack_img)
+        ref_img = ctx.get_ref_image()
+        projection = ctx.get_projection(ref_img)
         
     path = os.path.join(ctx.get_data_dir(), name)
     if not os.path.isdir(path):
-        raise Exception("No results found with name %s" % name)
+        print "No results saved with name %s" % name
+        return
 
     img_set_file = os.path.join(path, "%s.set.dat" % name)
     ms_detec_file = os.path.join(path, "%s.ms.dat" % name)
@@ -205,105 +296,193 @@ def load(ctx, name, projection=None, merge_with_previous=False, min_link_size=2)
 
 
 def view_all(ctx, preprocess=True, show_mask=True, show_regions=[], save_filename=None, **kargs):
-    ''' Preview all selected files '''
+    '''Preview all images
+    
+    Parameters
+    ----------
+    ctx : AnalysisContext
+    preprocess : bool, optional
+        If True, run the pre_process fct on each images
+    show_mask : bool, optional
+        If True, show the saved mask in the map
+    show_regions : list, optional
+        Plot the regions
+    save_filename : str, optional
+        If not None, the resulting maps will be saved in the project data dir
+        with this filename.
+    **kargs
+        Arguments to pass to plotutils.imshow_image()
+    '''
+    if len(ctx.files) == 0:
+        print "No files selected"
+        return
+
     stack = plotutils.FigureStack()
 
-    for file in ctx.files:
+    def do_plot(fig, file):
         img = ctx.open_file(file)
-        # print "File:%s, Bg: %s, Noise:%s" % (file, ctx.get_bg(img).std(), img.header["NOISE"])
-        
-        def do_plot(fig):
-            ax = fig.subplots()
-            ctx.align(img)
-            if preprocess:
-                ctx.pre_process(img)
-            plotutils.imshow_image(ax, img, projection=ctx.get_projection(img), **kargs)
-            if not preprocess:
-                bg_mask = imgutils.Image(np.zeros_like(img.data, dtype=np.int8))
-                bg = ctx.get_bg(bg_mask)
-                if bg is not None and isinstance(bg, np.ndarray):
-                    bg.fill(1)
-            if ctx.get_mask() is not None and show_mask is True:
-                ax.contour(ctx.get_mask().data, [0.5])
-            for region in show_regions:
-                plotutils.plot_region(ax, region, ctx.get_projection(img), text=True)
+        ax = fig.subplots()
+        ctx.align(img)
+        if preprocess:
+            ctx.pre_process(img)
+        plotutils.imshow_image(ax, img, projection=ctx.get_projection(img), **kargs)
+        if not preprocess:
+            bg_mask = imgutils.Image(np.zeros_like(img.data, dtype=np.int8))
+            bg = ctx.get_bg(bg_mask)
+            if bg is not None and isinstance(bg, np.ndarray):
+                bg.fill(1)
+        if ctx.get_mask() is not None and show_mask is True:
+            ax.contour(ctx.get_mask().data, [0.5])
+        for region in show_regions:
+            plotutils.plot_region(ax, region, ctx.get_projection(img), text=True)
 
-        stack.add_replayable_figure(img.get_epoch(), do_plot)
+    for file in ctx.files:
+        stack.add_replayable_figure(os.path.basename(file), do_plot, file)
 
     if save_filename is not None:
         stack.save_all(os.path.join(ctx.get_data_dir(), save_filename))
-
-    stack.show()
+        stack.destroy()
+    else:
+        stack.show()
 
 
 def view_stack(ctx, preprocess=True, nsigma=0, nsigma_connected=False, show_mask=True, show_regions=[], 
                   intensity_colorbar=False, save_filename=None, **kargs):
-    ''' Preview the stack image '''
-
+    '''Preview the stack image
+    
+    Parameters
+    ----------
+    ctx : AnalysisContext
+    preprocess : bool, optional
+        If True, run the pre_process fct on each images
+    nsigma : int, optional
+        Clip bg below nsigma level
+    nsigma_connected : bool, optional
+        If True, keep only the brightest connected structure
+    show_mask : bool, optional
+        If True, show the saved mask in the map
+    show_regions : list, optional
+        Plot the regions
+    intensity_colorbar : bool, optional
+        Add an intensity colorbar
+    save_filename : str, optional
+        If not None, the resulting maps will be saved in the project data dir
+        with this filename.
+    **kargs
+        Arguments to pass to plotutils.imshow_image()
+    '''
 
     stack = plotutils.FigureStack()
 
-    stack_img = ctx.get_stack_image(nsigma=nsigma, nsigma_connected=nsigma_connected)
-    if preprocess:
-        ctx.pre_process(stack_img)
+    ref_img = ctx.get_stack_image(preprocess=preprocess, nsigma=nsigma, 
+                                  nsigma_connected=nsigma_connected)
 
     def do_plot(fig):
         ax = fig.subplots()
 
-        plotutils.imshow_image(ax, stack_img, projection=ctx.get_projection(stack_img), 
+        plotutils.imshow_image(ax, ref_img, projection=ctx.get_projection(ref_img), 
                                intensity_colorbar=intensity_colorbar, **kargs)
         if ctx.get_mask() is not None and show_mask is True:
             ax.contour(ctx.get_mask().data, [0.5])
         for region in show_regions:
-            plotutils.plot_region(ax, region, ctx.get_projection(stack_img), text=False, fill=True)
+            plotutils.plot_region(ax, region, ctx.get_projection(ref_img), text=False, fill=True)
 
     stack.add_replayable_figure("Stack Image", do_plot)
 
     if save_filename is not None:
         stack.save_all(os.path.join(ctx.get_data_dir(), save_filename))
+        stack.destroy()
+    else:
+        stack.show()
 
-    stack.show()
 
-
-def view_wds(ctx, title=True, num=True, scale=None, save_filename=None, **kargs):
-    ''' Plot WDS decomposition '''
-    stack_img = ctx.get_stack_image(preprocess=True)
-    projection = ctx.get_projection(stack_img)
+def view_wds(ctx, title=True, num=True, scales=None, save_filename=None, **kargs):
+    '''Plot WDS decomposition
+    
+    Parameters
+    ----------
+    ctx : AnalysisContext
+    title : bool, optional
+        If True, add a title to the map
+    num : bool, optional
+        If True, annotate each segments
+    scales : list or int, optional
+        Plot only for scale or list of scales (in pixel)
+    save_filename : TYPE, optional
+        Description
+    **kargs
+        Description
+    '''
+    if not ctx.result.has_detection_result():
+        print "No result found. Run detect_all() or match_all() first."
+        return
 
     detection_result = ctx.get_detection_result()
+
+    ref_img = ctx.get_ref_image()
+    projection = ctx.get_projection(ref_img)
+    scales = _get_scales(scales, ctx.result.get_scales())
 
     if not detection_result.is_full_wds():
         print "This task require full WDS result. Please run detection again."
         return
 
+    if len(scales) == 0:
+        print "No result found for this scales. Available scales:", ctx.result.get_scales()
+        return
+
     stack = plotutils.FigureStack()
 
-    nax = 1
+    def do_plot(fig, epoch):
+        ms_result = detection_result.get_epoch(epoch)
+        ax = fig.subplots(n=len(scales), reshape=False)
+        for ax, scale in zip(ax, scales):
+            segments = ms_result.get_scale(scale)
+            wiseutils.imshow_segmented_image(ax, segments, title=title, 
+                projection=projection, num=num, **kargs)
 
-    for res in detection_result:
-        epoch = res.get_epoch()
-        if scale is not None:
-            res = [res.get_scale(scale)]
-        nax = len(res)
-
-        def do_plot(fig):
-            ax = fig.subplots(n=nax, reshape=False)
-            for ax, segments in zip(ax, res):
-                wiseutils.imshow_segmented_image(ax, segments, title=title, 
-                    projection=projection, num=num, **kargs)
-
-        stack.add_replayable_figure("WDS %s" % epoch, do_plot)
+    for epoch in detection_result.get_epochs():
+        stack.add_replayable_figure("WDS %s" % epoch, do_plot, epoch)
 
     if save_filename is not None:
         stack.save_all(os.path.join(ctx.get_data_dir(), save_filename))
-
-    stack.show()
+        stack.destroy()
+    else:
+        stack.show()
 
 
 def view_all_features(ctx, scales, region_list=None, legend=True, feature_filter=None, 
                       save_filename=None, **img_kargs):
-    stack_img = ctx.get_stack_image(preprocess=True, nsigma=3, nsigma_connected=True)
-    projection = ctx.get_projection(stack_img)
+    ''' Plot all features location
+    
+    Parameters
+    ----------
+    ctx : AnalysisContext
+    scales : int or list
+        Filter the results to scale or list of scales (in pixel)
+    region_list : list, optional
+        Plot the regions, and set the features color according to the region
+    legend : bool, optional
+        Add a legend 
+    feature_filter : FeatureFilter, optional
+        Filter the results
+    save_filename : TYPE, optional
+        If not None, the resulting maps will be saved in the project data dir
+        with this filename.
+    **img_kargs
+        Additional arguments to pass to plotutils.imshow_image
+    '''
+    if not ctx.result.has_detection_result():
+        print "No result found. Run detect_all() or match_all() first."
+        return
+
+    ref_img = ctx.get_ref_image()
+    projection = ctx.get_projection(ref_img)
+    scales = _get_scales(scales, ctx.result.get_scales())
+
+    if len(scales) == 0:
+        print "No result found for this scales. Available scales:", ctx.result.get_scales()
+        return
 
     data = wiseutils.SSPData.from_results(ctx.get_result(), projection, scales)
     if feature_filter is not None:
@@ -316,7 +495,7 @@ def view_all_features(ctx, scales, region_list=None, legend=True, feature_filter
     def do_plot(fig):
         ax_all = fig.subplots()
 
-        plotutils.imshow_image(ax_all, stack_img, projection=projection, **img_kargs)
+        plotutils.imshow_image(ax_all, ref_img, projection=projection, **img_kargs)
 
         if region_list is not None:
             for region, gdata in data.df.groupby('region'):
@@ -332,59 +511,128 @@ def view_all_features(ctx, scales, region_list=None, legend=True, feature_filter
         if legend:
             ax_all.legend(loc='best')
 
+    stack.add_replayable_figure("All features", do_plot)
+
     if save_filename is not None:
         stack.save_all(os.path.join(ctx.get_data_dir(), save_filename))
+        stack.destroy()
+    else:
+        stack.show()
 
-    stack.add_replayable_figure("All features", do_plot)
-    stack.show()
 
-
-def plot_separation_from_core(ctx, scale, feature_filter=None, min_link_size=2, title=True, 
+def plot_separation_from_core(ctx, scales=None, feature_filter=None, min_link_size=2, title=True, 
                             pa=False, snr=False, num=False, fit_fct=None, save_filename=None, **kargs):
+    """Plot separation from core with time
+    
+    Parameters
+    ----------
+    ctx : AnalysisContext
+    scales : int or list, optional
+        Filter the results to scale or list of scales (in pixel)
+    feature_filter : FeatureFilter, optional
+        Filter the results
+    min_link_size : int, optional
+        Filter out links with size < min_link_size
+    title : bool, optional
+    pa : bool, optional
+        Additionaly plot the PA vs epoch (only pa or snr)
+    snr : bool, optional
+        Additionaly plot the snr vs epoch (only pa or snr)
+    num : bool, optional
+        Annotate each links
+    fit_fct : AbstractFct, optional
+        Fit each links with provided fct
+    save_filename : str, optional
+        If not None, the resulting maps will be saved in the project data dir
+        with this filename.
+    **kargs
+        Additional arguments to pass to wiseutils.plot_links_dfc()
+    """
+    if not ctx.result.has_match_result():
+        print "No result found. Run match_all() first."
+        return
+
     stack = plotutils.FigureStack()
 
-    stack_img = ctx.get_stack_image(nsigma=3, preprocess=True, nsigma_connected=True)
-    projection = ctx.get_projection(stack_img)
+    ref_img = ctx.get_ref_image()
+    projection = ctx.get_projection(ref_img)
+    scales = _get_scales(scales, ctx.result.get_scales())
+
+    if len(scales) == 0:
+        print "No result found for this scales. Available scales:", ctx.result.get_scales()
+        return
 
     ms_match_results, link_builders = ctx.get_match_result()
 
-    for link_builder in link_builders.get_all()[:]:
-        if scale is None or scale == link_builder.get_scale():
-            links = list(link_builder.get_links(feature_filter=feature_filter, min_link_size=min_link_size))
+    fit_results = dict()
 
-            def do_plot(fig):
-                ax = fig.subplots(nrows=1 + int(pa or snr), reshape=False, sharex=True)
+    def do_plot(fig, scale):
+        link_builder = link_builders.get_scale(scale)
 
-                if fit_fct:
-                    plotutils.checkargs(kargs, 'ls', '--')
-                wiseutils.plot_links_dfc(ax[0], projection, links, num=num, **kargs)
-                if fit_fct:
-                    wiseutils.plot_links_dfc_fit(ax[0], projection, links, fit_fct, lw=2)
+        links = list(link_builder.get_links(feature_filter=feature_filter, 
+                        min_link_size=min_link_size))
+        ax = fig.subplots(nrows=1 + int(pa or snr), reshape=False, sharex=True)
 
-                scale = projection.mean_pixel_scale() * link_builder.get_scale()
+        if fit_fct:
+            plotutils.checkargs(kargs, 'ls', '--')
+        wiseutils.plot_links_dfc(ax[0], projection, links, num=num, **kargs)
+        if fit_fct:
+            fit_result = wiseutils.plot_links_dfc_fit(ax[0], projection, links, fit_fct, lw=2)
+            fit_results.update(fit_result)
 
-                if title:
-                    ax[0].set_title("Distance from core at scale %.2f mas." % scale)
-                ax[-1].set_xlabel("Epoch (years)")
-                ax[0].set_ylabel("Separation from core (mas)")
+        if title:
+            ax[0].set_title("Separation from core at scale %s" % projection.get_sky(scale))
 
-                if pa:
-                    wiseutils.plot_links_pa(ax[1], projection, links, **kargs)
-                elif snr:
-                    wiseutils.plot_links_snr(ax[1], projection, links, **kargs)
-                    ax[1].set_ylabel("Wavelet Coef SNR")
+        ax[-1].set_xlabel("Epoch (years)")
+        ax[0].set_ylabel("Distance from core (mas)")
 
-            stack.add_replayable_figure("DFC scale %s" % scale, do_plot)
+        if pa:
+            wiseutils.plot_links_pa(ax[1], projection, links, **kargs)
+            ax[-1].set_xlabel("Separation PA (deg)")
+        elif snr:
+            wiseutils.plot_links_snr(ax[1], projection, links, **kargs)
+            ax[1].set_ylabel("Wavelet Coef SNR")
+
+    for scale in scales:
+        stack.add_replayable_figure("DFC scale %s" % scale, do_plot, scale)
 
     if save_filename is not None:
         stack.save_all(os.path.join(ctx.get_data_dir(), save_filename))
+        stack.destroy()
+    else:
+        stack.show()
 
-    stack.show()
+    if fit_fct:
+        return fit_results
 
 
 def plot_all_features(ctx, scales=None, pa=False, feature_filter=None, save_filename=None):
-    stack_img = ctx.get_stack_image(preprocess=True, nsigma=3, nsigma_connected=True)
-    projection = ctx.get_projection(stack_img)
+    """Plot all features distance from core with time
+    
+    Parameters
+    ----------
+    ctx : AnalysisContext
+    scales : int or list, optional
+        Filter the results to scale or list of scales (in pixel)
+    pa : bool, optional
+        Additionaly plot the PA vs epoch
+    feature_filter : FeatureFilter, optional
+        Filter the results
+    save_filename : str, optional
+        If not None, the resulting maps will be saved in the project data dir
+        with this filename.
+    """
+    if not ctx.result.has_detection_result():
+        print "No result found. Run detect_all() or match_all() first."
+        return
+
+    ref_img = ctx.get_ref_image()
+    projection = ctx.get_projection(ref_img)
+    scales = _get_scales(scales, ctx.result.get_scales())
+
+    if len(scales) == 0:
+        print "No result found for this scales. Available scales:", ctx.result.get_scales()
+        return
 
     data = wiseutils.SSPData.from_results(ctx.get_result(), projection, scales)
     if feature_filter is not None:
@@ -398,7 +646,7 @@ def plot_all_features(ctx, scales=None, pa=False, feature_filter=None, save_file
 
         for scale, gdata in data.df.groupby('scale'):
             color = colors.get()
-            features = wds.DatedFeaturesGroupScale(scale, features=gdata.index)
+            features = wds.DatedFeaturesGroupScale(scale, features=gdata.features.values)
 
             wiseutils.plot_features_dfc(ax[0], projection, features, c=color)
 
@@ -409,148 +657,196 @@ def plot_all_features(ctx, scales=None, pa=False, feature_filter=None, save_file
         ax[0].set_ylabel("Distance from core (mas)")
         
         if pa:
-            ax[1].set_ylabel("PA (degree)")
+            ax[1].set_ylabel("PA (rad)")
 
     stack.add_replayable_figure("All features", do_plot)
 
     if save_filename is not None:
         stack.save_all(os.path.join(ctx.get_data_dir(), save_filename))
-
-    stack.show()
+        stack.destroy()
+    else:
+        stack.show()
 
 
 def view_displacements(ctx, scale, feature_filter=None, title=True, save_filename=None):
-    ''' Plot match results '''
+    '''Plot individual match results at specified scale
+    
+    Parameters
+    ----------
+    ctx : AnalysisContext
+        Description
+    scales : int
+        Scale in pixel
+    feature_filter : FeatureFilter, optional
+        Filter the results
+    save_filename : str, optional
+        If not None, the resulting maps will be saved in the project data dir
+        with this filename.
+    title : bool, optional
+    '''
+    if not ctx.result.has_match_result():
+        print "No result found. Run match_all() first."
+        return
+
+    if scale not in ctx.result.get_scales():
+        print "No result found for this scale. Available scales:", ctx.result.get_scales()
+        return
+
     stack = plotutils.FigureStack()
 
-    stack_img = ctx.get_stack_image(nsigma=3, preprocess=True, nsigma_connected=True)
-    projection = ctx.get_projection(stack_img)
+    ref_img = ctx.get_ref_image()
+    projection = ctx.get_projection(ref_img)
 
     ms_match_results, link_builders = ctx.get_match_result()
+    all_epochs = ms_match_results.get_epochs()
 
-    for ms_match_result in ms_match_results:
-        epoch = ms_match_result.get_epoch()
+    def do_plot(figure, epoch):
+        ms_match_result = ms_match_results.get_epoch(epoch)
         match_result = ms_match_result.get_scale(scale)
 
         segments1, segments2, match, delta_info = match_result.get_all(feature_filter=feature_filter)
+        
+        ax = figure.subplots()
 
-        if segments1.size() == 0:
-            continue
+        axtitle = 'Displacements vector at scale %s' % projection.get_sky(segments1.get_scale())
 
-        def do_plot(figure):
-            ax = figure.subplots()
-
-            axtitle = 'Velocity vector at scale %.2f' % segments1.get_scale(projection=projection)
-
-            if isinstance(segments1, wds.SegmentedImages):
+        if isinstance(segments1, wds.SegmentedImages):
+            if len(segments1.get_img().get_title()) > 0:
                 axtitle += '\n%s' % segments1.get_img().get_title()
                 axtitle += '\n%s' % segments2.get_img().get_title()
-                bg = segments1.get_img()
-            else:
-                axtitle += '\n%s vs %s' % (segments1.get_epoch(), segments2.get_epoch())
-                bg = stack_img
+            bg = segments1.get_img()
+        else:
+            axtitle += '\n%s vs %s' % (segments1.get_epoch(), segments2.get_epoch())
+            bg = ref_img
 
-            wiseutils.plot_displacements(ax, segments1, segments2, delta_info, 
-                                 projection=projection, bg=bg)
+        wiseutils.plot_displacements(ax, segments1, segments2, delta_info, 
+                             projection=projection, bg=bg)
 
-            if title:
-                ax.set_title(axtitle)
+        if title:
+            ax.set_title(axtitle)
 
-        stack.add_replayable_figure(epoch, do_plot)
+    for epoch in ms_match_results.get_epochs():
+        stack.add_replayable_figure(epoch, do_plot, epoch)
 
     if save_filename is not None:
         stack.save_all(os.path.join(ctx.get_data_dir(), save_filename))
+        stack.destroy()
+    else:
+        stack.show()
 
-    stack.show()
 
-
-def view_links(ctx, scale, feature_filter=None, min_link_size=2, map_cmap='YlGnBu_r',
+def view_links(ctx, scales=None, feature_filter=None, min_link_size=2, map_cmap='YlGnBu_r',
                vector_width=6, title=True, color_style='link', save_filename=None, **kargs):
-    ''' Plot stacked match results '''
-    stack = plotutils.FigureStack()
+    '''Plot all components trajectories on a map
+    
+    Parameters
+    ----------
+    ctx : AnalysisContext
+    scales : int or list, optional
+        Filter the results to scale or list of scales (in pixel)
+    feature_filter : FeatureFilter, optional
+        Filter the results
+    min_link_size : int, optional
+        Filter out links with size < min_link_size
+    map_cmap : str, optional
+        Colormap of the background map
+    vector_width : int, optional
+        Width of the displacement vectors
+    title : bool, optional
+    color_style : str, optional
+        'link': one color per components
+        'date': colors correspond to the epoch
+        color_str: use color_str as color for all components
+    save_filename : str, optional
+        If not None, the resulting maps will be saved in the project data dir
+        with this filename.
+    **kargs
+        Additional arguments to pass to plot_links_map
+    '''
+    if not ctx.result.has_match_result():
+        print "No result found. Run match_all() first."
+        return
 
-    stack_img = ctx.get_stack_image(nsigma=3, preprocess=True, nsigma_connected=True)
-    projection = ctx.get_projection(stack_img)
+    stack = plotutils.FigureStack()
+    scales = _get_scales(scales, ctx.result.get_scales())
+
+    if len(scales) == 0:
+        print "No result found for this scales. Available scales:", ctx.result.get_scales()
+        return
+
+    ref_img = ctx.get_ref_image()
+    projection = ctx.get_projection(ref_img)
 
     ms_match_results, link_builders = ctx.get_match_result()
 
-    for link_builder in link_builders.get_all()[:]:
-        if scale is None or scale == link_builder.get_scale():
-            def do_plot(fig):
-                ax = fig.subplots()
-                links = link_builder.get_links(feature_filter=feature_filter, min_link_size=min_link_size)
+    def do_plot(fig, scale):
+        ax = fig.subplots()
 
-                wiseutils.plot_links_map(ax, stack_img, projection, links, color_style=color_style, 
-                                           map_cmap=map_cmap, vector_width=vector_width, 
-                                           link_id_label=False, **kargs)
+        link_builder = link_builders.get_scale(scale)
+        links = link_builder.get_links(feature_filter=feature_filter, min_link_size=min_link_size)
 
-                scale = projection.mean_pixel_scale() * link_builder.get_scale()
+        wiseutils.plot_links_map(ax, ref_img, projection, links, color_style=color_style, 
+                                   map_cmap=map_cmap, vector_width=vector_width, 
+                                   link_id_label=False, **kargs)
 
-                if isinstance(title, bool) and title is True:
-                    ax.set_title(ax.get_title() + '\nVelocity map at scale %.2f mas.' % scale)
-                if isinstance(title, str):
-                    ax.set_title(title)
+        if isinstance(title, bool) and title is True:
+            ax.set_title('Displacement map at scale %s' % projection.get_sky(scale))
+        if isinstance(title, str):
+            ax.set_title(title)
 
-            stack.add_replayable_figure("Velocity field", do_plot)
+    for scale in scales:
+        stack.add_replayable_figure("Displacement map scale %s" % scale, do_plot, scale)
 
     if save_filename is not None:
         stack.save_all(os.path.join(ctx.get_data_dir(), save_filename))
+        stack.destroy()
+    else:
+        stack.show()
 
-    stack.show()
 
+def get_velocities_data(ctx, scales=None, region_list=None, min_link_size=2, feature_filter=None):
+    if not ctx.result.has_match_result():
+        print "No result found. Run match_all() first."
+        return
 
-def preview_detection_stack(ctx, stack_detection_name, count_threshold=0, ms_set=None, 
-                            date_filter=None, show_regions=[]):
-    ''' Plot detection in stack'''
     stack = plotutils.FigureStack()
+    scales = _get_scales(scales, ctx.result.get_scales())
 
-    stack_img, img_snr, img_count = load_detection_stack_image(ctx, stack_detection_name, preprocess=True)
+    if len(scales) == 0:
+        print "No result found for this scales. Available scales:", ctx.result.get_scales()
+        return
 
-    img_snr.data[img_count.data < count_threshold] = 0
-    img_count.data[img_count.data < count_threshold] = 0
+    ref_img = ctx.get_ref_image()
+    prj = ctx.get_projection(ref_img)
 
-    prj = ctx.get_projection(stack_img)
+    data = wiseutils.VelocityData.from_results(ctx.get_result(), prj, scales=scales)
+    if feature_filter is not None:
+        data.filter(feature_filter)
 
-    fig, ax = stack.add_subplots("Stack image")
-    plotutils.imshow_image(ax, stack_img, projection=prj)
-    for region in show_regions:
-        plotutils.plot_region(ax, region, prj, text=True)
+    data.df = data.df.groupby('link_id').filter(lambda x: len(x) > min_link_size)
 
-    fig, ax1 = stack.add_subplots("Stack detection SNR")
-    plotutils.imshow_image(ax1, img_snr, projection=prj, cmap=plotutils.get_cmap('jet'))
-    for region in show_regions:
-        plotutils.plot_region(ax1, region, prj, text=True)
+    if region_list is not None:
+        data.add_col_region(region_list)
 
-    fig, ax2 = stack.add_subplots("Stack detection count")
-    plotutils.imshow_image(ax2, img_count, projection=prj, cmap=plotutils.get_cmap('jet'))
-    for region in show_regions:
-        plotutils.plot_region(ax2, region, prj, text=True)
-
-    if ms_set is not None:
-        colorbar_setting = plotutils.ColorbarSetting(cmap='jet', ticks_locator=mdates.AutoDateLocator(),
-                                                     ticks_formatter=mdates.DateFormatter('%m/%y'))
-
-        def feature_filter(feature):
-            if img_snr.data[tuple(feature.get_coord())] == 0:
-                return False
-            if date_filter is not None and not date_filter(feature.get_epoch()):
-                return False
-            return True
-
-        ms_set = wds.MultiScaleImageSet.from_file(os.path.join(ctx.get_data_dir(), j),
-                                                  feature_filter=feature_filter)
-        plot_ms_set_map(ax1, None, ms_set, prj, colorbar_setting=colorbar_setting)
-        plot_ms_set_map(ax2, None, ms_set, prj, colorbar_setting=colorbar_setting)
-
-        add_features_tooltip(stack, ax1, ms_set.features_iter(), projection=prj, epoch=True, tol=1)
-        add_features_tooltip(stack, ax2, ms_set.features_iter(), projection=prj, epoch=True, tol=1)
-
-    stack.show()
+    return data.df
 
 
-def create_poly_region(ctx, img, features=None):
-    ''' Create a region file '''
+def create_poly_region(ctx, img=None, features=None):
+    '''Create a region file
+    
+    Parameters
+    ----------
+    ctx : AnalysisContext
+    img : Image, optional
+        Image to use as background
+    features : FeaturesGroup, optional
+        Features to plot on top of the image
+    '''
     from libwise.app import PolyRegionEditor
+
+    if img is None:
+        img = ctx.get_ref_image()
+
     prj = ctx.get_projection(img)
 
     editor = PolyRegionEditor.PolyRegionEditor(img, prj=prj, current_folder=ctx.get_data_dir())
@@ -561,8 +857,13 @@ def create_poly_region(ctx, img, features=None):
 
 
 def list_saved_results(ctx):
-    ''' List all saved results '''
-    stack_img = ctx.get_stack_image(preprocess=True)
+    '''List all saved results
+    
+    Parameters
+    ----------
+    ctx : AnalysisContext
+    '''
+    ref_img = ctx.get_ref_image()
     projection = ctx.get_projection(stack_img)
 
     ext = '.set.dat'
@@ -574,17 +875,21 @@ def list_saved_results(ctx):
             continue
         img_set = imgutils.ImageSet.from_file(file, projection)
         epochs = img_set.get_epochs()
+        if isinstance(epochs[0], datetime.datetime):
+            epochs = [epoch.strftime("%Y-%m-%d") for epoch in epochs]
         n = len(epochs)
         first, last = epochs[0], epochs[-1]
         link_builder_files = glob.glob(os.path.join(os.path.dirname(file), '*.ms.dfc.dat'))
         scales = [f.rsplit('_')[-1].split('.')[0] for f in link_builder_files]
 
-        data.append([name, n, first.strftime("%Y-%m-%d"), last.strftime("%Y-%m-%d"), bool(len(scales)), ", ".join(scales)])
+        data.append([name, n, first, last, bool(len(scales)), ", ".join(scales)])
 
     print nputils.format_table(data, header)
 
 
 def list_tasks():
+    """Lists all WISE tasks
+    """
     data = []
     header = ["Name", "Description"]
     for name, value in inspect.getmembers(sys.modules[__name__]):
@@ -653,7 +958,70 @@ def load_detection_stack_image(ctx, name, preprocess=True):
     return stack_img, img_snr, img_count
 
 
+def preview_detection_stack(ctx, stack_detection_name, count_threshold=0, ms_set=None, 
+                            date_filter=None, show_regions=[]):
+    ''' Plot detection in stack'''
+    stack = plotutils.FigureStack()
+
+    stack_img, img_snr, img_count = load_detection_stack_image(ctx, stack_detection_name, preprocess=True)
+
+    img_snr.data[img_count.data < count_threshold] = 0
+    img_count.data[img_count.data < count_threshold] = 0
+
+    prj = ctx.get_projection(stack_img)
+
+    fig, ax = stack.add_subplots("Stack image")
+    plotutils.imshow_image(ax, stack_img, projection=prj)
+    for region in show_regions:
+        plotutils.plot_region(ax, region, prj, text=True)
+
+    fig, ax1 = stack.add_subplots("Stack detection SNR")
+    plotutils.imshow_image(ax1, img_snr, projection=prj, cmap=plotutils.get_cmap('jet'))
+    for region in show_regions:
+        plotutils.plot_region(ax1, region, prj, text=True)
+
+    fig, ax2 = stack.add_subplots("Stack detection count")
+    plotutils.imshow_image(ax2, img_count, projection=prj, cmap=plotutils.get_cmap('jet'))
+    for region in show_regions:
+        plotutils.plot_region(ax2, region, prj, text=True)
+
+    if ms_set is not None:
+        colorbar_setting = plotutils.ColorbarSetting(cmap='jet', ticks_locator=mdates.AutoDateLocator(),
+                                                     ticks_formatter=mdates.DateFormatter('%m/%y'))
+
+        def feature_filter(feature):
+            if img_snr.data[tuple(feature.get_coord())] == 0:
+                return False
+            if date_filter is not None and not date_filter(feature.get_epoch()):
+                return False
+            return True
+
+        ms_set = wds.MultiScaleImageSet.from_file(os.path.join(ctx.get_data_dir(), j),
+                                                  feature_filter=feature_filter)
+        plot_ms_set_map(ax1, None, ms_set, prj, colorbar_setting=colorbar_setting)
+        plot_ms_set_map(ax2, None, ms_set, prj, colorbar_setting=colorbar_setting)
+
+        add_features_tooltip(stack, ax1, ms_set.features_iter(), projection=prj, epoch=True, tol=1)
+        add_features_tooltip(stack, ax2, ms_set.features_iter(), projection=prj, epoch=True, tol=1)
+
+    stack.show()
+
+
 def stack_cross_correlation(ctx, config, debug=0, nwise=2, stack=None):
+    """Perform a Stack Cross Correlation analysis
+    
+    Parameters
+    ----------
+    ctx : AnalysisContext
+    config : SCCCOnfiguration
+    debug : int, optional
+    nwise : int, optional
+    stack : TYPE, optional
+    
+    Returns
+    -------
+    TYPE : a StackCrossCorrelation containing the results of the analysis
+    """
     scc_result = scc.StackCrossCorrelation(config, debug=debug, stack=stack)
     all_files = nputils.nwise(ctx.files, nwise)
 
@@ -680,6 +1048,18 @@ def stack_cross_correlation(ctx, config, debug=0, nwise=2, stack=None):
 
 
 def bootstrap_scc(ctx, config, output_dir, n, append=False, seperate_scales=False):
+    """Perform Stack Cross Correlation analysis n time and store results in output_dir
+    
+    Parameters
+    ----------
+    ctx : AnalysisContext
+    config : SCCCOnfiguration
+    output_dir : str
+    n : int
+    append : bool, optional
+        Append results
+    seperate_scales : bool, optional
+    """
     nwise = 2
     random_shift = config.get("img_rnd_shift")
 
@@ -784,7 +1164,17 @@ def bootstrap_scc(ctx, config, output_dir, n, append=False, seperate_scales=Fals
     print "Done"
 
 
-def test_load_3c120_config():
+def _get_scales(scales, all_scales):
+    if isinstance(scales, (list, set, np.ndarray)):
+        return sorted(set(scales) & set(all_scales))
+    if isinstance(scales, (int, float)):
+        if not scales in all_scales:
+            return []
+        return [scales]
+    return sorted(all_scales)
+
+
+def _test_load_3c120_config():
     import astropy.cosmology as cosmology
 
     cosmology.default_cosmology.set(cosmology.FlatLambdaCDM(H0=71 * u.km / u.s / u.Mpc, Om0=0.27))
@@ -801,7 +1191,7 @@ def test_load_3c120_config():
         return img.data[:, :800]
 
     def build_mask(ctx):
-        stack = ctx.get_stack_image(nsigma=4)
+        stack = ctx.get_ref_image()
         segments = wise.SegmentedImages(stack)
         segments.connected_structure()
         mask = segments.get_mask(segments.sorted_list()[-1])
@@ -844,8 +1234,8 @@ def test_load_3c120_config():
 
     return ctx
 
-def test_3c120_plot_distance_from_core():
-    ctx = test_load_3c120_config()
+def _test_3c120_plot_distance_from_core():
+    ctx = _test_load_3c120_config()
 
     load(ctx, "ms_sep5", min_link_size=5)
 
@@ -858,11 +1248,11 @@ def test_3c120_plot_distance_from_core():
 
     feature_filter = (date_filter & dfc_filter) | (date_filter2 & dfc_filter2) 
 
-    plot_separation_from_core(ctx, scale=None, feature_filter=None, pa=False, fit_fct=nputils.LinearFct)
+    plot_separation_from_core(ctx, scales=None, feature_filter=None, pa=False, fit_fct=nputils.LinearFct)
 
 
-def test_3c120_view_links():
-    ctx = test_load_3c120_config()
+def _test_3c120_view_links():
+    ctx = _test_load_3c120_config()
 
     load(ctx, "ms_sep5", min_link_size=5)
 
@@ -875,11 +1265,11 @@ def test_3c120_view_links():
 
     feature_filter = (date_filter & dfc_filter) | (date_filter2 & dfc_filter2) 
 
-    view_links(ctx, scale=8, feature_filter=feature_filter)
+    view_links(ctx, scales=8, feature_filter=feature_filter)
 
 
-def test_3c120_plot_all_features():
-    ctx = test_load_3c120_config()
+def _test_3c120_plot_all_features():
+    ctx = _test_load_3c120_config()
 
     start_date = datetime.datetime(2006, 1, 1)
     end_date = datetime.datetime(2012, 1, 1)
@@ -897,8 +1287,8 @@ def test_3c120_plot_all_features():
     plot_all_features(ctx, feature_filter=feature_filter, pa=True)
 
 
-def test_3c120_view_wds():
-    ctx = test_load_3c120_config()
+def _test_3c120_view_wds():
+    ctx = _test_load_3c120_config()
 
     detection_all(ctx)
 
@@ -906,8 +1296,8 @@ def test_3c120_view_wds():
 
 
 if __name__ == '__main__':
-    # test_3c120_plot_distance_from_core()
-    # test_3c120_plot_all_features()
-    # list_saved_results(test_load_3c120_config())
-    # test_3c120_view_links()
-    test_3c120_view_wds()
+    # _test_3c120_plot_distance_from_core()
+    # _test_3c120_plot_all_features()
+    # list_saved_results(_test_load_3c120_config())
+    # _test_3c120_view_links()
+    _test_3c120_view_wds()

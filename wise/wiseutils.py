@@ -1,4 +1,5 @@
 import os
+import glob
 import logging
 import datetime
 
@@ -38,13 +39,14 @@ def imshow_segmented_image(ax, segmented_image, projection=None, title=True, bea
     if bg is None:
         bg = segmented_image.get_img()
 
-    projection = plotutils.imshow_image(ax, bg, projection=projection, title=False, beam=beam, **kargs)
+    prj = plotutils.imshow_image(ax, bg, projection=projection, title=False, beam=beam, **kargs)
 
     if title is True:
         title = "Segmented image"
         if isinstance(segmented_image, wds.AbstractScale):
-            title += " at scale %.2f" % segmented_image.get_scale(projection=projection)
-        title += "\n%s" % segmented_image.get_img().get_title()
+            title += " at scale %s" % prj.get_sky(segmented_image.get_scale())
+        if len(segmented_image.get_img().get_title()) > 0:
+            title += "\n%s" % segmented_image.get_img().get_title()
         ax.set_title(title)
 
     plot_segments_contour(ax, segmented_image)
@@ -100,9 +102,10 @@ def add_features_tooltip(stack, ax, features, projection=None, epoch=False, tol=
 
 def plot_inner_features(ax, segments, **kargs):
     for segment in segments:
-        inner_features = segment.get_inner_features()
-        if inner_features.size() > 1:
-            plot_features(ax, inner_features, **kargs)
+        if segment.has_inner_features():
+            inner_features = segment.get_inner_features()
+            if inner_features.size() > 1:
+                plot_features(ax, inner_features, **kargs)
 
 
 def plot_delta_info_1dim(ax, x, deltax, input_delta=None, axis=0):
@@ -317,11 +320,11 @@ def plot_links_dfc(ax, projection, links, mode='com', num=False, num_bbox=None, 
 
 
 def plot_links_dfc_fit(ax, projection, links, fit_fct, fit_min_size=3, mode='com', **kargs):
-    results = []
+    results = dict()
     for link in links:
         if fit_fct is not None and link.size() >= fit_min_size:
             fct, epochs, dfcs = link.fit_dfc(fit_fct, projection, coord_mode=mode)
-            results.append(fct)
+            results[link] = fct
             v = fct.a
             v_error = fct.error(epochs, dfcs)
             label = 'v = %.3f +- %.3f %s' % (v, v_error, (projection.unit / u.year).to_string())
@@ -333,7 +336,7 @@ def plot_links_dfc_fit(ax, projection, links, fit_fct, fit_min_size=3, mode='com
 
 def plot_links_pa(ax, projection, links, mode='com', **kargs):
     for link in links:
-        pas = [np.degrees(projection.pa(k.get_coord(mode=mode))) for k in link.get_features()]
+        pas = [np.degrees(projection.pa(p2i(k.get_coord(mode=mode)))) for k in link.get_features()]
         epochs = link.get_epochs()
 
         ax.plot(epochs, pas, marker='+', color=link.get_color(), **kargs)
@@ -378,9 +381,9 @@ def plot_velocity_map(ax, stack_img, projection, link_builder, min_link_size=2, 
         axis = plot_dfc_axis(ax, projection, dfc_axis_teta, dfc_axis_pos=dfc_axis_pos)
         axis.label.set_text("$z_{obs} (mas)$")
 
-    scale = projection.mean_pixel_scale() * link_builder.get_scale()
+    scale = projection.get_sky(link_builder.get_scale())
     if isinstance(title, bool) and title is True:
-        ax.set_title(ax.get_title() + '\nVelocity map at scale %.2f mas.' % scale)
+        ax.set_title(ax.get_title() + '\nVelocity map at scale %s.' % scale)
     if isinstance(title, str):
         ax.set_title(title)
 
@@ -438,6 +441,7 @@ class DataConfiguration(nputils.BaseConfiguration):
         ["data_dir", None, "Base data directory", nputils.validator_is(str)],
         ["fits_extension", 0, "Extension index", nputils.validator_is(int)],
         ["stack_image_filename", "full_stack_image.fits", "Stack Image filename", nputils.validator_is(str)],
+        ["ref_image_filename", "reference_image", "Stack Image filename", nputils.validator_is(str)],
         ["mask_filename", "mask.fits", "Mask filename", nputils.validator_is(str)],
         ["mask_fct", None, "Mask generation fct", nputils.is_callable],
         ["bg_fct", None, "Background extraction fct", nputils.is_callable],
@@ -481,10 +485,19 @@ class AnalysisResult(object):
 
     def __init__(self, config):
         self.detection = wds.MultiScaleImageSet()
-        self.ms_match_results = []
+        self.ms_match_results = matcher.MultiScaleMatchResultSet()
         self.link_builder = matcher.MultiScaleFeaturesLinkBuilder()
         self.image_set = imgutils.ImageSet()
         self.config = config
+
+    def has_detection_result(self):
+        return len(self.detection) > 0
+
+    def has_match_result(self):
+        return len(self.ms_match_results) > 0
+
+    def get_scales(self):
+        return self.detection.get_scales()
 
     def add_detection_result(self, img, res):
         self.image_set.add_img(img)
@@ -511,7 +524,7 @@ class AnalysisContext(object):
         if config is None:
             config = AnalysisConfiguration()
         self.config = config
-        self.result = None
+        self.result = AnalysisResult(self.config)
         self.files = []
 
         self.cache_mask_filter = None
@@ -545,6 +558,24 @@ class AnalysisContext(object):
         path = self.get_data_dir()
         return os.path.join(path, self.config.data.stack_image_filename)
 
+    def get_ref_image(self, preprocess=True):
+        ref_file =  os.path.join(self.get_data_dir(), self.config.data.ref_image_filename)
+        if not os.path.isfile(ref_file):
+            if len(self.files) == 0:
+                raise Exception("No files selected")
+            ref_file = self.files[0]
+
+        img = imgutils.guess_and_open(ref_file, check_stack_img=True)
+
+        if preprocess:
+            self.pre_process(img)
+
+        return img
+
+    def set_ref_image(self, img):
+        ref_file =  os.path.join(self.get_data_dir(), self.config.data.ref_image_filename)
+        img.save(ref_file)
+
     def get_result(self):
         return self.result
 
@@ -575,7 +606,7 @@ class AnalysisContext(object):
             self.cache_core_offset[1].align_img(img, projection=self.get_projection(img))
 
     def build_stack_image(self, mode='full', detection_snr=7, preprocess=False):
-        stack_mgr = imgutils.StackedImageManager()
+        stack_mgr = imgutils.StackedImageBuilder()
         for file in self.files:
             img = self.open_file(file)
             if preprocess:
@@ -646,14 +677,11 @@ class AnalysisContext(object):
         self.cache_core_offset = None
         core_offset_pos.save(filename)
 
-    def save_mask_file(self):
-        if self.config.data.mask_fct is None:
-            print "Warning: No mask fct defined"
-            return
+    def save_mask_file(self, mask_fct):
         filename = self.get_mask_filename()
         if os.path.isfile(filename):
             os.remove(filename)
-        mask = self.config.data.mask_fct(self)
+        mask = mask_fct(self)
         mask.data = mask.data.astype(bool).astype(float)
 
         self.cache_mask_filter = None
@@ -664,7 +692,9 @@ class AnalysisContext(object):
         stack.save_to_fits(self.get_stack_image_filename())
 
     def detection(self, img, config=None, filter=None):
-        print "Start detection on:", img, filter
+        print "Start detection on: %s" % img
+        if filter is not None:
+            print "  with filter: %s" % filter
         self.pre_bg_process(img)
         bg = self.get_bg(img)
         detection_filter = wfeatures.MaskFilter(self.get_mask())
@@ -684,6 +714,14 @@ class AnalysisContext(object):
         self.post_process(img, res)
 
         return res
+
+    def select_files(self, files, start_date=None, end_date=None, filter_dates=None, step=1):
+        files = glob.glob(files)
+
+        self.files = imgutils.fast_sorted_fits(files, start_date=start_date, 
+                            end_date=end_date, filter_dates=filter_dates, step=step)
+
+        print "Number of files selected:", len(self.files)
 
     def match(self, find_res1, find_res2):
         m = matcher.ImageMatcher(self.config.finder, self.config.matcher)
@@ -831,11 +869,13 @@ class SSPData(object):
         intensities = []
         snrs = []
         sigma_pos = []
+        idx = []
         for feature in features:
             epochs.append(feature.get_epoch())
             intensities.append(feature.get_intensity())
             snrs.append(feature.get_snr())
             sigma_pos.append(feature.get_coord_error(min_snr=2, max_snr=10))
+            idx.append(feature.get_id())
 
         sigma_pos = np.array(sigma_pos)
         ra_error = np.abs(projection.mean_pixel_scale()) * sigma_pos[:, 1] * projection.get_unit()
@@ -848,14 +888,13 @@ class SSPData(object):
         else:
             dfc = pa = None
 
-        df = pd.DataFrame({'ra': ra, 'dec': dec, 'epoch': epochs, 'snr': snrs,
+        df = pd.DataFrame({'features': list(features), 'ra': ra, 'dec': dec, 'epoch': epochs, 'snr': snrs,
                            'dfc': dfc, 'pa': pa, 'intensity': intensities,
                            'ra_error': ra_error, 'dec_error': dec_error,
-                           },
-                           index=features)
+                           }, index=idx)
 
         if scale is not None:
-            df.loc[features, 'scale'] = pd.Series(scale, index=features)
+            df.loc[:, 'scale'] = scale
 
         self.df = self.df.append(df)
 
@@ -867,7 +906,7 @@ class SSPData(object):
 
     def filter(self, feature_filter):
         assert isinstance(feature_filter, nputils.AbstractFilter)
-        self.df = self.df[[feature_filter.filter(k) for k in self.df.index.values]]
+        self.df = self.df[[feature_filter.filter(k) for k in self.df.features.values]]
 
     @staticmethod
     def from_results(results, projection, scales=None, coord_mode='com'):
@@ -887,14 +926,16 @@ class VelocityData(SSPData):
     def __init__(self):
         SSPData.__init__(self)
 
-    def add_delta_info(self, delta_info, match, projection, link_builder=None, coord_mode='com'):
+    def add_delta_info(self, delta_info, match, projection, link_builder=None, coord_mode='com', scale=None):
         features = delta_info.get_features(flag=wfeatures.DeltaInformation.DELTA_MATCH)
-        self.add_features_group(features, projection, coord_mode=coord_mode)
+        cdf = self.add_features_group(features, projection, coord_mode=coord_mode, scale=scale)
+        features = features.features
+        idx = cdf.index
         sigma_pos = np.array([feature.get_coord_error() for feature in features])
 
         deltas = delta_info.get_full_deltas(flag=wfeatures.DeltaInformation.DELTA_MATCH)
 
-        if isinstance(features.features[0].get_epoch(), (float, int)):
+        if isinstance(features[0].get_epoch(), (float, int)):
             time = [delta.get_time() for delta in deltas] * u.second
         else:
             time = [delta.get_time().total_seconds() for delta in deltas] * u.second
@@ -903,22 +944,23 @@ class VelocityData(SSPData):
         coord1 = p2i(np.array([delta.get_feature().get_coord(mode=coord_mode) for delta in deltas]))
         coord2 = coord1 + delta_pix
         angular_sep, sep_pa = projection.angular_separation_pa(coord1, coord2)
-        angular_sep_error = projection.angular_separation(coord1, coord1 + np.array([np.sqrt(2) / 2] * 2))
-
-        ra_error1, dec_error1 = self.df.loc[features, ['ra_error', 'dec_error']].as_matrix().T
-        ra_error2, dec_error2 = self.df.loc[features, ['ra_error', 'dec_error']].as_matrix().T
-
-        angular_sep_error_ra = np.sqrt(ra_error1 ** 2 + ra_error2 **2) * projection.get_unit()
-        angular_sep_error_dec = np.sqrt(dec_error1 ** 2 + dec_error2 ** 2) * projection.get_unit()
-        proper_sep = projection.proper_distance(coord1, coord2)
+        # angular_sep_error = projection.angular_separation(coord1, coord1 + np.array([np.sqrt(2) / 2] * 2))
 
         if angular_sep.unit.is_equivalent(u.deg):
+            ra_error1, dec_error1 = cdf[['ra_error', 'dec_error']].as_matrix().T
+            ra_error2, dec_error2 = ra_error1, dec_error1
+            
+            angular_sep_error_ra = np.sqrt(ra_error1 ** 2 + ra_error2 ** 2) * projection.get_unit()
+            angular_sep_error_dec = np.sqrt(dec_error1 ** 2 + dec_error2 ** 2) * projection.get_unit()
+
             angular_velocity = (angular_sep / time).to(u.mas / u.year)
 
             angular_velocity_error_ra = (angular_sep_error_ra / time).to(u.mas / u.year)
             angular_velocity_error_dec = (angular_sep_error_dec / time).to(u.mas / u.year)
             angular_velocity_error = nputils.l2norm(np.array([angular_velocity_error_ra, 
                                                               angular_velocity_error_dec]).T)
+
+        proper_sep = projection.proper_distance(coord1, coord2)
 
         if proper_sep.unit.is_equivalent(u.m):
             proper_velocity = (proper_sep / time).to(unit_c)
@@ -933,29 +975,29 @@ class VelocityData(SSPData):
         if link_builder is not None:
             fetaure_id_mapping = link_builder.get_features_id_mapping()
             link_id = [fetaure_id_mapping.get(feature) for feature in features]
-            self.df.loc[features, 'link_id'] = pd.Series(link_id, index=features)
+            self.df.loc[idx, 'link_id'] = pd.Series(link_id, index=idx)
 
         if match is not None:
             matching_features = [match.get_peer_of_one(feature) for feature in features]
-            self.df.loc[features, 'match'] = pd.Series(matching_features, index=features)
+            self.df.loc[idx, 'match'] = pd.Series(matching_features, index=idx)
 
-        self.df.loc[features, 'delta_ra'] = pd.Series(delta_pix.T[0], index=features)
-        self.df.loc[features, 'delta_dec'] = pd.Series(delta_pix.T[1], index=features)
-        self.df.loc[features, 'delta_time'] = pd.Series(time, index=features)
-        self.df.loc[features, 'sep_pa'] = pd.Series(sep_pa, index=features)
-        self.df.loc[features, 'angular_sep'] = pd.Series(angular_sep, index=features)
+        self.df.loc[idx, 'delta_ra'] = pd.Series(delta_pix.T[0], index=idx)
+        self.df.loc[idx, 'delta_dec'] = pd.Series(delta_pix.T[1], index=idx)
+        self.df.loc[idx, 'delta_time'] = pd.Series(time, index=idx)
+        self.df.loc[idx, 'sep_pa'] = pd.Series(sep_pa, index=idx)
+        self.df.loc[idx, 'angular_sep'] = pd.Series(angular_sep, index=idx)
 
         if angular_sep.unit.is_equivalent(u.deg):
-            self.df.loc[features, 'angular_velocity'] = pd.Series(angular_velocity, index=features)
-            self.df.loc[features, 'angular_velocity_error'] = pd.Series(angular_velocity_error, index=features)
-            self.df.loc[features, 'angular_velocity_error_ra'] = pd.Series(angular_velocity_error_ra, index=features)
-            self.df.loc[features, 'angular_velocity_error_dec'] = pd.Series(angular_velocity_error_dec, index=features)
+            self.df.loc[idx, 'angular_velocity'] = pd.Series(angular_velocity, index=idx)
+            self.df.loc[idx, 'angular_velocity_error'] = pd.Series(angular_velocity_error, index=idx)
+            self.df.loc[idx, 'angular_velocity_error_ra'] = pd.Series(angular_velocity_error_ra, index=idx)
+            self.df.loc[idx, 'angular_velocity_error_dec'] = pd.Series(angular_velocity_error_dec, index=idx)
         
         if proper_sep.unit.is_equivalent(u.m):
-            self.df.loc[features, 'proper_velocity'] = pd.Series(proper_velocity, index=features)
-            self.df.loc[features, 'proper_velocity_error'] = pd.Series(proper_velocity_error, index=features)
-            self.df.loc[features, 'proper_velocity_error_dec'] = pd.Series(proper_velocity_error_dec, index=features)
-            self.df.loc[features, 'proper_velocity_error_ra'] = pd.Series(proper_velocity_error_ra, index=features)
+            self.df.loc[idx, 'proper_velocity'] = pd.Series(proper_velocity, index=idx)
+            self.df.loc[idx, 'proper_velocity_error'] = pd.Series(proper_velocity_error, index=idx)
+            self.df.loc[idx, 'proper_velocity_error_dec'] = pd.Series(proper_velocity_error_dec, index=idx)
+            self.df.loc[idx, 'proper_velocity_error_ra'] = pd.Series(proper_velocity_error_ra, index=idx)
 
     @staticmethod
     def from_link_builder(link_builder, projection, coord_mode='com'):
@@ -978,7 +1020,7 @@ class VelocityData(SSPData):
                     segments1, segments2, match, delta_info = match_result.get_all()
                     if delta_info.size(flag=wfeatures.DeltaInformation.DELTA_MATCH) > 0:
                         new.add_delta_info(delta_info, match, projection, link_builder=link_builder, 
-                                           coord_mode=coord_mode)
+                                           coord_mode=coord_mode, scale=scale)
 
         return new
 
@@ -1130,4 +1172,5 @@ def align_image_on_cores_cos(img, bg):
 
     print "COS:", cos
     return cos
+
 
