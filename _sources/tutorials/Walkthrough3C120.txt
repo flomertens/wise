@@ -2,13 +2,13 @@
 Walkthrough 3C120
 =================
 
-In this walhthrough, I will show the basics of WISE analysis, by
+In this walkthrough, I will show the basics of WISE analysis, by
 investigating the kinematic in the 3C120 jet.
 
 Setup
 -----
 
-We will analysis maps of the 3C120 jet observed with VLBA at 15 GHZ as
+We will analyse maps of the 3C120 jet observed with VLBA at 15 GHZ as
 part of the MOJAVE project. They can be obtained from
 http://www.physics.purdue.edu/MOJAVE/sourcepages/0430+052.shtml (FITS I
 image).
@@ -40,11 +40,13 @@ configurations and store the results:
 .. code:: python
 
     ctx = wiseutils.AnalysisContext()
-Setting up the data configration:
+
+Setting up the data configuration:
 ---------------------------------
 
-Now we can setup the data configuration. To list the default
-configuration, we simply execute:
+The project configuration is separated into a data, detection and matcher configuration 
+retrospectively stored in ctx.config.data, ctx.config.finder and ctx.config.matcher. 
+To list the default configuration, we simply execute:
 
 .. code:: python
 
@@ -76,7 +78,6 @@ configuration, we simply execute:
     object_z             |Object z                                |0                     |
     
 
-
 data\_dir is the directory where the results will be store. Setting a
 configuration is as simple as assigning a new value to it:
 
@@ -87,10 +88,11 @@ configuration is as simple as assigning a new value to it:
     ctx.config.data.data_dir = os.path.join(BASE_DIR, "run001")
     ctx.config.data.object_z = 0.033
     ctx.config.data.object_distance = 143 * u.Mpc
+
 To select the files to analyse, we use the ctx.select\_files() function.
-This function accept shell like wilcards, and it is possible to filter
+This function accept shell like wildcards, and it is possible to filter
 files by dates. For this walkthrough, we will only analyse images
-starting from january 2012:
+starting from January 2012:
 
 .. code:: python
 
@@ -100,11 +102,10 @@ starting from january 2012:
 
     Number of files selected: 13
 
-
 Now that we have selected our files, we want to preview them, in order
 to select the region that we will investigate. For that, we will execute
 a tasks called wisetasks.view\_all(). A task is a small function that
-will execute a particular task. To list all currently available tasks,
+will execute a particular job. To list all currently available tasks,
 we can run:
 
 .. code:: python
@@ -202,6 +203,7 @@ And to view all currently selected images, we run:
 .. code:: python
 
     wisetasks.view_all(ctx)
+
 This will open a separate window in which you can walk through all the
 images.
 
@@ -222,13 +224,15 @@ image:
     
     ctx.config.data.bg_fct = get_bg
     ctx.config.data.pre_process_fct = pre_process
-We can also define a mask. We will use for that a conveniant task that
+
+We can also define a mask. We will use for that a convenient task that
 set the mask as the brightest connected structure above a certain
 threshold of the stacked image:
 
 .. code:: python
 
     wisetasks.set_mask_from_stack_img(ctx, nsigma=3)
+
 .. code:: python
 
     wisetasks.view_all(ctx)
@@ -236,11 +240,11 @@ threshold of the stacked image:
 .. image:: imgs/3c120/view_all_crop_mask2.png
    :width: 500px
 
-Setting up the detection configration:
+Setting up the detection configuration:
 --------------------------------------
 
 Similarly to the data configuration, the detection configuration is
-storted in ctx.config.finder:
+stored in ctx.config.finder:
 
 .. code:: python
 
@@ -282,6 +286,7 @@ wavelet decomposition:
     ctx.config.finder.alpha_threashold = 3
     ctx.config.finder.exclude_noise = False
     ctx.config.finder.ms_dec_klass = wise.InterscalesWaveletMultiscaleDecomposition
+
 Running the detection
 ---------------------
 
@@ -325,10 +330,10 @@ Different tasks can be used to look at the results:
 .. image:: imgs/3c120/plot_all_features.png
    :width: 500px
 
-Setting up the matching configration:
+Setting up the matching configuration:
 -------------------------------------
 
-The matching configuration is storted in ctx.config.matcher:
+The matching configuration is stored in ctx.config.matcher:
 
 .. code:: python
 
@@ -367,9 +372,8 @@ The matching configuration is storted in ctx.config.matcher:
                                     |correlation                              |                                        |
     
 
-
 We will use the method ScaleMatcherMSCSC2 for the matching job. We also
-restrict the range of allowed displacemnet with a DeltaRangeFilter:
+restrict the range of allowed displacement with a DeltaRangeFilter:
 
 .. code:: python
 
@@ -382,6 +386,7 @@ restrict the range of allowed displacemnet with a DeltaRangeFilter:
     ctx.config.matcher.ignore_features_at_border = True
     ctx.config.matcher.tolerance_factor = 1.5
     ctx.config.matcher.method_klass = wise.ScaleMatcherMSCSC2
+
 Running the matching
 --------------------
 
@@ -390,9 +395,10 @@ Starting the matching is also done with a task:
 .. code:: python
 
     wisetasks.match_all(ctx)
+
 Several tasks are available to view the results.
 
-We can look displacements from epoch to epoch indvidualy at a specified
+We can look displacements from epoch to epoch individually at a specified
 scale. The scale parameter in all wisetasks is in pixel.
 
 .. code:: python
@@ -420,7 +426,7 @@ from the core:
    :width: 500px
 
 plot\_separation\_from\_core() have several options. It is possible to
-additionaly plot the position angle of the features, and filter them:
+additionally plot the position angle of the features, and filter them:
 
 .. code:: python
 
@@ -462,11 +468,12 @@ dictionary with all the fit result:
 
 To view the trajectories on a map, we can set first a reference image
 that will be used as background. We will use a stacked image of the all
-set using a conveniant tasks for that:
+set using a convenient tasks for that:
 
 .. code:: python
 
     wisetasks.set_stack_image_as_ref(ctx)
+
 .. code:: python
 
     wisetasks.view_links(ctx, contour=True, levels=np.logspace(-3.5, 0.5, 20), map_cmap='gray')
@@ -474,7 +481,7 @@ set using a conveniant tasks for that:
 .. image:: imgs/3c120/view_links.png
    :width: 500px
 
-The result can be save on disk using the save() task:
+The result can be saved on disk using the save() task:
 
 .. code:: python
 
@@ -514,12 +521,13 @@ options:
 
 -  The full wise results can be obtained using either
    ctx.get\_detection\_result() or ctx.get\_match\_result() depending on
-   your need. This will return a MultiScaleMatchResultSet and a
+   your need. This later function return a MultiScaleMatchResultSet and a
    MultiScaleFeaturesLinkBuilder:
 
 .. code:: python
 
     ms_result_set, ms_link_builder = ctx.get_match_result()
+
 This is two different and compatible data structures that handle the
 result in a different way. The MultiScaleFeaturesLinkBuilder contains a
 set of FeaturesLinkBuilder object, one for each scale, and each of this
@@ -534,8 +542,9 @@ scales.
 .. code:: python
 
     data = wisetasks.get_velocities_data(ctx, min_link_size=4, scales=4)
-data is a spreadsheat like object with attributes as columns. The
-following columns are provided:
+
+data is a spreadsheet like object with attributes as columns. The
+following attributes are provided:
 
 .. code:: python
 
@@ -546,7 +555,7 @@ following columns are provided:
     ['angular_sep', 'angular_velocity', 'angular_velocity_error', 'angular_velocity_error_dec', 'angular_velocity_error_ra', 'dec', 'dec_error', 'delta_dec', 'delta_ra', 'delta_time', 'dfc', 'epoch', 'features', 'intensity', 'link_id', 'match', 'pa', 'proper_velocity', 'proper_velocity_error', 'proper_velocity_error_dec', 'proper_velocity_error_ra', 'ra', 'ra_error', 'scale', 'sep_pa', 'snr']
 
 
-One can for exemple group the result by link\_id and display the
+One can for example group the result by link\_id and display the
 proper\_velocity with distance from the core for each detected segments:
 
 .. code:: python

@@ -11,8 +11,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   tutorial/Walkthrough3C120
-   tutorial/WalkthroughWaterDiffusion
+   tutorials/index
 
 
 

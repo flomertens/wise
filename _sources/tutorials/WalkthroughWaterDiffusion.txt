@@ -2,7 +2,7 @@
 Walkthrough particle diffusing in water
 =======================================
 
-In this walkthrough we will explore the potentiel of WISE for the
+In this walkthrough we will explore the potential of WISE for the
 analysis of micron-sized particles diffusing in water. We will use
 images from
 https://soft-matter.github.io/trackpy/tutorial/walkthrough.html, detect
@@ -28,7 +28,8 @@ Setup
 .. code:: python
 
     ctx = wiseutils.AnalysisContext()
-Setting up the data configration:
+
+Setting up the data configuration:
 ---------------------------------
 
 The full data set is composed of 300 images. We will first analyse only
@@ -65,10 +66,10 @@ the images:
 .. image:: imgs/bulk_water/view_all.png
        :width: 500px
 
-Setting up the detection configration:
+Setting up the detection configuration:
 --------------------------------------
 
-We want to track only the most promeninent particles, and to control it
+We want to track only the most prominent particles, and to control it
 we set an high value for alpha\_detection. Also the particles are
 typically all of the same sizes, and the displacement from image to
 image is small, so we can perform the analysis only on one scale of the
@@ -85,6 +86,7 @@ wavelet decomposition:
 .. code:: python
 
     wisetasks.detection_all(ctx)
+
 .. code:: python
 
     wisetasks.view_wds(ctx, num=False)
@@ -92,7 +94,7 @@ wavelet decomposition:
 .. image:: imgs/bulk_water/view_wds.png
        :width: 500px
 
-Setting up the matching configration:
+Setting up the matching configuration:
 -------------------------------------
 
 A reasonable maximum displacement from image to image is 5 pixels. For
@@ -105,9 +107,11 @@ and we can use the more simple and faster ScaleMatcherMSCI matcher:
     ctx.config.matcher.mscsc2_smooth = False
     ctx.config.matcher.ignore_features_at_border = True
     ctx.config.matcher.method_klass = wise.ScaleMatcherMSCI
+
 .. code:: python
 
     wisetasks.match_all(ctx)
+
 .. code:: python
 
     wisetasks.view_displacements(ctx, 4)
@@ -122,7 +126,7 @@ and we can use the more simple and faster ScaleMatcherMSCI matcher:
 
     wisetasks.view_links(ctx, map_cmap='winter_r')
 
- .. image:: imgs/bulk_water/view_links.png
+.. image:: imgs/bulk_water/view_links.png
        :width: 500px
 
 Assessing the results:
@@ -149,7 +153,8 @@ complete data set:
 .. code:: python
 
     wisetasks.match_all(ctx)
-The different plotting tasks of wise all have an option to save the plot
+
+The different plotting tasks of WISE all have an option to save the plot
 in a file. We will use it to view the trajectories of all the particles:
 
 .. code:: python
@@ -163,7 +168,7 @@ in a file. We will use it to view the trajectories of all the particles:
 
 Now to compare our result, we will use analysis method developed by
 trackpy to obtain the mean square displacement of the particles. The
-following will convert wise result data structure into one compatible
+following will convert WISE result data structure into one compatible
 with trackpy:
 
 .. code:: python
@@ -183,6 +188,7 @@ with trackpy:
     data_tp = data_tp.drop_duplicates()
     
     %matplotlib inline
+
 To make sure that the conversion was correctly done, we first plot the
 particle trajectories:
 
@@ -239,7 +245,6 @@ compare it with the theoretical one:
 
     n =  1.0636+/-0.0024
     A =  1.734+/-0.007
-
 
 
 .. image:: WalkthroughWaterDiffusion_files/WalkthroughWaterDiffusion_40_1.png
