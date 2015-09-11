@@ -3,4 +3,6 @@ from matcher import *
 from libwise import *
 from scc import *
 from wds import *
-import wiseutils
+from project import *
+from wiseutils import *
+import tasks

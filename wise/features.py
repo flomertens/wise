@@ -15,23 +15,33 @@ logger = logging.getLogger(__name__)
 
 
 class Feature(object):
-    ''' ! Store feature coord as index ! '''
+    '''Base class defining a feature. Features coordinate are stored as array index.
+
+    Parameters
+    ----------
+    coord : list of 2 elements
+        Coordinate of the features in array index.
+    intensity : float
+        Intensity of the feature
+    '''
+
+    __slots__ = ['coord', 'intensity', 'initial_coord', '__hash']
 
     def __init__(self, coord, intensity):
         self.set_coord(coord)
         self.intensity = intensity
         self.initial_coord = self.get_coord()
 
-        self.__key = tuple(self.initial_coord.tolist() + [self.intensity])
+        self.__hash = hash(tuple(self.initial_coord.tolist() + [self.intensity]))
 
     def __str__(self):
         return "c:%s,i:%s" % (self.get_coord(), self.intensity)
 
     def __eq__(x, y):
-        return x.__key == y.__key
+        return x.__hash == y.__hash
 
     def __hash__(self):
-        return hash(self.__key)
+        return self.__hash
 
     def __repr__(self):
         return str(self)
@@ -45,22 +55,29 @@ class Feature(object):
         return res
 
     def set_coord(self, coord):
-        self.coord = nputils.get_pair(coord)
+        """Set the coordinate of the feature."""
+        self.coord = nputils.get_pair(coord, dtype=np.float32)
 
     def get_coord(self, mode=None):
+        """Get the coordinate of the feature."""
         return self.coord.copy()
 
     def set_intensity(self, intensity):
+        """Set the intensity of he feature."""
         self.intensity = intensity
 
     def get_intensity(self):
+        '''Get the intensity of the feature.
+        '''
         return self.intensity
 
     def move(self, delta):
+        """Move the feature by an offset `delta` (in array index)."""
         coord = self.get_coord()
         self.set_coord(coord + delta)
 
     def move_back_to_initial(self):
+        """Reset the coordinate to the initial one."""
         self.set_coord(self.initial_coord)
 
     def copy(self):
@@ -69,12 +86,38 @@ class Feature(object):
         return new
 
     def distance(self, other, fct=None):
+        """Return the euclidean distance between this feature and `other`."""
         if fct is None:
             fct = lambda f: f.get_coord()
         return np.linalg.norm(fct(self) - fct(other))
 
 
 class ImageFeature(Feature):
+    """Class defining a feature in an image.
+
+    Parameters
+    ----------
+    coord : list of 2 elements
+        Coordinate of the features in array index.
+    meta : :class:`libwise.imgutils.ImageMeta`
+        Image meta information.
+    intensity : float
+        Intensity of the feature
+    snr : float
+        Signal over noise ratio.
+    id : str, optional
+        A feature identifier. Must be unique.
+    
+    Attributes
+    ----------
+    id : str
+        The feature identifier
+    meta : :class:`libwise.imgutils.ImageMeta`
+        Image meta information. 
+    snr : float
+        Signal over noise ratio of the feature.
+    """
+    __slots__ = ['coord', 'intensity', 'initial_coord', 'meta', 'snr', 'id', '__hash']
 
     def __init__(self, coord, meta, intensity, snr, id=None):
         Feature.__init__(self, coord, intensity)
@@ -87,20 +130,25 @@ class ImageFeature(Feature):
                     id += meta.get_epoch().strftime("%Y%m%d")
                 else:
                     id += str(meta.get_epoch())
-            id += 'x'.join([str(k) for k in coord])
+                id += "@"
+            id += 'x'.join([str(np.round(k, decimals=2)) for k in coord])
 
         self.id = id
 
     def get_epoch(self):
+        """Return the epoch of the feature."""
         return self.meta.get_epoch()
 
     def get_id(self):
-        self.id
+        ''' Return the identifier of the feature.'''
+        return self.id
 
     def get_meta(self):
+        ''' Return the feature image meta information (:class:`libwise.imgutils.ImageMeta`).'''
         return self.meta
 
     def get_coord_error(self, min_snr=0, max_snr=10):
+        ''' Return the standard error on the coordinate position_angle.'''
         beam = self.meta.get_beam()
         width = np.array([1, 1])
         if isinstance(beam , imgutils.GaussianBeam):
@@ -111,12 +159,15 @@ class ImageFeature(Feature):
         return width / (np.sqrt(2) * max(min(self.get_snr(), max_snr), min_snr))
 
     def get_rms_noise(self):
+        ''' Return the rms noise of the image.'''
         return self.get_intensity() / self.get_snr()
 
     def get_snr(self):
+        ''' Return the feature SNR.'''
         return self.snr
 
     def get_coordinate_system(self):
+        ''' Return the image coordinate system (:class:`libwise.imgutils.AbstractCoordinateSystem`).'''
         return self.meta.get_coordinate_system()
 
     def copy(self):
@@ -126,7 +177,12 @@ class ImageFeature(Feature):
 
 
 class FeaturesGroup(object):
-    '''TODO: list for baseclass, deprecate get_features(), new in place sort()'''
+    '''A group of features.
+    
+    Attributes
+    ----------
+    features : list
+    '''
 
     def __init__(self, features=None):
         if features is None:
@@ -143,15 +199,37 @@ class FeaturesGroup(object):
         return self.size()
 
     def set_features(self, features):
+        '''Set the list of features.'''
         self.features = features
 
     def merge(self, other):
+        ''' Merge this list of features with the features from `other`.'''
         self.features.extend(other.features)
 
     @classmethod
     def from_img_peaks(Klass, img, width, threashold, feature_filter=None, 
                        fit_gaussian=False, exclude_border_dist=1):
+        '''Detect local maxima in an image and return a corresponding :class:`FeaturesGroup`.
+        
+        Parameters
+        ----------
+        img : :class:`libwise.imgutils.Image`
+            The image to analyse.
+        width : int
+            The typical width of the features to detect.
+        threashold : float
+            Threshold above which a local maxima is considered a feature.
+        feature_filter : :class:`FeatureFilter`, optional
+            Filter the features.
+        fit_gaussian : bool, optional
+            If true, a sub pixel coordinate position is estimated by fitting a 2D 
+            gaussian profile on the feature.
+        exclude_border_dist : int, optional
+            Exclude features which are at distance < `exclude_border_dist` from 
+            teh image border.
+        '''
         width = max(width, 2)
+        img_meta = img.get_meta()
         threashold_pics_coord = nputils.find_peaks(img.data, width, threashold, exclude_border=False,
                                                    fit_gaussian=fit_gaussian,
                                                    exclude_border_dist=exclude_border_dist)
@@ -161,7 +239,7 @@ class FeaturesGroup(object):
         for coord in threashold_pics_coord:
             pic_max = img.data[tuple(coord)]
             snr = pic_max / float(threashold)
-            feature = ImageFeature(coord, img.get_meta(), pic_max, snr)
+            feature = ImageFeature(coord, img_meta, pic_max, snr)
             if feature_filter is not None:
                 res = feature_filter.filter(feature)
                 if res is False:
@@ -171,12 +249,15 @@ class FeaturesGroup(object):
         return result
 
     def intersect(self, other):
+        ''' Return the intersection between this list of features and `other`.'''
         return FeaturesGroup(set(self.features).intersection(set(other.features)))
 
     def has_feature(self, feature):
+        ''' Return True if the length of this list of features is not null.'''
         return feature in self.features
 
     def add_feature(self, feature, test_exist=False):
+        ''' Append a feature to this list of feature.'''
         assert isinstance(feature, Feature)
 
         if test_exist and self.has_feature(feature):
@@ -185,31 +266,37 @@ class FeaturesGroup(object):
         self.features.append(feature)
 
     def remove_feature(self, feature):
+        ''' Remove a feature to this list of features.'''
         self.features.remove(feature)
 
     def add_features_group(self, group):
+        ''' Append a list of features to this list of features.'''
         assert isinstance(group, FeaturesGroup)
 
         for feature in group.get_features():
             self.add_feature(feature)
 
     def get_features(self):
+        ''' Return the list of features as a set.'''
         return set(self.features)
 
     def filter(self, feature_filter):
-        ''' In place filter '''
+        ''' In place filtering of this list of features. '''
         for feature in list(self.features):
             if not feature_filter.filter(feature):
                 self.remove_feature(feature)
 
     def get_filtered(self, feature_filter):
+        ''' Return a new filtered list of features.'''
         new = self.copy()
         new.filter(feature_filter)
         return new
 
-    def move_features(self, delta, time_delta=1):
+    def move_features(self, delta_fct, time_delta=1):
+        ''' Move all features of an offset determined by a function `delta_fct`
+        which take a feature as argument and return a delta offset.'''
         deltas = DeltaInformation(self)
-        delta_fct = nputils.make_callable(delta)
+        delta_fct = nputils.make_callable(delta_fct)
         for feature in sorted(self.features):
             delta = np.round(delta_fct(feature.get_coord()))
             deltas.add_delta(feature, delta, time_delta)
@@ -217,25 +304,31 @@ class FeaturesGroup(object):
         return deltas
 
     def move_features_from_delta_info(self, delta_info):
+        ''' Move all features using information from a :class:`DeltaInformation`.'''
         for feature in self.features:
             delta = delta_info.get_delta(feature)
             if delta is not None:
                 feature.move(delta)
 
     def move_back_to_initial(self):
+        ''' Move all features to there initial coordinates.'''
         for feature in self.features:
             feature.move_back_to_initial()
 
     def get_coords(self, mode='lm'):
+        ''' Return a list of all features coordinates.'''
         coords = np.zeros((len(self.features), 2))
         for i, feature in enumerate(self.features):
             coords[i] = feature.get_coord(mode=mode)
         return coords
 
     def get_intensities(self):
+        ''' Return a list of all features intensities.'''
         return [k.get_intensity() for k in self.features]
 
     def find(self, feature, tol=0, mode=None):
+        ''' Return a list of this group features which are at a distance < tol of `feature`.
+        The returned list is sorted by increasing distance.'''
         founds = []
         for f in self.features:
             dist = feature.distance(f, mode)
@@ -246,6 +339,8 @@ class FeaturesGroup(object):
         return [k[0] for k in founds]
 
     def find_at_coord(self, coord, tol=0, coord_fct=None):
+        ''' Return a list of this group features which are at a distance < tol of `coord`.
+        The returned list is sorted by increasing distance.'''
         founds = []
         if coord_fct is None:
             coord_fct = lambda f: f.get_coord()
@@ -258,6 +353,8 @@ class FeaturesGroup(object):
         return [k[0] for k in founds]
 
     def sorted_list(self, cmp=None, key=None):
+        ''' Sort this list of features using `cmp` or `key`. 
+        See Python list documentation for more information.'''
         if cmp is None and key is None:
             key = lambda f: f.get_intensity()
         l = list(self.get_features())
@@ -338,18 +435,23 @@ class FeaturesQuery(object):
         self.features1 = fgroup.features
         self.nf1 = len(self.features1) 
         coords1 = np.array([f.get_coord(mode=mode) for mode in coord_modes for f in self.features1])
-        self.kdtree = KDTree(coords1)
+        if len(self.features1) > 0:
+            self.kdtree = KDTree(coords1)
 
     def get_features(self):
         return set(self.features1)
 
     def find(self, feature2, tol=np.inf):
+        if len(self.features1) == 0:
+            return []
         d, i = self.kdtree.query(feature2.get_coord(), k=len(self.features1),
                                  distance_upper_bound=tol)
         i = i[d < tol]
         return nputils.uniq([self.features1[k % self.nf1] for k in i])
 
     def get_match(self, fgroup2, tol=2):
+        if len(self.features1) == 0:
+            return FeaturesMatch()
         coords2 = np.array([f.get_coord() for f in fgroup2.features])
         d, i = self.kdtree.query(coords2, k=1, distance_upper_bound=tol)
         i1 = i[d < tol]
@@ -441,9 +543,11 @@ class FeaturesMatch(object):
 
 class Delta(object):
 
+    __slots__ = ['feature', 'delta', 'time']
+
     def __init__(self, feature, delta, time):
         self.feature = feature
-        self.delta = np.array(delta)
+        self.delta = np.array(delta, dtype=np.float32)
         self.time = time
 
     def get_delta(self):
@@ -487,6 +591,8 @@ class DeltaInformation(object):
     DELTA_COMPUTED = 1 << 2
 
     def __init__(self, features=[], average_tol=10):
+        # MEM ISSUE: using dict here does not scale well with increasing 
+        # number of features. 
         self.deltas = dict()
         self.flags = dict.fromkeys(features, self.NO_DELTA)
         self.average_tol = average_tol
@@ -508,12 +614,7 @@ class DeltaInformation(object):
         for f1, f2 in match.get_pairs():
             time_delta = f2.get_epoch() - f1.get_epoch()
             # f1 from match might have been moved. We want to get our own f1 to calculate delta correctly
-            # TODO: find a better solution for that
-            # PERF ISSUE.
-            try:
-                f1 = own_f1s[f1]
-            except ValueError:
-                continue
+            f1 = own_f1s[f1]
             self.add_delta(f1, delta_fct(f1, f2), time_delta, flag=self.DELTA_MATCH)
 
     def add_delta(self, feature, delta, time_delta, flag=DELTA_MATCH):
@@ -622,8 +723,13 @@ class DeltaInformation(object):
         new.flags = self.flags.copy()
         return new
 
+class FeatureFilter(nputils.AbstractFilter):
 
-class MaskFilter(nputils.AbstractFilter):
+    def filter(self, feature):
+        raise NotImplementedError()
+
+
+class MaskFilter(FeatureFilter):
 
     def __init__(self, img, coord_mode='com', prj_settings=None):
         self.img = img
@@ -651,7 +757,7 @@ class MaskFilter(nputils.AbstractFilter):
         return bool(self.img.data[tuple(feature_pixel_mask_coord)])
 
 
-class DateFilter(nputils.AbstractFilter):
+class DateFilter(FeatureFilter):
 
     def __init__(self, start_date=None, end_date=None, filter_dates=None):
         self.filter_fct = nputils.date_filter(start_date=start_date, end_date=end_date, 
@@ -667,7 +773,7 @@ class DateFilter(nputils.AbstractFilter):
         return self.filter_fct(feature.get_epoch())
 
 
-class DfcFilter(nputils.AbstractFilter):
+class DfcFilter(FeatureFilter):
 
     def __init__(self, dfc_min, dfc_max, unit, coord_mode='com'):
         self.dfc_min = dfc_min
@@ -686,7 +792,7 @@ class DfcFilter(nputils.AbstractFilter):
         return res
 
 
-class PaFilter(nputils.AbstractFilter):
+class PaFilter(FeatureFilter):
 
     def __init__(self, pa_min, pa_max, pa_fct=None, coord_mode='com'):
         self.pa_min = pa_min
@@ -708,7 +814,7 @@ class PaFilter(nputils.AbstractFilter):
         return res
 
 
-class RegionFilter(nputils.AbstractFilter):
+class RegionFilter(FeatureFilter):
 
     def __init__(self, region, coord_mode='com'):
         self.region = region
