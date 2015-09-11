@@ -154,13 +154,6 @@ def get_all_epochs(links):
     return sorted(epochs)
 
 
-def reset_links_colors(links):
-    self.color_selector = plotutils.ColorSelector()
-    links = sorted(links, key=lambda link: -link.size())
-    for link in links:
-        link.set_color(self.color_selector.get())
-
-
 class FeaturesLinkBuilder(object):
 
     TYPE = '.dfc.dat'
@@ -278,16 +271,22 @@ class FeaturesLinkBuilder(object):
         return match_results
 
     def add_match(self, match, delta_info, epoch):
-        last_links = [(k, k.get(epoch)) for k in self.links.values() if k.get(epoch) is not None]
+        # ids = [539]
+        # for f1, f2 in match.get_pairs():
+        #     if f1.get_segmentid() in ids or f2.get_segmentid() in ids:
+        #         print "%s (%s) -> %s (%s) " % (f1.get_id(), id(f1), f2.get_id(), id(f2))
 
+        last_links = [(k, k.get(epoch)) for k in self.links.values() if k.get(epoch) is not None]
         coord_feature_map = dict()
         for link, last in last_links:
+            # if last.get_segmentid() in ids:
+            #     print "Link:", link.get_id(), str(last), last.get_id(), id(last)
             if last.has_inner_features():
+                # print [tuple(f.get_coord('lm')) for f in feature1.get_inner_features()]
                 for inner_feature in last.get_inner_features():
                     coord_feature_map[tuple(inner_feature.get_coord('lm'))] = link
             else:
                 coord_feature_map[tuple(last.get_coord('lm'))] = link
-
         for (feature1, feature2) in match.get_pairs():
             # print "Add:", feature1.get_segmentid(), feature2.get_segmentid()
             linked_links = []
@@ -302,7 +301,25 @@ class FeaturesLinkBuilder(object):
             elif coord in coord_feature_map:
                 linked_links = [coord_feature_map.get(coord)]
             linked_links = list(set([k for k in linked_links if k is not None]))
-                        
+            
+            # linked_links2 = []
+            # for link, last in last_links:
+            #     # PERF ISSUE (top: equivalent, __eq__, get_segment_from_feature, last)
+            #     # Build list of last features matching epoch before the loop
+            #     # Build a KdTree (review what equivalent can mean)
+            #     if last.equivalent(feature1, weakly=True):
+            #         linked_links2.append(link)
+            # if sorted(linked_links) != sorted(linked_links2):
+            #     print "\nDiff", [k.get_id() for k in linked_links], [k.get_id() for k in linked_links2]
+            #     # print "\n".join([str(l) for l in linked_links])
+            #     # print "\n".join([str(l) for l in linked_links2])
+            #     print feature1, feature1.get_inner_features()
+            #     print [l.last() for l in linked_links]
+            #     print [list(l.last().get_inner_features()) for l in linked_links]
+            #     print [l.last() for l in linked_links2]
+            #     print [list(l.last().get_inner_features()) for l in linked_links2]
+            #     # print [coord_feature_map.get(tuple(f.get_coord('lm'))) for f in feature1.get_inner_features()]
+            
             # print "Possible links:", [k.get_id() for k in linked_links]
             if len(linked_links) == 0:
                 new_link = self.add_new(feature1)
@@ -408,7 +425,6 @@ class FeaturesLinkBuilder(object):
         array = sorted(array, key=lambda line: line[5])
         current_component_id = 0
         coord_sys = projection.get_coordinate_system()
-        img_metas = dict()
         if filter is not None:
             filter = map(str, filter)
         for line in array:
@@ -419,9 +435,8 @@ class FeaturesLinkBuilder(object):
             component_id = str(line[5])
             if filter is not None and not component_id in filter:
                 continue
-            if date not in img_metas:
-                img_metas[date] = imgutils.ImageMeta(date, coord_sys, image_set.get_beam(date))
-            f = ImageFeature([y, x], img_metas[date], 1, 1)
+            meta = imgutils.ImageMeta(date, coord_sys, image_set.get_beam(date))
+            f = ImageFeature([y, x], meta, 1, 1)
             if current_component_id != component_id:
                 component = FeaturesLink(f, new.color_selector.get(), component_id)
                 new.links[component_id] = component
@@ -456,7 +471,6 @@ class FeaturesLinkBuilder(object):
         relations = []
         current_component_id = 0
         coord_sys = projection.get_coordinate_system()
-        img_metas = dict()
         if filter is not None:
             filter = map(str, filter)
         for line in array:
@@ -474,9 +488,8 @@ class FeaturesLinkBuilder(object):
             related_id = str(line[inext+1])
             if filter is not None and not component_id in filter:
                 continue
-            if date not in img_metas:
-                img_metas[date] = imgutils.ImageMeta(date, coord_sys, image_set.get_beam(date))
-            f = ImageFeature([y, x], img_metas[date], intensity, snr)
+            meta = imgutils.ImageMeta(date, coord_sys, image_set.get_beam(date))
+            f = ImageFeature([y, x], meta, intensity, snr)
             if current_component_id != component_id:
                 component = FeaturesLink(f, new.color_selector.get(), component_id)
                 new.links[component_id] = component
@@ -547,9 +560,6 @@ class MultiScaleFeaturesLinkBuilder(object):
     def get_scale(self, scale):
         return self.link_builders.get(scale, None)
 
-    def get_scales(self):
-        return sorted(self.link_builders.keys())
-
     def add_match_result(self, ms_match_result):
         if len(self.link_builders) == 0:
             self.__init_builders(ms_match_result.get_scales())
@@ -557,8 +567,6 @@ class MultiScaleFeaturesLinkBuilder(object):
             link_builder = self.link_builders[scale_match_result.get_scale()]
             (segments1, segments2, match, delta_info) = scale_match_result.get_all()
             link_builder.add_match(match, delta_info, scale_match_result.get_epoch())
-        for link_builder in self.link_builders.values():
-            link_builder.reset_colors(link_sort_key=lambda link: -link.size())
 
     def get_ms_match_results(self, min_link_size=2):
         all_ms = defaultdict(MultiScaleMatchResult)
@@ -1099,9 +1107,10 @@ class ScaleMatcherMSCSC2(BaseScaleMatcher):
             r1.set_shift(np.round(window_search_offset))
 
         delta1 = r2.get_center_of_mass() - r1.get_center_of_mass()
-        # delta2 = r2.get_coord_max() - r1.get_coord_max()
+        delta2 = r2.get_coord_max() - r1.get_coord_max()
 
         def correlate(delta):
+
             # print "Window search:", window_search_offset
             # print "Com:", r2.get_center_of_mass(), r1.get_center_of_mass()
             if delta_tol is not None and np.linalg.norm(delta) > delta_tol:
@@ -1109,22 +1118,44 @@ class ScaleMatcherMSCSC2(BaseScaleMatcher):
                 # return 0, delta, window_search_offset + delta
                 return delta, 0
 
+            # regions1 = [k.get_image_region() for k in segments1]
+            # regions2 = [k.get_image_region() for k in segments2]
+
+            # if len(segments1) == 1:
+            #     region1 = regions1[0]
+            #     if len(segments2) > 1:
+            #         shape_r1 = region1.get_region().shape
+            #         region2 = imgutils.join_image_region(regions2, shape_r1)
+            # if len(segments2) == 1:
+            #     region2 = regions2[0]
+            #     if len(segments1) > 1:
+            #         shape_r2 = region2.get_region().shape
+            #         region1 = imgutils.join_image_region(regions1, shape_r2)
+            # if len(segments1) > 1 and len(segments2) > 1:
+            #     joined_shape = tuple(np.array([r1.get_region().shape, r2.get_region().shape]).min(axis=0))
+
+            #     region1 = imgutils.join_image_region(regions1, joined_shape)
+            #     region2 = imgutils.join_image_region(regions2, joined_shape)
+
+            # region1.set_shift(np.round(window_search_offset + delta))
             r1.set_shift(np.round(window_search_offset + delta))
 
+            #PERF ISSUE (optional ?)
             if self.config.get("mscsc2_smooth"):
-                # To improve performance, we need to run smooth only on the segments
-                if min(r1.get_shape_region()) > 3:
-                    r1.img = nputils.smooth(r1.img, 3, boundary="zero", mode="same")
-                if min(r2.get_shape_region()) > 3:
-                    r2.img = nputils.smooth(r2.img, 3, boundary="zero", mode="same")
-                
-            i1 = r1.get_data()
-            i2 = r2.get_data()
+                i1 = nputils.smooth(r1.get_data(), 3)
+                i2 = nputils.smooth(r2.get_data(), 3)
+            else:
+                i1 = r1.get_data()
+                i2 = r2.get_data()
 
-            coef_data = nputils.norm_xcorr_coef(i1, i2)
+            # PERF ISSUE: can be optimized
+            coef1 = 0 #nputils.norm_xcorr_coef(region1.get_data(), region2.get_data())
+            coef2 = nputils.norm_xcorr_coef(i1, i2)
+            coef = max([coef1, coef2])
             coef_shape = nputils.norm_xcorr_coef((i1 > 0), (i2 > 0))
-            coef = (coef_data + coef_shape) / 2.
+            coef = (coef + coef_shape) / 2.
 
+            # region1.set_shift(None)
             r1.set_shift(None)
 
             return delta, coef
@@ -1136,6 +1167,7 @@ class ScaleMatcherMSCSC2(BaseScaleMatcher):
             title = [u.get_segmentid() for u in segments1], "->", [u.get_segmentid() for u in segments2]
             cb(title, region1.get_data(), region2.get_data())
         
+
         return coef, delta, window_search_offset + delta
 
     def get_correlation(self, features1, features2, cb=None):

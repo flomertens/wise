@@ -87,8 +87,7 @@ class ImageFeature(Feature):
                     id += meta.get_epoch().strftime("%Y%m%d")
                 else:
                     id += str(meta.get_epoch())
-                id += "@"
-            id += 'x'.join([str(np.round(k, decimals=2)) for k in coord])
+            id += 'x'.join([str(k) for k in coord])
 
         self.id = id
 
@@ -96,7 +95,7 @@ class ImageFeature(Feature):
         return self.meta.get_epoch()
 
     def get_id(self):
-        return self.id
+        self.id
 
     def get_meta(self):
         return self.meta
@@ -153,7 +152,6 @@ class FeaturesGroup(object):
     def from_img_peaks(Klass, img, width, threashold, feature_filter=None, 
                        fit_gaussian=False, exclude_border_dist=1):
         width = max(width, 2)
-        img_meta = img.get_meta()
         threashold_pics_coord = nputils.find_peaks(img.data, width, threashold, exclude_border=False,
                                                    fit_gaussian=fit_gaussian,
                                                    exclude_border_dist=exclude_border_dist)
@@ -163,7 +161,7 @@ class FeaturesGroup(object):
         for coord in threashold_pics_coord:
             pic_max = img.data[tuple(coord)]
             snr = pic_max / float(threashold)
-            feature = ImageFeature(coord, img_meta, pic_max, snr)
+            feature = ImageFeature(coord, img.get_meta(), pic_max, snr)
             if feature_filter is not None:
                 res = feature_filter.filter(feature)
                 if res is False:
@@ -340,23 +338,18 @@ class FeaturesQuery(object):
         self.features1 = fgroup.features
         self.nf1 = len(self.features1) 
         coords1 = np.array([f.get_coord(mode=mode) for mode in coord_modes for f in self.features1])
-        if len(self.features1) > 0:
-            self.kdtree = KDTree(coords1)
+        self.kdtree = KDTree(coords1)
 
     def get_features(self):
         return set(self.features1)
 
     def find(self, feature2, tol=np.inf):
-        if len(self.features1) == 0:
-            return []
         d, i = self.kdtree.query(feature2.get_coord(), k=len(self.features1),
                                  distance_upper_bound=tol)
         i = i[d < tol]
         return nputils.uniq([self.features1[k % self.nf1] for k in i])
 
     def get_match(self, fgroup2, tol=2):
-        if len(self.features1) == 0:
-            return FeaturesMatch()
         coords2 = np.array([f.get_coord() for f in fgroup2.features])
         d, i = self.kdtree.query(coords2, k=1, distance_upper_bound=tol)
         i1 = i[d < tol]
@@ -515,7 +508,12 @@ class DeltaInformation(object):
         for f1, f2 in match.get_pairs():
             time_delta = f2.get_epoch() - f1.get_epoch()
             # f1 from match might have been moved. We want to get our own f1 to calculate delta correctly
-            f1 = own_f1s[f1]
+            # TODO: find a better solution for that
+            # PERF ISSUE.
+            try:
+                f1 = own_f1s[f1]
+            except ValueError:
+                continue
             self.add_delta(f1, delta_fct(f1, f2), time_delta, flag=self.DELTA_MATCH)
 
     def add_delta(self, feature, delta, time_delta, flag=DELTA_MATCH):
@@ -624,13 +622,8 @@ class DeltaInformation(object):
         new.flags = self.flags.copy()
         return new
 
-class FeatureFilter(nputils.AbstractFilter):
 
-    def filter(self, feature):
-        raise NotImplementedError()
-
-
-class MaskFilter(FeatureFilter):
+class MaskFilter(nputils.AbstractFilter):
 
     def __init__(self, img, coord_mode='com', prj_settings=None):
         self.img = img
@@ -658,7 +651,7 @@ class MaskFilter(FeatureFilter):
         return bool(self.img.data[tuple(feature_pixel_mask_coord)])
 
 
-class DateFilter(FeatureFilter):
+class DateFilter(nputils.AbstractFilter):
 
     def __init__(self, start_date=None, end_date=None, filter_dates=None):
         self.filter_fct = nputils.date_filter(start_date=start_date, end_date=end_date, 
@@ -674,7 +667,7 @@ class DateFilter(FeatureFilter):
         return self.filter_fct(feature.get_epoch())
 
 
-class DfcFilter(FeatureFilter):
+class DfcFilter(nputils.AbstractFilter):
 
     def __init__(self, dfc_min, dfc_max, unit, coord_mode='com'):
         self.dfc_min = dfc_min
@@ -693,7 +686,7 @@ class DfcFilter(FeatureFilter):
         return res
 
 
-class PaFilter(FeatureFilter):
+class PaFilter(nputils.AbstractFilter):
 
     def __init__(self, pa_min, pa_max, pa_fct=None, coord_mode='com'):
         self.pa_min = pa_min
@@ -715,7 +708,7 @@ class PaFilter(FeatureFilter):
         return res
 
 
-class RegionFilter(FeatureFilter):
+class RegionFilter(nputils.AbstractFilter):
 
     def __init__(self, region, coord_mode='com'):
         self.region = region

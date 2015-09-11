@@ -25,10 +25,12 @@ class Segment(ImageFeature):
 
     def __init__(self, coord, intensity, segmentid, segmented_image, inner_features=None):
         snr = intensity / segmented_image.get_rms_noise()
-        meta = segmented_image.get_img_meta()
+        meta = segmented_image.get_img().get_meta()
         ImageFeature.__init__(self, coord, meta, intensity, snr)
         self.segmentid = segmentid
         self.inner_features = inner_features
+        if self.inner_features is None:
+            self.inner_features = FeaturesGroup()
         self.segmented_image = segmented_image
 
         # cache
@@ -61,19 +63,31 @@ class Segment(ImageFeature):
             segid = self.get_segmentid()
         return '%s_%s' % (epoch, segid)
 
+    def equivalent(self, other, weakly=False):
+        a = self.get_segmented_image().get_segment_from_feature(other)
+        b = other.get_segmented_image().get_segment_from_feature(self)
+        if not weakly:
+            if a is not None and a == self and b is not None and b == other:
+                return True
+        else:
+            if (a is not None and a == self) or (b is not None and b == other):
+                return True
+        return False
+
+    def related(self, other):
+        a = self.get_segmented_image().get_segment_from_feature(other)
+        b = other.get_segmented_image().get_segment_from_feature(self)
+        if (a is not None and a == self) or (b is not None and b == other):
+            return True
+        return False
+
     def add_inner_feature(self, feature):
-        if self.inner_features is None:
-            self.inner_features = FeaturesGroup()
         self.inner_features.add_feature(feature)
 
     def get_inner_features(self):
-        if self.inner_features is None:
-            return []
         return self.inner_features
 
     def has_inner_features(self):
-        if self.inner_features is None:
-            return False
         return self.inner_features.size() > 0
 
     def get_segmentid(self):
@@ -86,27 +100,26 @@ class Segment(ImageFeature):
         return self.segmented_image.get_mask(self)
 
     def get_segment_image(self):
+        # PERF ISSUE
         image = self.segmented_image.get_img().data.copy()
         labels = self.segmented_image.get_labels()
         image[labels != self.get_segmentid()] = 0
         return image
 
-    def get_cropped_segment_image(self):
-        s = nputils.index2slice(self.get_cropped_index())
-        image = self.segmented_image.get_img().data[s].copy()
-        labels = self.segmented_image.get_labels()
-        image[labels[s] != self.get_segmentid()] = 0
-        return image
-
     def get_image_region(self):
         if self.image_region is None:
-            shape = self.segmented_image.get_img().data.shape
-            self.image_region = imgutils.ImageRegion(self.get_cropped_segment_image(),
-                                     self.get_cropped_index(), cropped=True, shape=shape)
+            # PERF ISSUE: review this
+            self.image_region = imgutils.ImageRegion(self.get_segment_image(),
+                                                     self.get_cropped_index())
         return self.image_region
 
     def get_center_of_shape(self):
         return self.segmented_image.get_center_of_shape(self)
+        # if self.center_of_shape is None:
+        #     labels = self.segmented_image.get_labels()
+        #     cos = measurements.center_of_mass(labels, labels, self.segmentid)
+        #     self.center_of_shape = np.array(cos)
+        # return self.center_of_shape
 
     def get_area(self):
         if self.area is None:
@@ -115,6 +128,15 @@ class Segment(ImageFeature):
 
     def get_center_of_mass(self):
         return self.segmented_image.get_center_of_mass(self)
+        # if self.center_of_mass is None:
+        #     labels = self.segmented_image.get_labels()
+        #     img = self.segmented_image.get_img()
+        #     com = measurements.center_of_mass(img.data, labels, self.segmentid)
+        #     if np.isnan(max(com)):
+        #         print "Warning: nan com for:", self.get_segmentid()
+        #         com = self.get_coord('lm')
+        #     self.center_of_mass = np.array(com)
+        # return self.center_of_mass
 
     def get_coord(self, mode=None):
         if mode is None or mode is 'lm':
@@ -137,12 +159,9 @@ class Segment(ImageFeature):
 
     def get_interface(self):
         if self.interface is None:
+            #PERF ISSUE
             segments = self.segmented_image
-            i = self.get_cropped_index()
-            # crop the labels, adding just a small border to get the interface
-            index = [max(0, i[0] - 1), max(0, i[1] - 1), i[2] + 1, i[3] + 1]
-            labels = segments.get_labels()[nputils.index2slice(index)]
-            interface = nputils.get_interface(labels, self.segmentid)
+            interface = nputils.get_interface(segments.get_labels(), self.segmentid)
             self.interface = dict([(segments.get_segment_from_id(k), v) for k, v in interface.items()])
         return self.interface
 
@@ -176,6 +195,8 @@ class Segment(ImageFeature):
         return (self.get_mask() * region.get_mask()).sum() > 0
 
     def discard_cache(self):
+        # self.center_of_shape = None
+        # self.center_of_mass = None
         self.area = None
         self.crop_index = None
         self.image_region = None
@@ -183,9 +204,8 @@ class Segment(ImageFeature):
 
     def copy(self):
         new = Segment(self.coord, self.intensity,
-                      self.segmentid, self.segmented_image)
-        if self.has_inner_features():
-            new.inner_features = self.inner_features.copy()
+                      self.segmentid, self.segmented_image,
+                      self.inner_features.copy())
         new.initial_coord = self.initial_coord
         return new
 
@@ -194,7 +214,6 @@ class SegmentedImages(DatedFeaturesGroup):
 
     def __init__(self, img, features=[], labels=None, rms_noise=0):
         self.img = img
-        self.img_meta = img.get_meta()
         self.rms_noise = rms_noise
         self.labels = labels
         self.ids = dict(zip([f.get_segmentid() for f in features], features))
@@ -253,9 +272,14 @@ class SegmentedImages(DatedFeaturesGroup):
     def get_all_inner_features(self):
         group = FeaturesGroup()
         for feature in self.get_features():
-            if feature.has_inner_features():
-                group.add_features_group(feature.get_inner_features())
+            group.add_features_group(feature.get_inner_features())
         return group
+
+    # def get_center_of_mass(self):
+    #     coords = np.zeros((len(self.features), 2))
+    #     for i, segment in enumerate(self.features):
+    #         coords[i] = segment.get_center_of_mass()
+    #     return coords
 
     def merge_segments(self, segment1, segment2):
         if not self.has_feature(segment1) or not self.has_feature(segment2):
@@ -275,7 +299,7 @@ class SegmentedImages(DatedFeaturesGroup):
         self.labels[self.labels == id2] = id1
 
         # merge inner features from each segments
-        if segment2.has_inner_features():
+        if len(segment2.get_inner_features()) > 0:
             for feature in segment2.get_inner_features():
                 segment1.add_inner_feature(feature.copy())
         else:
@@ -308,6 +332,18 @@ class SegmentedImages(DatedFeaturesGroup):
             if upper_segment is not None and upper_segment == segment:
                 result.add_feature(feature)
         return result
+
+    # NOT USED
+    # def get_overlapping_segment_old(self, segment, delta=None, min_ratio=0.5):
+    #     mask1 = segment.get_segmented_image().get_mask(segment)
+    #     if delta is not None:
+    #         mask1.roll(delta)
+    #     for feature in self.get_features():
+    #         mask2 = self.get_mask(feature)
+    #         ratio = (mask1 * mask2).sum() / float(mask1.sum())
+    #         if ratio >= min_ratio:
+    #             return feature
+    #     return None
 
     def get_overlapping_segment(self, segment, delta=None, min_ratio=0.4):
         mask1 = segment.get_segmented_image().get_mask(segment)
@@ -348,9 +384,6 @@ class SegmentedImages(DatedFeaturesGroup):
 
     def get_img(self):
         return self.img
-
-    def get_img_meta(self):
-        return self.img_meta
 
     def get_segments_img(self):
         img = self.img.data.copy()
@@ -415,7 +448,7 @@ class SegmentedImages(DatedFeaturesGroup):
             ids = np.unique(labels)
             coms = measurements.center_of_mass(img.data, labels, ids)
             self.center_of_mass = dict(zip(ids, np.array(coms)))
-        return self.center_of_mass.get(segment.get_segmentid(), segment.get_coord(mode="lm"))
+        return self.center_of_mass.get(segment.get_segmentid())
 
     def get_center_of_shape(self, segment):
         if self.center_of_shape is None:
@@ -424,7 +457,7 @@ class SegmentedImages(DatedFeaturesGroup):
             ids = np.unique(labels)
             coss = measurements.center_of_mass(labels, labels, ids)
             self.center_of_shape = dict(zip(ids, np.array(coss)))
-        return self.center_of_shape.get(segment.get_segmentid(), segment.get_coord(mode="lm"))
+        return self.center_of_shape.get(segment.get_segmentid())
 
     def discard_cache(self, segment=None):
         if segment is None:
@@ -436,7 +469,6 @@ class SegmentedImages(DatedFeaturesGroup):
         self.center_of_mass = None
 
     def copy(self):
-        # MEM ISSUE: we should avoid having to copy the labels
         new = SegmentedImages(self.img, [k.copy() for k in self.features], self.labels.copy(), self.rms_noise)
         for feature in new.get_features():
             feature.segmented_image = new
@@ -805,11 +837,6 @@ class MultiScaleImageSet(AbstractKeyList):
     def get_epoch(self, epoch):
         return self.get_key(epoch)
 
-    def get_scales(self):
-        if len(self) == 0:
-            return []
-        return sorted(self[0].get_scales())
-
     def features_iter(self):
         for ms_segments in self:
             for segments in ms_segments:
@@ -845,16 +872,15 @@ class MultiScaleImageSet(AbstractKeyList):
         new = MultiScaleImageSet()
         array = np.loadtxt(file, dtype=str, delimiter=' ')
         epochs = dict()
-        img_metas = dict()
         cs = projection.get_coordinate_system()
         for line in array:
             date = nputils.epoch_to_datetime(line[0])
             x, y = projection.s2p(map(float, line[1:3]))
             intensity = float(line[3])
             snr = float(line[4])
-            if date not in img_metas:
-                img_metas[date] = imgutils.ImageMeta(date, cs, image_set.get_beam(date))
-            feature = ImageFeature([y, x], img_metas[date], intensity, snr)
+
+            meta = imgutils.ImageMeta(date, cs, image_set.get_beam(date))
+            feature = ImageFeature([y, x], meta, intensity, snr)
             if feature_filter is not None and not feature_filter(feature):
                 continue
             scale = np.round(float(line[5]) / projection.mean_pixel_scale())
@@ -975,6 +1001,11 @@ class DoGMultiscaleDecomposition(WaveletMultiscaleDecomposition):
         scales_noises = wtutils.dog_noise_factor(self.bg, widths=widths, angle=angle,
                                             ellipticity=ellipticity, beam=self.img.get_beam())
         
+        # SPECIAL
+        # scales = [scales[0]] * len(scales)
+        # scales_noises = [scales_noises[0]] * len(scales_noises)
+        # END OF SPECIAL
+
         return zip(scales, scales_noises, widths)
 
 
@@ -1039,6 +1070,8 @@ class FeaturesFinder(object):
                 features = FeaturesGroup.from_img_peaks(scale_img, min(width, 8), 
                     detection, exclude_border_dist=exculde_dist)
                 mask = (scale.real > threshold)
+                # if self.region_filter is not None:
+                #     mask = mask * self.region_filter.get_mask()
 
                 res = SegmentedScale(scale_img, [], None, scale_noise, self.img, width)
                 res.watershed_segmentation(features, mask, feature_filter=self.filter)
@@ -1050,8 +1083,24 @@ class FeaturesFinder(object):
                     res.img.data[res.labels == 0] = 0
                 # res.img.data[res.labels <= scale_noise] = 0
 
+                # scales = wtutils.wavedec(res.img.data, wavelet_fct, max_scale, dec=wt_dec)
+                # res.img.data = gaussian_filter(self.img.data, 2, order=1, mode='constant')
                 logger.info("Detected features at scale %s: %s" % (width, res.size()))
                 logger.info("Threasholds: %s, %s" % (detection, threshold))
+
+                # SPECIAL
+                # detection = 1e-10
+                # threshold = 1e-10
+
+                # scale = res.img.data
+                # b1 = gaussian_filter(scale, width / 2.35, order=0, mode='constant')
+                # b2 = gaussian_filter(scale, width / 2.35 + 1, order=0, mode='constant')
+                # scale = b1 - b2
+                # features = FeaturesGroup.from_img_peaks(scale_img, width, detection, region_filter=self.region_filter)
+                # scale_img = imgutils.Image.from_image(self.img, scale.real)
+                # res = SegmentedScale(scale_img, [], None, scale_noise, self.img, width)
+                # res.watershed_segmentation(features, (scale.real > threshold))
+                # END OF SPECIAL
             else:
                 res = FeaturesGroup.from_img_peaks(scale_img, width, detection, feature_filter=self.filter,
                                                    fit_gaussian=False)
