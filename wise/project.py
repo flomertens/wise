@@ -5,6 +5,7 @@ import datetime
 
 import wds
 import matcher
+import wiseutils
 import features as wfeatures
 
 from libwise import plotutils, nputils, imgutils
@@ -221,7 +222,7 @@ class AnalysisContext(object):
             return None
         mtime = os.path.getmtime(filename)
         if self._cache_core_offset is None or self._cache_core_offset[0] != (mtime, filename):
-            core_offset_pos = CoreOffsetPositions.new_from_file(filename)
+            core_offset_pos = wiseutils.CoreOffsetPositions.new_from_file(filename)
             self._cache_core_offset = [(mtime, filename), core_offset_pos]
         return self._cache_core_offset[1]
 
@@ -330,6 +331,7 @@ class AnalysisContext(object):
         stack_bg_builder = imgutils.StackedImageBuilder()
         for file in self.files:
             img = self.open_file(file)
+            self.pre_bg_process(img)
             bg = imgutils.Image(self.get_bg(img))
             stack_bg_builder.add(bg)
             if preprocess:
@@ -407,7 +409,7 @@ class AnalysisContext(object):
             print "Warning: No core offset fct defined"
             return
         filename = self.get_core_offset_filename()
-        core_offset_pos = CoreOffsetPositions()
+        core_offset_pos = wiseutils.CoreOffsetPositions()
 
         for file in self.files:
             img = self.open_file(file)
@@ -436,12 +438,13 @@ class AnalysisContext(object):
         stack = self.build_stack_image(preprocess=preprocess)
         stack.save_to_fits(self.get_stack_image_filename())
 
-    def detection(self, img, config=None, filter=None):
+    def detection(self, img, config=None, filter=None, verbose=True):
         """Run detection on `img` (:class:`libwise.imgutils.Image`).
         """
-        print "Start detection on: %s" % img
-        if filter is not None:
-            print "  with filter: %s" % filter
+        if verbose:
+            print "Start detection on: %s" % img
+            if filter is not None:
+                print "  with filter: %s" % filter
         self.pre_bg_process(img)
         bg = self.get_bg(img)
         detection_filter = wfeatures.MaskFilter(self.get_mask())
@@ -495,10 +498,10 @@ class AnalysisContext(object):
 
         print "Number of files selected:", len(self.files)
 
-    def match(self, find_res1, find_res2):
+    def match(self, find_res1, find_res2, verbose=True):
         """Run match on `find_res1` and `find_res2` (both :class:`wise.wds.SegmentedScale`)
         """
         m = matcher.ImageMatcher(self.config.finder, self.config.matcher)
 
-        return m.get_match(find_res1, find_res2)
+        return m.get_match(find_res1, find_res2, verbose=verbose)
 

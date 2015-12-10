@@ -14,7 +14,6 @@ import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from mpl_toolkits.axisartist.grid_finder import MaxNLocator
-from matplotlib.ticker import ScalarFormatter
 
 from scipy.optimize import curve_fit
 from scipy.ndimage import measurements
@@ -127,9 +126,9 @@ def plot_features(ax, features, mode='com', color_fct=None, num=False, num_offse
         plotutils.plot_coords(ax, p2i(features.get_coords(mode=mode)), **kwargs)
 
     if num and isinstance(features, wds.SegmentedImages):
-        for segment in segments.get_features():
+        for segment in features.get_features():
             y, x = segment.get_center_of_mass()
-            ax.text(x - offset[0], y - offset[1], "%d" % segment.get_segmentid(), size='small')
+            ax.text(x - num_offset[0], y - num_offset[1], "%d" % segment.get_segmentid(), size='small')
 
 
 def add_features_tooltip(stack, ax, features, projection=None, epoch=False, tol=4):
@@ -213,7 +212,8 @@ def plot_delta_info(stack, delta_info, input_delta=None, plot_error=True):
     stack.add_replayable_figure("Delta Mesure", do_plot)
 
 
-def plot_displacement_vector(ax, delta_info, mode='com', color_fct=None, flag=wfeatures.DeltaInformation.DELTA_MATCH, **kwargs):
+def plot_displacement_vector(ax, delta_info, mode='com', color_fct=None, 
+                             flag=wfeatures.DeltaInformation.DELTA_MATCH, **kwargs):
     """Display displacements vectors represented as arrows.
     
     Parameters
@@ -242,6 +242,24 @@ def plot_displacement_vector(ax, delta_info, mode='com', color_fct=None, flag=wf
         plotutils.checkargs(kwargs, 'zorder', 3)
         plotutils.checkargs(kwargs, 'width', 3.5)
         patch = plt.Arrow(coord[1], coord[0], delta[1], delta[0], **kwargs)
+        ax.add_patch(patch)
+
+
+def plot_velocity_vector(ax, delta_info, projection, ang_vel_unit, pix_per_unit, 
+                         mode='com', color_fct=None, 
+                         flag=wfeatures.DeltaInformation.DELTA_MATCH, **kwargs):
+    features = delta_info.get_features(flag=flag)
+    for i, feature in enumerate(features):
+        coord = feature.get_coord(mode=mode)
+        delta = delta_info.get_delta(feature)
+        ang_vel = delta_info.get_full_delta(feature).get_angular_velocity(projection)
+        ang_vel_pix = ang_vel.to(ang_vel_unit).value * pix_per_unit
+        ang_vel_vect_pix = ang_vel_pix * delta / nputils.l2norm(delta)
+        if color_fct is not None:
+            kwargs['fc'] = color_fct(feature)
+        plotutils.checkargs(kwargs, 'zorder', 3)
+        plotutils.checkargs(kwargs, 'width', 3.5)
+        patch = plt.Arrow(coord[1], coord[0], ang_vel_vect_pix[1], ang_vel_vect_pix[0], **kwargs)
         ax.add_patch(patch)
 
 
@@ -293,7 +311,7 @@ def plot_displacements(ax, features1, features2, delta_info, num=False, projecti
 
     cmap = plotutils.get_cmap(cmap)
     plotutils.imshow_image(ax, bg, projection=projection, beam=beam, title=False,
-                           alpha=alpha_map, cmap=cmap)
+                           alpha=0.8, cmap=cmap)
 
     if num:
         plot_segmentid(ax, features1)
@@ -457,11 +475,11 @@ def plot_links_dfc(ax, projection, links, mode='com', num=False, num_bbox=None, 
             # ax.text(link.get_first_epoch(), dfc_fct(link.first()), "%s, %s" % (link.get_id(), link.size()))            
             ax.text(link.get_first_epoch(), dfc_fct(link.first()), link.get_id(), bbox=num_bbox, zorder=200, size='small')
 
-        if 'c' not in kargs:
+        if 'c' not in kwargs:
             line_color = link.get_color()
         else:
-            line_color = kargs['c']
-        # plotutils.checkargs(kargs, 'lw', 2.5)
+            line_color = kwargs['c']
+        # plotutils.checkargs(kwargs, 'lw', 2.5)
 
         for epoch, related in link.get_relations():
             link_feature = link.get(epoch)
@@ -570,13 +588,13 @@ def plot_velocity_map(ax, stack_img, projection, link_builder, min_link_size=2, 
     #   dfc_axis_pos is (nth_coord, value)
     links = link_builder.get_links(feature_filter=feature_filter, min_link_size=min_link_size)
 
-    wiseutils.plot_links_map(ax, stack_img, projection, links, color_style=color_style, 
+    plot_links_map(ax, stack_img, projection, links, color_style=color_style, 
                                mode=mode, colorbar_setting=colorbar_setting, map_cmap=map_cmap,
                                vector_width=vector_width, link_id_label=link_id_label, 
                                num_bbox=None, **kwargs)
 
     if dfc_axis:
-        axis = plotutils.add_rotated_axis(ax, projection, dfc_axis_teta, dfc_axis_pos=dfc_axis_pos)
+        axis = plotutils.add_rotated_axis(ax, projection, dfc_axis_teta, axis_pos=dfc_axis_pos)
         axis.label.set_text("$z_{obs} (mas)$")
 
     scale = projection.get_sky(link_builder.get_scale())
@@ -587,7 +605,8 @@ def plot_velocity_map(ax, stack_img, projection, link_builder, min_link_size=2, 
 
 
 def plot_links_map(ax, img, projection, links, color_style='link', mode='com', colorbar_setting=None,
-                     map_cmap='jet', vector_width=4, link_id_label=False, num_bbox=None, **kwargs):
+                     map_cmap='jet', vector_width=4, link_id_label=False, num_bbox=None, 
+                     ang_vel_arrows=False, ang_vel_unit=u.mas / u.year, pix_per_ang_vel_unit=1, **kwargs):
     """Display features links on a map.
     
     Parameters
@@ -637,8 +656,13 @@ def plot_links_map(ax, img, projection, links, color_style='link', mode='com', c
     for link in links:
         delta_info = link.get_delta_info(measured_delta=False)
 
-        plot_displacement_vector(ax, delta_info, color_fct=color_fct, mode=mode, lw=0.5,
-                             fc=link.get_color(), ec='k', alpha=0.9, zorder=link.size(), width=vector_width)
+        if ang_vel_arrows:
+            plot_velocity_vector(ax, delta_info, projection, ang_vel_unit, pix_per_ang_vel_unit, 
+                                 color_fct=color_fct, mode=mode, lw=0.5,
+                                 fc=link.get_color(), ec='k', alpha=0.9, zorder=link.size(), width=vector_width)
+        else:
+            plot_displacement_vector(ax, delta_info, color_fct=color_fct, mode=mode, lw=0.5,
+                                 fc=link.get_color(), ec='k', alpha=0.9, zorder=link.size(), width=vector_width)
         # y, x = link.get_features()[int(np.random.normal(s / 2, s / 4))].get_coord()
         if link_id_label:
             y, x = link.last().get_coord()
@@ -778,7 +802,8 @@ class SSPData(object):
     def __init__(self):
         self.df = pd.DataFrame()
 
-    def add_features_group(self, features, projection, coord_mode='com', scale=None):
+    def add_features_group(self, features, projection, coord_mode='com', 
+                           scale=None, min_snr=2, max_snr=10):
         coords = p2i(features.get_coords(mode=coord_mode))
         ra, dec = zip(*projection.p2s(coords))
         
@@ -791,22 +816,25 @@ class SSPData(object):
             epochs.append(feature.get_epoch())
             intensities.append(feature.get_intensity())
             snrs.append(feature.get_snr())
-            sigma_pos.append(feature.get_coord_error(min_snr=2, max_snr=10))
+            sigma_pos.append(feature.get_coord_error(min_snr=min_snr, max_snr=max_snr))
             idx.append(feature.get_id())
 
         sigma_pos = np.array(sigma_pos)
-        ra_error = np.abs(projection.mean_pixel_scale()) * sigma_pos[:, 1] * projection.get_unit()
-        dec_error = np.abs(projection.mean_pixel_scale()) * sigma_pos[:, 0] * projection.get_unit()
-
+        ra_error = np.abs(projection.mean_pixel_scale()) * sigma_pos[:, 1] #* projection.get_unit()
+        dec_error = np.abs(projection.mean_pixel_scale()) * sigma_pos[:, 0] #* projection.get_unit()
 
         if isinstance(projection, imgutils.AbstractRelativeProjection):
             dfc = projection.dfc(coords)
+            dfc_error = nputils.uarray_s((nputils.uarray(ra, ra_error) ** 2 + 
+                                    nputils.uarray(dec, dec_error) ** 2) ** 0.5)
             pa = projection.pa(coords)
+            pa_error = nputils.uarray_s(nputils.unumpy.arctan2(nputils.uarray(ra, ra_error), 
+                                    nputils.uarray(dec, dec_error)))
         else:
-            dfc = pa = None
+            dfc = dfc_error = pa = pa_error = None
 
         df = pd.DataFrame({'features': list(features), 'ra': ra, 'dec': dec, 'epoch': epochs, 'snr': snrs,
-                           'dfc': dfc, 'pa': pa, 'intensity': intensities,
+                           'dfc': dfc, 'dfc_error': dfc_error, 'pa': pa, 'pa_error': pa_error, 'intensity': intensities,
                            'ra_error': ra_error, 'dec_error': dec_error,
                            }, index=idx)
 
@@ -818,22 +846,22 @@ class SSPData(object):
         return df
 
     def add_col_region(self, region_list):
-        region = [region_list.get_region(f) for f in self.df.index]
+        region = [region_list.get_region(f) for f in self.df.features]
         self.df['region'] = pd.Series(region, index=self.df.index)
 
     def filter(self, feature_filter):
         assert isinstance(feature_filter, nputils.AbstractFilter)
-        self.df = self.df[[feature_filter.filter(k) for k in self.df.features.values]]
+        self.df = self.df[[feature_filter.filter(k) for k in self.df['features'].values]]
 
     @staticmethod
-    def from_results(results, projection, scales=None, coord_mode='com'):
+    def from_results(results, projection, scales=None, **kargs):
         new = SSPData()
         detection_result = results.get_detection_result()
         for ms_image in detection_result:
             for segments in ms_image:
                 scale = segments.get_scale()
                 if scales is None or scale in scales:
-                    new.add_features_group(segments, projection, coord_mode=coord_mode, scale=scale)
+                    new.add_features_group(segments, projection, scale=scale, **kargs)
 
         return new
 
@@ -843,9 +871,11 @@ class VelocityData(SSPData):
     def __init__(self):
         SSPData.__init__(self)
 
-    def add_delta_info(self, delta_info, match, projection, link_builder=None, coord_mode='com', scale=None):
+    def add_delta_info(self, delta_info, match, projection, link_builder=None, 
+                       coord_mode='com', scale=None, min_snr=2, max_snr=10):
         features = delta_info.get_features(flag=wfeatures.DeltaInformation.DELTA_MATCH)
-        cdf = self.add_features_group(features, projection, coord_mode=coord_mode, scale=scale)
+        cdf = self.add_features_group(features, projection, coord_mode=coord_mode, 
+                                      scale=scale, min_snr=min_snr, max_snr=max_snr)
         features = features.features
         idx = cdf.index
         sigma_pos = np.array([feature.get_coord_error() for feature in features])
@@ -917,16 +947,15 @@ class VelocityData(SSPData):
             self.df.loc[idx, 'proper_velocity_error_ra'] = pd.Series(proper_velocity_error_ra, index=idx)
 
     @staticmethod
-    def from_link_builder(link_builder, projection, coord_mode='com'):
+    def from_link_builder(link_builder, projection, **kargs):
         new = VelocityData()
         delta_info = link_builder.get_delta_info()
-        new.add_delta_info(delta_info, None, projection, link_builder=link_builder, 
-                                           coord_mode=coord_mode)
+        new.add_delta_info(delta_info, None, projection, link_builder=link_builder, **kargs)
 
         return new
 
     @staticmethod
-    def from_results(results, projection, scales=None, coord_mode='com'):
+    def from_results(results, projection, scales=None, **kargs):
         new = VelocityData()
         ms_match_results, ms_link_builders = results.get_match_result()
 
@@ -936,8 +965,8 @@ class VelocityData(SSPData):
                 for match_result in match_results:
                     segments1, segments2, match, delta_info = match_result.get_all()
                     if delta_info.size(flag=wfeatures.DeltaInformation.DELTA_MATCH) > 0:
-                        new.add_delta_info(delta_info, match, projection, link_builder=link_builder, 
-                                           coord_mode=coord_mode, scale=scale)
+                        new.add_delta_info(delta_info, match, projection, 
+                                            link_builder=link_builder, scale=scale, **kargs)
 
         return new
 

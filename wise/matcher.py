@@ -806,7 +806,7 @@ class ScaleMatcherMSCI(BaseScaleMatcher):
 
         return match, delta_info
 
-    def get_match(self, cb=None):
+    def get_match(self, cb=None, verbose=True):
         tol = self.get_tolerance()
 
         logging.info("Start Matching at scale %s. Tolerence: %s" % (self.segments1.get_scale(), tol))
@@ -988,7 +988,7 @@ class ScaleMatcherMSCSC(BaseScaleMatcher):
         # print "=> Result: ", ','.join([str(k) for k in best[0].items()]), "Correlation:", best[1]
         return best[0]
 
-    def get_match(self, cb=None):
+    def get_match(self, cb=None, verbose=True):
         print "\nStart Matching at scale %s. Tolerence: %s" % (self.scale, self.get_tolerance())
 
         if self.config.get("ignore_features_at_border"):
@@ -1268,8 +1268,9 @@ class ScaleMatcherMSCSC2(BaseScaleMatcher):
             print "=> Result: ", ','.join([str(k) for k in best[0].items()]), "Correlation:", best[1]
         return best[0]
 
-    def get_match(self, cb=None):
-        print "\nStart Matching at scale %s. Tolerence: %s" % (self.scale, self.get_tolerance())
+    def get_match(self, cb=None, verbose=True):
+        if verbose:
+            print "\nStart Matching at scale %s. Tolerence: %s" % (self.scale, self.get_tolerance())
 
         to_match1, to_match2 = self.get_features_to_match()
         to_match2_query = FeaturesQuery(to_match2, coord_modes=self.mode)
@@ -1327,9 +1328,11 @@ class ScaleMatcherMSCSC2(BaseScaleMatcher):
 
             ssd = ((r1.get_data() - r2.get_data()) ** 2).sum()
 
-            print "Matching features: %s / %s (%s %%)" % (match.size(), to_match1.size(),
+            if verbose:
+                print "Matching features: %s / %s (%s %%)" % (match.size(), to_match1.size(),
                                                         (match.size() / float(to_match1.size()) * 100))
-            print "Correlation:", total_correlation / match.size(), "SSD:", ssd
+            if verbose:
+                print "Correlation:", total_correlation / match.size(), "SSD:", ssd
 
         return ScaleMatchResult(self.segments1, self.segments2, match, delta_info, self.upper_delta_info)
 
@@ -1588,7 +1591,7 @@ class ScaleMatcherMSCC2(BaseScaleMatcher):
                 elif feature.get_area() < 0.4 * self.scale * np.pi ** 2:
                     self.segments1.remove_feature(feature)
 
-    def get_match(self, cb=None):
+    def get_match(self, cb=None, verbose=True):
         print "\nStart Matching at scale %s." % (self.scale)
 
         to_match1, to_match2 = self.get_features_to_match()
@@ -1902,7 +1905,7 @@ class ScaleMatcherMSCC(BaseScaleMatcher):
         # print "Criteria:", np.nanmin([corr_with - corr_without, (error_without - error_with) / error_without])
         return corr_with - corr_without
 
-    def get_match(self, cb=None):
+    def get_match(self, cb=None, verbose=True):
         print "\nStart Matching at scale %s." % (self.scale)
 
         # self.merge_small_features()
@@ -2161,7 +2164,7 @@ class MatcherConfiguration(nputils.BaseConfiguration):
         ["range_delta_x", [-40, 40], "Deprecated: use delta_range_filter", None],
         ["range_delta_y", [-40, 40], "Deprecated: use delta_range_filter", None],
         ["increase_tol_for_no_input_delta", True, "Increase tolerance when no initial guess", nputils.validator_is(bool)],
-        ["delta_range_filter", None, "Delta range filter", nputils.validator_is(AbstractDeltaRangeFilter)],
+        ["delta_range_filter", None, "Delta range filter", nputils.validator_is(nputils.AbstractFilter)],
         ["mscsc_max_merge", 3, "MSCSC: Maximum number of segment merged", nputils.validator_in_range(1, 5, instance=int)],
         ["tolerance_factor", 1, "Tolerance factor", nputils.validator_in_range(0, 4)],
         ["method_klass", ScaleMatcherMSCC, "Matching method", nputils.validator_is_class(BaseScaleMatcher)],
@@ -2267,17 +2270,18 @@ class ImageMatcher(object):
         self.match_config = match_config
         self.filter = filter
 
-    def get_match_scale(self, features1, features2, upper_delta_info, do_merge=True, cb=None):
+    def get_match_scale(self, features1, features2, upper_delta_info, 
+                        do_merge=True, cb=None, verbose=True):
         klass = self.match_config.get("method_klass")
         matcher = klass(features1, features2, upper_delta_info, self.match_config)
-        result = matcher.get_match(cb=cb)
+        result = matcher.get_match(cb=cb, verbose=verbose)
 
         features1.discard_cache()
         features2.discard_cache()
 
         return result
 
-    def get_match(self, finder_res1, finder_res2, cb=None):
+    def get_match(self, finder_res1, finder_res2, cb=None, verbose=True):
         upper_delta_info = None
         result = MultiScaleMatchResult()
         average_tol_factor = self.match_config.get("upper_info_average_tol_factor")
@@ -2287,7 +2291,8 @@ class ImageMatcher(object):
                 upper_delta_info = build_delta_information_scale2(finder_res1[i],
                                                                   result[-1] if len(result) > 0 else None,
                                                                   average_tol_factor=average_tol_factor)
-            scale_match_result = self.get_match_scale(finder_res1[i], finder_res2[i], upper_delta_info, i > 0, cb=cb)
+            scale_match_result = self.get_match_scale(finder_res1[i], finder_res2[i], 
+                upper_delta_info, i > 0, cb=cb, verbose=verbose)
             result.append(scale_match_result)
 
         result.sort(key=lambda k: k.get_scale())

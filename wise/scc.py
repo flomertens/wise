@@ -24,7 +24,8 @@ class SCCConfiguration(nputils.BaseConfiguration):
         ["ncc_threshold", 0.6, "Threshold for the NCC", nputils.validator_is(bool)],
         ["factor", 10, "Zoom factor of the resulting map", nputils.validator_in_range(1, 20)],
         ["method", 'ncc_peaks_direct', "Method used to compute the SCC", lambda v: v in ['ncc', 'ncc_peaks', 'ncc_peaks_direct']],
-        ["vector_direction", None, "Project the result on this direction", lambda v: v == 'position_angle' or isinstance(v, (list, np.ndarray, NoneType))],
+        ["vector_direction", None, "Project the result on this direction", lambda v: v == 'position_angle' or nputils.is_callable(v) or isinstance(v, (list, np.ndarray, NoneType))],
+        ["velocity_trans", None, "Do any transform on the velocity vector, pre projection", lambda v: nputils.is_callable(v)],
         ["rnd_pos_shift", False, "Randomly shift the segments position", nputils.validator_is((bool, NoneType))],
         ["rnd_pos_factor", 1.5, "Factor of the standart deviation of the shift", nputils.validator_in_range(0.1, 5)],
         ["img_rnd_shift", 0, "Randomly shift the images (pixel std)", nputils.validator_in_range(0, 10)],
@@ -49,6 +50,7 @@ class StackCrossCorrelation(object):
         self.rnd_pos_shift = config.get("rnd_pos_shift")
         self.rnd_pos_factor = config.get("rnd_pos_factor")
         self.ncc_threshold = config.get("ncc_threshold")
+        self.vel_trans = config.get("velocity_trans")
 
         if self.stack is None:
             self.stack = plotutils.FigureStack()
@@ -134,6 +136,8 @@ class StackCrossCorrelation(object):
                 x_dir = self.x_dir
                 if x_dir == 'position_angle':
                     x_dir = prj.p2s(p2i(segment1.get_coord()))
+                elif nputils.is_callable(x_dir):
+                    x_dir = self.x_dir(prj.p2s(p2i(segment1.get_coord())))
 
                 if self.mode == 'ncc_peaks_direct':
                     region1 = segment1.get_image_region()
@@ -160,6 +164,9 @@ class StackCrossCorrelation(object):
 
                         delta = prj.pixel_scales() * np.array(delta_pix)  * prj.unit
                         v = delta / self.__get_delta_time(delta_t)
+
+                        if self.vel_trans:
+                            v = self.vel_trans(prj.p2s(p2i(segment1.get_coord())), v.T).T
 
                         if x_dir is not None:
                             vx, vy = nputils.vector_projection(v.T, x_dir) * v.unit

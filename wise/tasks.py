@@ -184,10 +184,6 @@ def info_files_delta(ctx, delta_time_unit=u.day, angular_velocity_unit=u.mas / u
     print "Mean Velocity resolution: %s +- %s" % (np.mean(all_velocity_c_px), np.std(all_velocity_c_px))
 
 
-# def info_result(ctx):
-#     pass
-
-
 def detection_all(ctx, filter=None):
     '''Run wds on all selected files
     
@@ -220,6 +216,7 @@ def match_all(ctx, filter=None):
     ctx.result = project.AnalysisResult(ctx.config)
     prev_result = None
     prev_img = None
+    match_ratio_list = []
     for i, file in enumerate(ctx.files):
         img = ctx.open_file(file)
         res = ctx.detection(img, filter=filter)
@@ -232,8 +229,76 @@ def match_all(ctx, filter=None):
             match_res = ctx.match(prev_result, res)
             ctx.result.add_match_result(match_res)
 
+            for match_res_scale in match_res:
+                n_segments = match_res_scale.segments1.size()
+                match_ratio = (match_res_scale.get_match().size()) / (float(n_segments))
+                # print match_res_scale.get_match().size(), n_segments
+                match_ratio_list.append(match_ratio)
+            # print match_ratio_list
+
         prev_result = result_copy
         prev_img = img
+
+    print "Match ratio stat:", nputils.stat(match_ratio_list)
+
+
+def bootstrap_matching(ctx, n=100, filter=None, cb_post_match=None):
+    all_res = dict()
+    all_epochs = []
+    all_imgs = dict()
+    for i, file in enumerate(ctx.files):
+        img = ctx.open_file(file)
+        all_epochs.append(img.get_epoch())
+
+        res = ctx.detection(img, filter=filter)
+        all_res[img.get_epoch()] = res
+        all_imgs[img.get_epoch()] = img
+
+    t = time.time()
+    all_match_ratio = []
+    for i in range(n):
+        eta = ""
+        if i > 0:
+            remaining = (np.round((time.time() - t) / float(i) * (n - i)))
+            eta = " (ETA: %s)" % time.strftime("%H:%M:%S", time.localtime(time.time() + remaining))
+        print "Run %s / %s%s" % (i + 1, n, eta)
+        
+        shuffled = nputils.permutation_no_succesive(all_epochs)
+        match_ratio_list = []
+        match_results = project.AnalysisResult(ctx.config)
+
+        for epoch1, epoch2 in nputils.pairwise(shuffled):
+            res1 = all_res[epoch1].copy()
+            res2 = all_res[epoch2].copy()
+            # print "Matching:", res1.get_epoch(), "vs", res2.get_epoch()
+
+            res1.epoch = epoch1
+            for segments in res1:
+                segments.epoch = epoch1
+
+            res2.epoch = epoch2
+            for segments in res2:
+                segments.epoch = epoch2
+
+            full_match_res = ctx.match(res1, res2, verbose=False)
+            match_results.add_match_result(full_match_res)
+            match_results.add_detection_result(all_imgs[epoch1], res1)
+
+            for match_res in full_match_res:
+                n_segments = match_res.segments1.size()
+                match_ratio = (match_res.get_match().size()) / (float(n_segments))
+                match_ratio_list.append(match_ratio)
+
+        all_match_ratio.append(np.mean(match_ratio_list))
+
+        if cb_post_match is not None:
+            cb_post_match(shuffled, match_results)
+
+        # print "Match ratio stat:", nputils.stat(match_ratio_list)
+
+    # print all_match_ratio
+
+    print "Match ratio stat:", nputils.stat(all_match_ratio)
 
 
 def save(ctx, name, coord_mode='com', measured_delta=True):
@@ -351,12 +416,12 @@ def view_all(ctx, preprocess=True, show_mask=True, show_regions=[], save_filenam
 
     def do_plot(fig, file):
         img = ctx.open_file(file)
-        prj = ctx.get_projection()
         ax = fig.subplots()
         if align:
             ctx.align(img)
         if preprocess:
             ctx.pre_process(img)
+        prj = ctx.get_projection(img)
         plotutils.imshow_image(ax, img, projection=prj, **kwargs)
         if not align:
             core_offset = ctx.get_core_offset()
@@ -371,12 +436,18 @@ def view_all(ctx, preprocess=True, show_mask=True, show_regions=[], save_filenam
             if bg is not None and isinstance(bg, np.ndarray):
                 bg.fill(1)
         if ctx.get_mask() is not None and show_mask is True:
-            ax.contour(ctx.get_mask().data, [0.5])
+            mask = ctx.get_mask()
+            ctx.pre_process(mask)
+            ax.contour(mask.data, [0.5])
         for region in show_regions:
             plotutils.plot_region(ax, region, prj, text=True)
 
     for file in ctx.files:
-        stack.add_replayable_figure(os.path.basename(file), do_plot, file)
+        if isinstance(file, basestring):
+            name = os.path.basename(file)
+        else:
+            name = str(file)
+        stack.add_replayable_figure(name, do_plot, file)
 
     if save_filename is not None:
         stack.save_all(os.path.join(ctx.get_data_dir(), save_filename))
@@ -547,13 +618,13 @@ def view_all_features(ctx, scales, region_list=None, legend=True, feature_filter
 
         if region_list is not None:
             for region, gdata in data.df.groupby('region'):
-                features = wfeatures.FeaturesGroup(gdata.index)
+                features = wds.DatedFeaturesGroupScale(scale, features=gdata.features.values)
 
                 wiseutils.plot_features(ax_all, features, mode='com', c=region.get_color(), label=region.get_name())
                 plotutils.plot_region(ax_all, region, projection=projection, text=False, 
                                       color=region.get_color(), fill=True)
         else:
-            features = wfeatures.FeaturesGroup(data.df.index)
+            features = wds.DatedFeaturesGroupScale(scale, features=data.features.values)
             wiseutils.plot_features(ax_all, features, mode='com')
 
         if legend:
@@ -625,7 +696,7 @@ def plot_separation_from_core(ctx, scales=None, feature_filter=None, min_link_si
         ax = fig.subplots(nrows=1 + int(pa or snr), reshape=False, sharex=True)
 
         if fit_fct:
-            plotutils.checkargs(kargs, 'ls', '--')
+            plotutils.checkargs(kwargs, 'ls', '--')
         wiseutils.plot_links_dfc(ax[0], projection, links, num=num, **kwargs)
         if fit_fct:
             fit_result = wiseutils.plot_links_dfc_fit(ax[0], projection, links, fit_fct, lw=2)
@@ -864,12 +935,12 @@ def view_links(ctx, scales=None, feature_filter=None, min_link_size=2, map_cmap=
         stack.show()
 
 
-def get_velocities_data(ctx, scales=None, region_list=None, min_link_size=2, feature_filter=None):
+def get_velocities_data(ctx, scales=None, region_list=None, min_link_size=2, feature_filter=None,
+                        **kargs):
     if not ctx.result.has_match_result():
         print "No result found. Run match_all() first."
         return
 
-    stack = plotutils.FigureStack()
     scales = _get_scales(scales, ctx.result.get_scales())
 
     if len(scales) == 0:
@@ -879,7 +950,7 @@ def get_velocities_data(ctx, scales=None, region_list=None, min_link_size=2, fea
     ref_img = ctx.get_ref_image()
     prj = ctx.get_projection(ref_img)
 
-    data = wiseutils.VelocityData.from_results(ctx.get_result(), prj, scales=scales)
+    data = wiseutils.VelocityData.from_results(ctx.get_result(), prj, scales=scales, **kargs)
     if feature_filter is not None:
         data.filter(feature_filter)
 
@@ -1107,16 +1178,16 @@ def stack_cross_correlation(ctx, config, debug=0, nwise=2, stack=None):
             continue
 
         res1 = ctx.detection(img1, filter=config.get("filter1"))
+        print "-> Numbers of detected SSP: %s" % ", ".join([str(k.size()) for k in res1])
         res2 = ctx.detection(img2, filter=config.get("filter2"))
-
-        print [k.size() for k in res1]
 
         scc_result.process(prj, res1, res2)
 
     return scc_result
 
 
-def bootstrap_scc(ctx, config, output_dir, n, append=False, seperate_scales=False):
+def bootstrap_scc(ctx, config, output_dir, n, nwise = 2, append=False, 
+                  verbose=False, seperate_scales=False):
     """Perform Stack Cross Correlation analysis n time and store results in output_dir
     
     Parameters
@@ -1132,7 +1203,6 @@ def bootstrap_scc(ctx, config, output_dir, n, append=False, seperate_scales=Fals
 
     .. _tags: task_scc
     """
-    nwise = 2
     random_shift = config.get("img_rnd_shift")
 
     if config.get("shuffle") == config.get("rnd_pos_shift"):
@@ -1155,10 +1225,9 @@ def bootstrap_scc(ctx, config, output_dir, n, append=False, seperate_scales=Fals
         img2.data = nputils.shift2d(img2.data, np.random.uniform(-random_shift, random_shift, 2))
 
         res1 = ctx.detection(img1, filter=config.get("filter1"))
+        print "-> Numbers of detected SSP: %s" % ", ".join([str(k.size()) for k in res1])
         res2 = ctx.detection(img2, filter=config.get("filter2"))
-
-        # print [k.size() for k in res1]
-        # print [k.size() for k in res2]
+        print "-> Numbers of detected SSP: %s" % ", ".join([str(k.size()) for k in res2])
 
         all_res1[file1] = res1
         all_res2[file1] = res2
@@ -1200,7 +1269,7 @@ def bootstrap_scc(ctx, config, output_dir, n, append=False, seperate_scales=Fals
             files_pair = nputils.nwise(all_files, nwise)
         epochs_pair = nputils.nwise(all_epochs, nwise)
 
-        scc_result = scc.StackCrossCorrelation(config, verbose=False)
+        scc_result = scc.StackCrossCorrelation(config, verbose=verbose)
 
         for shuffled_pair, epoch_pair in zip(files_pair, epochs_pair):
             res1 = all_res1[shuffled_pair[0]]
@@ -1215,8 +1284,8 @@ def bootstrap_scc(ctx, config, output_dir, n, append=False, seperate_scales=Fals
 
             delta_t, velocity_pix, tol_pix = scc_result.get_velocity_resolution(prj, res1, res2)
 
-            if tol_pix <= 4 or tol_pix >= 20:
-                # print "-> Skip"
+            if not nputils.in_range(tol_pix, config.get("tol_pix_range")):
+                print "-> Skip: Not in the allowed range of pixel velocity resolution:", tol_pix
                 continue
 
             scc_result.process(prj, res1, res2)

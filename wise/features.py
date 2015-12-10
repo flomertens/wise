@@ -446,6 +446,10 @@ class FeaturesQuery(object):
             return []
         d, i = self.kdtree.query(feature2.get_coord(), k=len(self.features1),
                                  distance_upper_bound=tol)
+        if len(self.features1) == 1:
+            if d < tol:
+                return self.features1
+            return []
         i = i[d < tol]
         return nputils.uniq([self.features1[k % self.nf1] for k in i])
 
