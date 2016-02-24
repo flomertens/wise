@@ -15,7 +15,7 @@ image).
 
 The first step is to import the required python library:
 
-.. code:: python
+.. code-block:: python
 
     import os
     import datetime
@@ -24,7 +24,7 @@ The first step is to import the required python library:
     import astropy.units as u
     
     import wise
-    from wise import wiseutils, wisetasks
+    from wise import tasks
     from libwise import imgutils, plotutils, nputils
     
     %matplotlib gtk
@@ -37,9 +37,9 @@ The first step is to import the required python library:
 We then initialize an AnalysisContext object that will handle the
 configurations and store the results:
 
-.. code:: python
+.. code-block:: python
 
-    ctx = wiseutils.AnalysisContext()
+    ctx = wise.AnalysisContext()
 
 Setting up the data configuration:
 ---------------------------------
@@ -48,7 +48,7 @@ The project configuration is separated into a data, detection and matcher config
 retrospectively stored in ctx.config.data, ctx.config.finder and ctx.config.matcher. 
 To list the default configuration, we simply execute:
 
-.. code:: python
+.. code-block:: python
 
     print ctx.config.data.doc()
 
@@ -81,7 +81,7 @@ To list the default configuration, we simply execute:
 data\_dir is the directory where the results will be store. Setting a
 configuration is as simple as assigning a new value to it:
 
-.. code:: python
+.. code-block:: python
 
     BASE_DIR = os.path.expanduser("~/data/3c120/mojave")
     
@@ -94,7 +94,7 @@ This function accept shell like wildcards, and it is possible to filter
 files by dates. For this walkthrough, we will only analyse images
 starting from January 2012:
 
-.. code:: python
+.. code-block:: python
 
     ctx.select_files(os.path.join(BASE_DIR, "icn/*.icn.fits"), start_date=datetime.datetime(2012, 1, 1))
 
@@ -104,13 +104,13 @@ starting from January 2012:
 
 Now that we have selected our files, we want to preview them, in order
 to select the region that we will investigate. For that, we will execute
-a tasks called wisetasks.view\_all(). A task is a small function that
+a tasks called tasks.view\_all(). A task is a small function that
 will execute a particular job. To list all currently available tasks,
 we can run:
 
-.. code:: python
+.. code-block:: python
 
-    wisetasks.list_tasks()
+    tasks.list_tasks()
 
 .. parsed-literal::
 
@@ -140,12 +140,12 @@ we can run:
     
 
 
-The task wisetasks.info\_files() will list some information about the
+The task tasks.info\_files() will list some information about the
 currently selected files:
 
-.. code:: python
+.. code-block:: python
 
-    wisetasks.info_files(ctx)
+    tasks.info_files(ctx)
 
 .. parsed-literal::
 
@@ -169,12 +169,12 @@ currently selected files:
     Mean beam: Bmin: 0.557, Bmaj: 1.291, Angle:-0.07
 
 
-while wisetasks.info\_files\_delta() gives information about the
+while tasks.info\_files\_delta() gives information about the
 velocity resolution:
 
-.. code:: python
+.. code-block:: python
 
-    wisetasks.info_files_delta(ctx)
+    tasks.info_files_delta(ctx)
 
 .. parsed-literal::
 
@@ -200,9 +200,9 @@ velocity resolution:
 
 And to view all currently selected images, we run:
 
-.. code:: python
+.. code-block:: python
 
-    wisetasks.view_all(ctx)
+    tasks.view_all(ctx)
 
 This will open a separate window in which you can walk through all the
 images.
@@ -214,7 +214,7 @@ To define our region of interest, we need to set a pre\_process
 function. We will do similarly to define also a background region in the
 image:
 
-.. code:: python
+.. code-block:: python
 
     def pre_process(ctx, img):
         img.crop([5, -15], [-25, 5], projection=ctx.get_projection(img))
@@ -229,13 +229,13 @@ We can also define a mask. We will use for that a convenient task that
 set the mask as the brightest connected structure above a certain
 threshold of the stacked image:
 
-.. code:: python
+.. code-block:: python
 
-    wisetasks.set_mask_from_stack_img(ctx, nsigma=3)
+    tasks.set_mask_from_stack_img(ctx, nsigma=3)
 
-.. code:: python
+.. code-block:: python
 
-    wisetasks.view_all(ctx)
+    tasks.view_all(ctx)
 
 .. image:: imgs/3c120/view_all_crop_mask2.png
    :width: 500px
@@ -246,7 +246,7 @@ Setting up the detection configuration:
 Similarly to the data configuration, the detection configuration is
 stored in ctx.config.finder:
 
-.. code:: python
+.. code-block:: python
 
     print ctx.config.finder.doc()
 
@@ -279,7 +279,7 @@ stored in ctx.config.finder:
 We will perform the analysis for scales 2 and 3, with intermediate scale
 wavelet decomposition:
 
-.. code:: python
+.. code-block:: python
 
     ctx.config.finder.min_scale = 2
     ctx.config.finder.max_scale = 4
@@ -287,14 +287,14 @@ wavelet decomposition:
     ctx.config.finder.exclude_noise = False
     ctx.config.finder.ms_dec_klass = wise.InterscalesWaveletMultiscaleDecomposition
 
-Running the detection
+Running the detection task
 ---------------------
 
 Starting the detection is done with a task:
 
-.. code:: python
+.. code-block:: python
 
-    wisetasks.detection_all(ctx)
+    tasks.detection_all(ctx)
 
 .. parsed-literal::
 
@@ -316,16 +316,16 @@ Starting the detection is done with a task:
 
 Different tasks can be used to look at the results:
 
-.. code:: python
+.. code-block:: python
 
-    wisetasks.view_wds(ctx, title=False)
+    tasks.view_wds(ctx, title=False)
 
 .. image:: imgs/3c120/view_wds.png
    :width: 500px
 
-.. code:: python
+.. code-block:: python
 
-    wisetasks.plot_all_features(ctx, scales=[4, 8], pa=True, feature_filter=wise.DfcFilter(0.1, 18, u.mas))
+    tasks.plot_all_features(ctx, scales=[4, 8], pa=True, feature_filter=wise.DfcFilter(0.1, 18, u.mas))
 
 .. image:: imgs/3c120/plot_all_features.png
    :width: 500px
@@ -335,7 +335,7 @@ Setting up the matching configuration:
 
 The matching configuration is stored in ctx.config.matcher:
 
-.. code:: python
+.. code-block:: python
 
     print ctx.config.matcher.doc()
 
@@ -375,7 +375,7 @@ The matching configuration is stored in ctx.config.matcher:
 We will use the method ScaleMatcherMSCSC2 for the matching job. We also
 restrict the range of allowed displacement with a DeltaRangeFilter:
 
-.. code:: python
+.. code-block:: python
 
     JET_ANGLE = -0.4 * u.rad
     direction = np.array([-np.cos(JET_ANGLE), np.sin(JET_ANGLE)])
@@ -387,24 +387,23 @@ restrict the range of allowed displacement with a DeltaRangeFilter:
     ctx.config.matcher.tolerance_factor = 1.5
     ctx.config.matcher.method_klass = wise.ScaleMatcherMSCSC2
 
-Running the matching
+Running the matching task
 --------------------
 
 Starting the matching is also done with a task:
 
-.. code:: python
+.. code-block:: python
 
-    wisetasks.match_all(ctx)
+    tasks.match_all(ctx)
 
 Several tasks are available to view the results.
 
 We can look displacements from epoch to epoch individually at a specified
-scale. The scale parameter in all wisetasks is in pixel.
+scale. The scale parameter in all tasks is in pixel.
 
-.. code:: python
+.. code-block:: python
 
-    reload(wisetasks)
-    wisetasks.view_displacements(ctx, 8)
+    tasks.view_displacements(ctx, 8)
 
 .. image:: imgs/3c120/view_displacements.png
    :width: 500px
@@ -415,10 +414,9 @@ scale. The scale parameter in all wisetasks is in pixel.
 We can also view how the different components evolve as the travel away
 from the core:
 
-.. code:: python
+.. code-block:: python
 
-    reload(wisetasks)
-    wisetasks.plot_separation_from_core(ctx)
+    tasks.plot_separation_from_core(ctx)
 
 .. image:: imgs/3c120/plot_separation_from_core_scale4.png
    :width: 500px
@@ -428,10 +426,9 @@ from the core:
 plot\_separation\_from\_core() have several options. It is possible to
 additionally plot the position angle of the features, and filter them:
 
-.. code:: python
+.. code-block:: python
 
-    reload(wisetasks)
-    wisetasks.plot_separation_from_core(ctx, min_link_size=4, pa=True, feature_filter=wise.DfcFilter(0.1, 20, u.mas))
+    tasks.plot_separation_from_core(ctx, min_link_size=4, pa=True, feature_filter=wise.DfcFilter(0.1, 20, u.mas))
 
 .. image:: imgs/3c120/plot_separation_from_core_pa_scale4.png
    :width: 500px
@@ -442,15 +439,15 @@ additionally plot the position angle of the features, and filter them:
 We can also fit a fct to the trajectory. The task then return a
 dictionary with all the fit result:
 
-.. code:: python
+.. code-block:: python
 
-    fit_result = wisetasks.plot_separation_from_core(ctx, scales=4, fit_fct=nputils.LinearFct, num=True, 
+    fit_result = tasks.plot_separation_from_core(ctx, scales=4, fit_fct=nputils.LinearFct, num=True, 
                                                      min_link_size=4, feature_filter=wise.DfcFilter(0.1, 20, u.mas))
 
 .. image:: imgs/3c120/plot_separation_from_core_fit_scale4.png
    :width: 500px
 
-.. code:: python
+.. code-block:: python
 
     for link, fit_fct in fit_result.items():
         print "Fit result for link %s: %.2f +- %.2f mas / year" % (link.get_id(), fit_fct.a, fit_fct.ea)
@@ -470,22 +467,22 @@ To view the trajectories on a map, we can set first a reference image
 that will be used as background. We will use a stacked image of the all
 set using a convenient tasks for that:
 
-.. code:: python
+.. code-block:: python
 
-    wisetasks.set_stack_image_as_ref(ctx)
+    tasks.set_stack_image_as_ref(ctx)
 
-.. code:: python
+.. code-block:: python
 
-    wisetasks.view_links(ctx, contour=True, levels=np.logspace(-3.5, 0.5, 20), map_cmap='gray')
+    tasks.view_links(ctx, contour=True, levels=np.logspace(-3.5, 0.5, 20), map_cmap='gray')
 
 .. image:: imgs/3c120/view_links.png
    :width: 500px
 
 The result can be saved on disk using the save() task:
 
-.. code:: python
+.. code-block:: python
 
-    wisetasks.save(ctx, "walkthrough_test")
+    tasks.save(ctx, "walkthrough_test")
 
 .. parsed-literal::
 
@@ -499,9 +496,9 @@ The result can be saved on disk using the save() task:
 
 And can later be loaded using the load() task:
 
-.. code:: python
+.. code-block:: python
 
-    wisetasks.load(ctx, "walkthrough_test")
+    tasks.load(ctx, "walkthrough_test")
 
 .. parsed-literal::
 
@@ -524,7 +521,7 @@ options:
    your need. This later function return a MultiScaleMatchResultSet and a
    MultiScaleFeaturesLinkBuilder:
 
-.. code:: python
+.. code-block:: python
 
     ms_result_set, ms_link_builder = ctx.get_match_result()
 
@@ -539,14 +536,14 @@ scales.
 -  The results can also be loaded into a pandas data structure
    (http://pandas.pydata.org/):
 
-.. code:: python
+.. code-block:: python
 
-    data = wisetasks.get_velocities_data(ctx, min_link_size=4, scales=4)
+    data = tasks.get_velocities_data(ctx, min_link_size=4, scales=4)
 
 data is a spreadsheet like object with attributes as columns. The
 following attributes are provided:
 
-.. code:: python
+.. code-block:: python
 
     print list(data.columns)
 
@@ -558,7 +555,7 @@ following attributes are provided:
 One can for example group the result by link\_id and display the
 proper\_velocity with distance from the core for each detected segments:
 
-.. code:: python
+.. code-block:: python
 
     ax = plotutils.subplots()
     for name, data_epoch in data.groupby('link_id'):
