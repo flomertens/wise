@@ -152,6 +152,7 @@ def info_files_delta(ctx, delta_time_unit=u.day, angular_velocity_unit=u.mas / u
     header = ["Date 1", "Date 2", "Delta (%s)" % delta_time_unit, 
             "Angular vel. res. (%s)" % angular_velocity_unit, 
             "Proper vel. res. (%s)" % proper_velocity_unit]
+    has_distance = ctx.config.data.object_distance or ctx.config.data.object_z
     for file1, file2 in nputils.pairwise(ctx.files):
         img1 = ctx.open_file(file1)
         img2 = ctx.open_file(file2)
@@ -164,28 +165,34 @@ def info_files_delta(ctx, delta_time_unit=u.day, angular_velocity_unit=u.mas / u
         delta_t = ((img2.get_epoch() - img1.get_epoch()).total_seconds() * u.second).to(delta_time_unit)
         all_delta_time.append(delta_t)
 
-        velocity_c_px = prj.proper_velocity([0, 0], [0, 1], delta_t).to(proper_velocity_unit)
         velocity_px = prj.angular_velocity([0, 0], [0, 1], delta_t).to(angular_velocity_unit)
-        all_velocity_c_px.append(velocity_c_px)
         all_velocity_px.append(velocity_px)
 
-        data.append([date1, date2, delta_t.value, velocity_px.value, velocity_c_px.value])
+        if has_distance:
+            velocity_c_px = prj.proper_velocity([0, 0], [0, 1], delta_t).to(proper_velocity_unit)
+            all_velocity_c_px.append(velocity_c_px)
+
+        if has_distance:
+            data.append([date1, date2, delta_t.value, velocity_px.value, velocity_c_px.value])
+        else:
+            data.append([date1, date2, delta_t.value, velocity_px.value, '-'])
 
         # print "{0} -> {1}: Delta time: {2}, Velocity resolution: {3:.3f}, {4:.3f}".format(*data)
 
     all_delta_time = nputils.quantities_to_array(all_delta_time)
-    all_velocity_c_px = nputils.quantities_to_array(all_velocity_c_px)
     all_velocity_px = nputils.quantities_to_array(all_velocity_px)
 
     print nputils.format_table(data, header)
 
     print "Mean Delta time: %s +- %s" % (np.mean(all_delta_time), np.std(all_delta_time))
     print "Mean Velocity resolution: %s +- %s" % (np.mean(all_velocity_px), np.std(all_velocity_px))
-    print "Mean Velocity resolution: %s +- %s" % (np.mean(all_velocity_c_px), np.std(all_velocity_c_px))
+    if has_distance:
+        all_velocity_c_px = nputils.quantities_to_array(all_velocity_c_px)
+        print "Mean Velocity resolution: %s +- %s" % (np.mean(all_velocity_c_px), np.std(all_velocity_c_px))
 
 
 def detection_all(ctx, filter=None):
-    '''Run wds on all selected files
+    '''Run the Segmented wavelet decomposition on all selected files
     
     Parameters
     ----------
@@ -430,11 +437,11 @@ def view_all(ctx, preprocess=True, show_mask=True, show_regions=[], save_filenam
                 x, y = prj.s2p([x, y])
                 print core_offset, x, y
                 ax.scatter(x, y, marker='*', s=40, c=plotutils.black)
-        if not preprocess:
-            bg_mask = imgutils.Image(np.zeros_like(img.data, dtype=np.int8))
-            bg = ctx.get_bg(bg_mask)
-            if bg is not None and isinstance(bg, np.ndarray):
-                bg.fill(1)
+        # if not preprocess:
+        #     bg_mask = imgutils.Image(np.zeros_like(img.data, dtype=np.int8))
+        #     bg = ctx.get_bg(bg_mask)
+        #     if bg is not None and isinstance(bg, np.ndarray):
+        #         bg.fill(1)
         if ctx.get_mask() is not None and show_mask is True:
             mask = ctx.get_mask()
             ctx.pre_process(mask)
@@ -567,7 +574,7 @@ def view_wds(ctx, title=True, num=True, scales=None, save_filename=None, **kwarg
         stack.show()
 
 
-def view_all_features(ctx, scales, region_list=None, legend=True, feature_filter=None, 
+def view_all_features(ctx, scales, region_list=None, legend=False, feature_filter=None, 
                       save_filename=None, **img_kargs):
     ''' Plot all features location
     
@@ -618,13 +625,13 @@ def view_all_features(ctx, scales, region_list=None, legend=True, feature_filter
 
         if region_list is not None:
             for region, gdata in data.df.groupby('region'):
-                features = wds.DatedFeaturesGroupScale(scale, features=gdata.features.values)
+                features = wds.DatedFeaturesGroupScale(0, features=gdata.features.values)
 
                 wiseutils.plot_features(ax_all, features, mode='com', c=region.get_color(), label=region.get_name())
                 plotutils.plot_region(ax_all, region, projection=projection, text=False, 
                                       color=region.get_color(), fill=True)
         else:
-            features = wds.DatedFeaturesGroupScale(scale, features=data.features.values)
+            features = wds.DatedFeaturesGroupScale(0, features=data.df.features.values)
             wiseutils.plot_features(ax_all, features, mode='com')
 
         if legend:

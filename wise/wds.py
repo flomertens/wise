@@ -3,6 +3,10 @@ from skimage.morphology import watershed
 from scipy.ndimage import measurements, gaussian_filter
 
 from libwise import nputils, imgutils, wtutils, wavelets
+from libwise.nputils import validator_is, is_callable, validator_in_range, str2jsonfunction
+from libwise.nputils import validator_list, validator_is_class, str2bool, str2jsonclass
+
+import jsonpickle as jp
 
 from features import *
 
@@ -495,20 +499,22 @@ class FinderConfiguration(nputils.BaseConfiguration):
 
     def __init__(self):
         data = [
-        ["alpha_threashold", 3, "Significance threshold", nputils.validator_in_range(0.1, 20)],
-        ["alpha_detection", 4, "Detection threshold", nputils.validator_in_range(0.1, 20)],
-        ["min_scale", 1, "Minimum Wavelet scale", nputils.validator_in_range(0, 10, instance=int)],
-        ["max_scale", 4, "Maximum Wavelet scale", nputils.validator_in_range(1, 10, instance=int)],
-        ["scales_snr_filter", None, "Per scales detection threshold", nputils.validator_is(dict)],
-        ["ms_dec_klass", WaveletMultiscaleDecomposition, "Multiscale decompostion class", nputils.validator_is_class(AbstractMultiScaleDecomposition)],
-        ["dec", wtutils.uiwt, "Multiscale decompostion class", nputils.is_callable],
-        ["wd_wavelet", 'b1', "Wavelet to use for the Wavelet Decomposition", nputils.validator_is(str)],
-        ["iwd_wavelet", 'b3', "Wavelet to use for the Intermediate Wavelet Decomposition", nputils.validator_is(str)],
-        ["dog_step", True, "DOG", nputils.validator_is(int)],
-        ["dog_angle", True, "DOG", nputils.validator_is((int, float))],
-        ["dog_ellipticity", True, "DOG", nputils.validator_is((int, float))],
-        ["exclude_border_dist", 1, "Number of pixel from border to exclude", nputils.validator_is(int)],
-        ["exclude_noise", True, "Include coefficients below threshold in resulting image", nputils.validator_is(bool)],
+        ["alpha_threashold", 3, "Significance threshold", validator_in_range(0.1, 20), float, str, 0],
+        ["alpha_detection", 4, "Detection threshold", validator_in_range(0.1, 20), float, str, 0],
+        ["min_scale", 1, "Minimum Wavelet scale", validator_in_range(0, 10, instance=int), int, str, 0],
+        ["max_scale", 4, "Maximum Wavelet scale", validator_in_range(1, 10, instance=int), int, str, 0],
+        ["scales_snr_filter", None, "Per scales detection threshold", validator_is(dict), jp.decode, jp.encode, 1],
+        ["ms_dec_klass", WaveletMultiscaleDecomposition, "Multiscale decompostion class", 
+            validator_is_class(AbstractMultiScaleDecomposition), lambda s: jp.decode(str2jsonclass(s)), jp.encode, 1],
+        ["use_iwd", False, "Use Intermediate Wavelet Decomposition", validator_is(bool), str2bool, str, 0],
+        ["dec", wtutils.uiwt, "Multiscale decompostion class", is_callable, lambda s: jp.decode(str2jsonfunction(s)), jp.encode, 1],
+        ["wd_wavelet", 'b1', "Wavelet to use for the Wavelet Decomposition", validator_is(str), str, str, 1],
+        ["iwd_wavelet", 'b3', "Wavelet to use for the Intermediate Wavelet Decomposition", validator_is(str), str, str, 1],
+        ["dog_step", True, "DOG", validator_is(int), None, None, 2],
+        ["dog_angle", True, "DOG", validator_is((int, float)), None, None, 2],
+        ["dog_ellipticity", True, "DOG", validator_is((int, float)), None, None, 2],
+        ["exclude_border_dist", 1, "Number of pixel from border to exclude", validator_is(int), int, str, 0],
+        ["exclude_noise", True, "Include coefficients below threshold in resulting image", validator_is(bool), str2bool, str, 1],
         ]
 
         super(FinderConfiguration, self).__init__(data, title="Finder configuration")
@@ -787,6 +793,12 @@ class MultiScaleImage(BaseMultiScaleImage):
 
         return imgutils.Image.from_image(self.original_img, img)
 
+    def save_to_fits(self, filename):
+        pass
+
+    def load_from_fits(self, filename):
+        pass
+
     def copy(self):
         new = MultiScaleImage(self.original_img, self.rms_noise)
         for k in self:
@@ -823,6 +835,9 @@ class MultiScaleImageSet(AbstractKeyList):
             return False
         return isinstance(first_segment, Segment)
 
+    def to_file_full(self, projection, image_set):
+        pass
+
     def to_file(self, filename, projection, coord_mode='com'):
         '''Format is: epoch, x, y, intensity, snr, scale'''
         l = []
@@ -838,6 +853,10 @@ class MultiScaleImageSet(AbstractKeyList):
 
         np.savetxt(filename, l, ["%f", "%.5f", "%.5f", "%.6f", "%.6f", "%f"], delimiter=' ')
         print "Saved MultiScaleImageSet @ %s" % filename
+    
+    @staticmethod
+    def from_file_full(self, projection, image_set):
+        pass
 
     @staticmethod
     def from_file(file, projection, image_set, feature_filter=None):
@@ -1024,6 +1043,9 @@ class FeaturesFinder(object):
         alpha_detection = self.config.get("alpha_detection")
         alpha_threashold = self.config.get("alpha_threashold")
         ms_dec_klass = self.config.get("ms_dec_klass")
+
+        if self.config.get("use_iwd"):
+            ms_dec_klass = InterscalesWaveletMultiscaleDecomposition            
 
         dec = ms_dec_klass(self.img, self.background, self.config)
         decomposed = dec.decompose()

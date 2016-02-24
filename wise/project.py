@@ -1,4 +1,5 @@
 import os
+import re
 import glob
 import logging
 import datetime
@@ -8,11 +9,24 @@ import matcher
 import wiseutils
 import features as wfeatures
 
+import numpy as np
+
 from libwise import plotutils, nputils, imgutils
+from libwise.nputils import validator_is, is_callable, validator_in_range, validator_list, str2bool, str2floatlist
+
+import jsonpickle as jp
 
 import astropy.units as u
 
 logger = logging.getLogger(__name__)
+
+
+def quantity_decode(s):
+    try:
+        value, unit = re.match('(\d+\.*\d*)\s*([a-zA-Z]+)', s).group(1,2)
+    except:
+        raise ValueError("Quantity '%s' is not in the right format." % s)
+    return float(value) * u.Unit(unit)
 
 
 class DataConfiguration(nputils.BaseConfiguration):
@@ -20,25 +34,29 @@ class DataConfiguration(nputils.BaseConfiguration):
 
     def __init__(self):
         data = [
-        ["data_dir", None, "Base data directory", nputils.validator_is(str)],
-        ["fits_extension", 0, "Extension index", nputils.validator_is(int)],
-        ["stack_image_filename", "full_stack_image.fits", "Stack Image filename", nputils.validator_is(str)],
-        ["ref_image_filename", "reference_image", "Stack Image filename", nputils.validator_is(str)],
-        ["mask_filename", "mask.fits", "Mask filename", nputils.validator_is(str)],
-        ["mask_fct", None, "Mask generation fct", nputils.is_callable],
-        ["bg_fct", None, "Background extraction fct", nputils.is_callable],
-        ["core_offset_filename", "core.dat", "Core offset filename", nputils.validator_is(str)],
-        ["core_offset_fct", None, "Core offset generation fct", nputils.is_callable],
-        ["pre_bg_process_fct", None, "Initial processing before bg extraction", nputils.is_callable],
-        ["pre_process_fct", None, "Pre detection processing", nputils.is_callable],
-        ["post_process_fct", None, "Post detection processing", nputils.is_callable],
-        ["crval", None, "CRVAL", nputils.validator_is(list)],
-        ["crpix", None, "CRPIX", nputils.validator_is(list)],
-        ["projection_unit", u.mas, "Unit used for the projection", nputils.validator_is(u.Unit)],
-        ["projection_relative", True, "Use relative projection", nputils.validator_is(bool)],
-        ["projection_center", "pix_ref", "Method used to get the center", nputils.validator_is(str)],
-        ["object_distance", None, "Object distance", nputils.validator_is(u.Quantity)],
-        ["object_z", 0, "Object z", nputils.validator_in_range(0, 5)],
+        ["data_dir", None, "Base data directory", validator_is(str), str, str, 0],
+        ["fits_extension", 0, "Extension index", validator_is(int), int, str, 0],
+        ["stack_image_filename", "full_stack_image.fits", "Stack Image filename", nputils.validator_is(str), str, str, 2],
+        ["ref_image_filename", "reference_image", "Reference image filename", validator_is(str), str, str, 0],
+        ["mask_filename", "mask.fits", "Mask filename", validator_is(str), str, str, 0],
+        ["bg_fct", None, "Background extraction fct", is_callable, None, None, 2],
+        ["bg_coords", None, "Background region in coordinates [Xa,Ya,Xb,Yb]", validator_list(4, (int, float)), 
+            str2floatlist, jp.encode, 0],
+        ["bg_use_ksigma_method", False, "Use ksigma method to estimate the background level", validator_is(bool), str2bool, str, 0],
+        ["roi_coords", None, "Region of interest in coordinates [Xa,Ya,Xb,Yb]", validator_list(4, (int, float)), 
+            str2floatlist, jp.encode, 0],            
+        ["core_offset_filename", "core.dat", "Core offset filename", validator_is(str), str, str, 0],
+        ["core_offset_fct", None, "Core offset generation fct", is_callable, None, None, 2],
+        ["pre_bg_process_fct", None, "Initial processing before bg extraction", is_callable, None, None, 2],
+        ["pre_process_fct", None, "Pre detection processing", is_callable, None, None, 2],
+        ["post_process_fct", None, "Post detection processing", is_callable, None, None, 2],
+        ["crval", None, "CRVAL", validator_is(list), jp.decode, jp.encode, 1],
+        ["crpix", None, "CRPIX", validator_is(list), jp.decode, jp.encode, 1],
+        ["projection_unit", u.mas, "Unit used for the projection", validator_is(u.Unit), u.Unit, str, 0],
+        ["projection_relative", True, "Use relative projection", validator_is(bool), str2bool, str, 0],
+        ["projection_center", "pix_ref", "Method used to get the center", validator_is(str), str, str, 0],
+        ["object_distance", None, "Object distance", validator_is(u.Quantity), quantity_decode, str, 0],
+        ["object_z", 0, "Object z", validator_in_range(0, 5), float, str, 0],
         ]
 
         # nputils.BaseConfiguration.__init__(self, data, title="Finder configuration")
@@ -185,7 +203,7 @@ class AnalysisContext(object):
         If the directory does not exist, it will be created. """
         path = self.config.data.data_dir
         if self.config.data.data_dir is None:
-            raise Exception("A data directory need to be set")
+            return os.getcwd()
         if not os.path.exists(path):
             print "Creating %s" % path
             os.makedirs(path)
@@ -240,7 +258,9 @@ class AnalysisContext(object):
             return None
         mtime = os.path.getmtime(filename)
         if self._cache_mask_filter is None or self._cache_mask_filter[0] != (mtime, filename):
-            self._cache_mask_filter = [(mtime, filename), imgutils.FitsImage(filename)]
+            mask = imgutils.FitsImage(filename)
+            mask.data = mask.data.astype(bool)
+            self._cache_mask_filter = [(mtime, filename), mask]
         return self._cache_mask_filter[1]
 
     def get_stack_image_filename(self):
@@ -348,7 +368,6 @@ class AnalysisContext(object):
                 segments = wds.SegmentedImages(stack_img)
                 segments.connected_structure()
                 stack_img.data = segments.sorted_list()[-1].get_segment_image()
-
         return stack_img
 
     def get_stack_image(self, nsigma=0, nsigma_connected=False, preprocess=False):
@@ -383,9 +402,20 @@ class AnalysisContext(object):
     def get_bg(self, img):
         """Return either the noise level or a background map.
         """
-        if self.config.data.bg_fct is None:
-            raise Exception("Bg extraction method need to be set")
-        return self.config.data.bg_fct(self, img)
+        if self.config.data.bg_use_ksigma_method:
+            return nputils.k_sigma_noise_estimation(img.data)
+        if self.config.data.bg_coords is not None:
+            x1, y1, x2, y2 = self.config.data.bg_coords
+            prj = self.get_projection(img)
+            xy_p1, xy_p2 = np.round(prj.s2p([(x1, y1), (x2, y2)])).astype(int)
+            ex = [0, img.data.shape[1]]
+            ey = [0, img.data.shape[0]]
+            xlim1, xlim2 = sorted([nputils.clamp(xy_p1[0], *ex), nputils.clamp(xy_p2[0], *ex)])
+            ylim1, ylim2 = sorted([nputils.clamp(xy_p1[1], *ey), nputils.clamp(xy_p2[1], *ey)])
+            return img.data[ylim1:ylim2, xlim1:xlim2].copy()
+        elif self.config.data.bg_fct is not None:
+            return self.config.data.bg_fct(self, img)
+        raise Exception("Bg extraction method need to be set")
 
     def pre_bg_process(self, img):
         if self.config.data.pre_bg_process_fct is not None:
@@ -396,6 +426,9 @@ class AnalysisContext(object):
         """
         if self.config.data.pre_process_fct is not None:
             self.config.data.pre_process_fct(self, img)
+        if self.config.data.roi_coords is not None:
+            x1, y1, x2, y2 = self.config.data.roi_coords
+            img.crop((x1, y1), (x2, y2), projection=self.get_projection(img))
 
     def post_process(self, img, res):
         if self.config.data.post_process_fct is not None:
@@ -491,7 +524,8 @@ class AnalysisContext(object):
             Reject files with date in `filter_dates`
         step : int, optional
         """
-        files = glob.glob(files)
+        if isinstance(files, str):
+            files = glob.glob(files)
 
         self.files = imgutils.fast_sorted_fits(files, start_date=start_date, 
                             end_date=end_date, filter_dates=filter_dates, step=step)

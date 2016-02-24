@@ -11,6 +11,10 @@ from wds import *
 from features import *
 
 from libwise import nputils, imgutils, plotutils
+from libwise.nputils import validator_is, is_callable, validator_in_range
+from libwise.nputils import validator_list, validator_is_class, str2bool, str2jsonclass
+
+import jsonpickle as jp
 
 from astropy import units as u
 
@@ -1097,12 +1101,17 @@ class ScaleMatcherMSCSC2(BaseScaleMatcher):
         r2 = build_image(segments2)
 
         if window_search_offset is not None:
+            if not r1.check_shift(np.round(window_search_offset)):
+                return 0, np.array([0, 0]), window_search_offset
+
             r1.set_shift(np.round(window_search_offset))
 
         delta1 = r2.get_center_of_mass() - r1.get_center_of_mass()
         # delta2 = r2.get_coord_max() - r1.get_coord_max()
 
         def correlate(delta):
+            if not r1.check_shift(np.round(window_search_offset + delta)):
+                return delta, 0
             # print "Window search:", window_search_offset
             # print "Com:", r2.get_center_of_mass(), r1.get_center_of_mass()
             if delta_tol is not None and np.linalg.norm(delta) > delta_tol:
@@ -2150,28 +2159,37 @@ class MatcherConfiguration(nputils.BaseConfiguration):
 
     def __init__(self):
         data = [
-        ["use_upper_info", True, "Use Pyramidal scheme for matching", nputils.validator_is(bool)],
-        ["upper_info_average_tol_factor", 10, "Tolerance factor that define the number of features for average upper delta calculation", nputils.validator_is(int)],
-        ["mscsc2_upper_delta_bonus_range", 0.4, "Bonus for delta close to upper delta", nputils.validator_in_range(0, 1)],
-        ["mscsc2_nitems_bonus_range", 0.4, "Bonus for fewer merge", nputils.validator_in_range(0, 1)],
-        ["simple_merge", True, "MSCI: use segment merging", nputils.validator_is(bool)],
-        ["correlation_threshold", 0.65, "Correlation threshold", nputils.validator_in_range(0, 1)],
-        ["ignore_features_at_border", False, "Ignore feature art border for matching", nputils.validator_is(bool)],
-        ["features_at_border_k1", 0.5, "At border param k1", nputils.validator_in_range(0, 2)],
-        ["features_at_border_k2", 0.25, "At border param k2", nputils.validator_in_range(0, 2)],
-        ["features_at_border_k3", 0.25, "At border param k3", nputils.validator_in_range(0, 2)],
-        ["maximum_delta", 40, "Deprecated: use delta_range_filter", None],
-        ["range_delta_x", [-40, 40], "Deprecated: use delta_range_filter", None],
-        ["range_delta_y", [-40, 40], "Deprecated: use delta_range_filter", None],
-        ["increase_tol_for_no_input_delta", True, "Increase tolerance when no initial guess", nputils.validator_is(bool)],
-        ["delta_range_filter", None, "Delta range filter", nputils.validator_is(nputils.AbstractFilter)],
-        ["mscsc_max_merge", 3, "MSCSC: Maximum number of segment merged", nputils.validator_in_range(1, 5, instance=int)],
-        ["tolerance_factor", 1, "Tolerance factor", nputils.validator_in_range(0, 4)],
-        ["method_klass", ScaleMatcherMSCC, "Matching method", nputils.validator_is_class(BaseScaleMatcher)],
-        ["no_input_no_match_scales", [], "List of scales at which no match is performed if no initial guess", nputils.validator_is(list)],
-        ["min_scale_tolerance", {2: 4, 3: 4, 4: 6}, "Per scale tolerance factor", nputils.validator_is(dict)],
-        ["find_distance_mode", "min" , "Method used for distance measure", nputils.validator_is(str)],
-        ["mscsc2_smooth", True , "Apply smooth on merged features before correlation", nputils.validator_is(bool)],
+        ["use_upper_info", True, "Use Pyramidal scheme for matching", validator_is(bool), str2bool, str, 0],
+        ["upper_info_average_tol_factor", 10, "Tolerance factor that define the number of features for average upper delta calculation", 
+            validator_is(int), int, str, 1],
+        ["mscsc2_upper_delta_bonus_range", 0.4, "Bonus for delta close to upper delta", 
+            validator_in_range(0, 1), float, str, 1],
+        ["mscsc2_nitems_bonus_range", 0.4, "Bonus for fewer merge", validator_in_range(0, 1), float, str, 1],
+        ["simple_merge", True, "MSCI: use segment merging", validator_is(bool), str2bool, str, 1],
+        ["correlation_threshold", 0.65, "Correlation threshold", validator_in_range(0, 1), float, str, 0],
+        ["ignore_features_at_border", False, "Ignore feature art border for matching", 
+            validator_is(bool), str2bool, str, 0],
+        ["features_at_border_k1", 0.5, "At border param k1", validator_in_range(0, 2), float, str, 1],
+        ["features_at_border_k2", 0.25, "At border param k2", validator_in_range(0, 2), float, str, 1],
+        ["features_at_border_k3", 0.25, "At border param k3", validator_in_range(0, 2), float, str, 1],
+        ["maximum_delta", 40, "Deprecated: use delta_range_filter", None, None, None, 2],
+        ["range_delta_x", [-40, 40], "Deprecated: use delta_range_filter", None, None, None, 2],
+        ["range_delta_y", [-40, 40], "Deprecated: use delta_range_filter", None, None, None, 2],
+        ["increase_tol_for_no_input_delta", True, "Increase tolerance when no initial guess", 
+            validator_is(bool), str2bool, str, 1],
+        ["delta_range_filter", None, "Delta range filter", validator_is(nputils.AbstractFilter),
+            jp.decode, jp.encode, 0],
+        ["mscsc_max_merge", 3, "MSCSC: Maximum number of segment merged", validator_in_range(1, 5, instance=int),
+            int, str, 1],
+        ["tolerance_factor", 1, "Tolerance factor", validator_in_range(0, 4), float, str, 0],
+        ["method_klass", ScaleMatcherMSCSC2, "Matching method", validator_is_class(BaseScaleMatcher),
+            lambda s: jp.decode(str2jsonclass(s)), jp.encode, 1],
+        ["no_input_no_match_scales", [], "List of scales at which no match is performed if no initial guess", 
+            validator_is(list), jp.decode, jp.encode, 1],
+        ["min_scale_tolerance", {2: 4, 3: 4, 4: 6}, "Per scale tolerance in pixel", validator_is(dict),
+            jp.decode, jp.encode, 1],
+        ["find_distance_mode", "min" , "Method used for distance measure", validator_is(str), str, str, 1],
+        ["mscsc2_smooth", True , "Apply smooth on merged features before correlation", validator_is(bool), str2bool, str, 1],
         ]
 
         super(MatcherConfiguration, self).__init__(data, title="Matcher configuration")

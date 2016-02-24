@@ -727,6 +727,7 @@ class DeltaInformation(object):
         new.flags = self.flags.copy()
         return new
 
+
 class FeatureFilter(nputils.AbstractFilter):
 
     def filter(self, feature):
@@ -788,6 +789,11 @@ class DfcFilter(FeatureFilter):
     def __str__(self):
         return "DfcFilter(%s, %s)" % (self.dfc_min, self.dfc_max)
 
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        del state['prj_settings']
+        return state
+
     def filter(self, feature):
         feature_prj = feature.get_coordinate_system().get_projection(self.prj_settings)
         dfc = feature_prj.dfc(p2i(feature.get_coord(mode=self.coord_mode)))
@@ -808,6 +814,11 @@ class PaFilter(FeatureFilter):
     def __str__(self):
         return "PaFilter(%s, %s)" % (self.pa_min, self.pa_max)
 
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        del state['prj_settings']
+        return state
+
     def filter(self, feature):
         feature_prj = feature.get_coordinate_system().get_projection(self.prj_settings)
         pa = feature_prj.pa(p2i(feature.get_coord(mode=self.coord_mode)))
@@ -827,6 +838,15 @@ class RegionFilter(FeatureFilter):
 
     def __str__(self):
         return "RegionFilter(%s)" % (os.path.basename(self.region.get_filename()))
+
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        del state['cache']
+        return state
+
+    def __setstate__(self, state):
+        self.__dict__ = state
+        self.cache = nputils.LimitedSizeDict(size_limit=100)
 
     def filter(self, feature):
         if feature not in self.cache:
@@ -889,6 +909,17 @@ class DeltaRangeFilter(AbstractDeltaRangeFilter):
     def __str__(self):
         d = (self.vxrange, self.vyrange, self.normrange, self.unit, self.pix_limit, self.x_dir)
         return "DeltaRangeFilter(vs=%s, vy=%s, v=%s, u=%s, pix=%s, dir=%s)" % d
+
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        del state['prj_settings']
+        state['unit'] = str(self.unit)
+        return state
+
+    def __setstate__(self, state):
+        self.__dict__ = state
+        self.unit = u.Unit(self.unit)
+        self.prj_settings = imgutils.ProjectionSettings(relative=True, unit=u.mas)
 
     def filter(self, delta):
         feature = delta.get_feature()
