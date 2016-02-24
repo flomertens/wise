@@ -584,9 +584,9 @@ class MultiScaleFeaturesLinkBuilder(object):
     @staticmethod
     def from_file(filename, projection, image_set, min_link_size=2):
         new = MultiScaleFeaturesLinkBuilder()
-        regex = '%s_[0-9]+%s' % (filename, MultiScaleFeaturesLinkBuilder.TYPE)
+        regex = '%s_[0-9]+%s' % (os.path.basename(filename), MultiScaleFeaturesLinkBuilder.TYPE)
         for file in glob.glob(filename + '_*' + MultiScaleFeaturesLinkBuilder.TYPE):
-            if re.match(regex, file):
+            if re.match(regex, os.path.basename(file)):
                 scale = float(file.split('_')[-1].split(MultiScaleFeaturesLinkBuilder.TYPE)[0])
                 link_builder = FeaturesLinkBuilder.from_file(file, projection, image_set, 
                                                              suffix='', min_link_size=min_link_size)

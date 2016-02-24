@@ -19,6 +19,6 @@ setup(
 
     include_package_data=True,
     packages=find_packages(),
-    scripts=glob.glob('scripts/*.py')
+    scripts=glob.glob('scripts/*')
 )
 
