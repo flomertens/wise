@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -58,7 +57,7 @@
   <div class="section" id="wise-project-module">
 <h1>Wise project module<a class="headerlink" href="#wise-project-module" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="summary">
-<h2>Summary:<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -81,16 +80,16 @@
 <td>Align image using core position defined in self.config.data.core_offset_filename.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#wise.project.AnalysisContext.build_stack_image" title="wise.project.AnalysisContext.build_stack_image"><tt class="xref py py-obj docutils literal"><span class="pre">build_stack_image</span></tt></a>([preprocess,&nbsp;nsigma,&nbsp;...])</td>
-<td>Create a stacked image (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.StackedImage</span></tt> of all</td>
+<td>Create a stacked image (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.StackedImage</span></tt> of all    the project images, aligning them if necessary.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#wise.project.AnalysisContext.detection" title="wise.project.AnalysisContext.detection"><tt class="xref py py-obj docutils literal"><span class="pre">detection</span></tt></a>(img[,&nbsp;config,&nbsp;filter])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#wise.project.AnalysisContext.detection" title="wise.project.AnalysisContext.detection"><tt class="xref py py-obj docutils literal"><span class="pre">detection</span></tt></a>(img[,&nbsp;config,&nbsp;filter,&nbsp;verbose])</td>
 <td>Run detection on <cite>img</cite> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Image</span></tt>).</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#wise.project.AnalysisContext.get_bg" title="wise.project.AnalysisContext.get_bg"><tt class="xref py py-obj docutils literal"><span class="pre">get_bg</span></tt></a>(img)</td>
 <td>Return either the noise level or a background map.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#wise.project.AnalysisContext.get_core_offset" title="wise.project.AnalysisContext.get_core_offset"><tt class="xref py py-obj docutils literal"><span class="pre">get_core_offset</span></tt></a>()</td>
-<td>Return a <tt class="xref py py-class docutils literal"><span class="pre">CoreOffsetPositions</span></tt>  based on the core position</td>
+<td>Return a <tt class="xref py py-class docutils literal"><span class="pre">CoreOffsetPositions</span></tt>  based on the core position defined in the file self.config.data.core_offset_filename.</td>
 </tr>
 <tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_core_offset_filename</span></tt>()</td>
 <td></td>
@@ -108,13 +107,13 @@
 <td></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#wise.project.AnalysisContext.get_match_result" title="wise.project.AnalysisContext.get_match_result"><tt class="xref py py-obj docutils literal"><span class="pre">get_match_result</span></tt></a>()</td>
-<td>Return the matching result (tuple of <tt class="xref py py-class docutils literal"><span class="pre">wise.matcher.MultiScaleMatchResultSet</span></tt></td>
+<td>Return the matching result (tuple of <tt class="xref py py-class docutils literal"><span class="pre">wise.matcher.MultiScaleMatchResultSet</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">wise.matcher.MultiScaleFeaturesLinkBuilder</span></tt>).</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#wise.project.AnalysisContext.get_projection" title="wise.project.AnalysisContext.get_projection"><tt class="xref py py-obj docutils literal"><span class="pre">get_projection</span></tt></a>([img])</td>
-<td>Return a <tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></tt> corresponding to <cite>img</cite> and the settings</td>
+<td>Return a <tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></tt> corresponding to <cite>img</cite> and the settings defined in config.data.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#wise.project.AnalysisContext.get_ref_image" title="wise.project.AnalysisContext.get_ref_image"><tt class="xref py py-obj docutils literal"><span class="pre">get_ref_image</span></tt></a>([preprocess])</td>
-<td>Return the reference image (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Image</span></tt>) of the project,</td>
+<td>Return the reference image (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Image</span></tt>) of the project, used for the projection defintion and several plotting tasks.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#wise.project.AnalysisContext.get_result" title="wise.project.AnalysisContext.get_result"><tt class="xref py py-obj docutils literal"><span class="pre">get_result</span></tt></a>()</td>
 <td>Return the project result (<tt class="xref py py-class docutils literal"><span class="pre">AnalysisResult</span></tt>)</td>
@@ -125,7 +124,7 @@
 <tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_stack_image_filename</span></tt>()</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#wise.project.AnalysisContext.match" title="wise.project.AnalysisContext.match"><tt class="xref py py-obj docutils literal"><span class="pre">match</span></tt></a>(find_res1,&nbsp;find_res2)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#wise.project.AnalysisContext.match" title="wise.project.AnalysisContext.match"><tt class="xref py py-obj docutils literal"><span class="pre">match</span></tt></a>(find_res1,&nbsp;find_res2[,&nbsp;verbose])</td>
 <td>Run match on <cite>find_res1</cite> and <cite>find_res2</cite> (both <tt class="xref py py-class docutils literal"><span class="pre">wise.wds.SegmentedScale</span></tt>)</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#wise.project.AnalysisContext.open_file" title="wise.project.AnalysisContext.open_file"><tt class="xref py py-obj docutils literal"><span class="pre">open_file</span></tt></a>(file)</td>
@@ -141,7 +140,7 @@
 <td>Run self.config.data.pre_process_fct on <cite>img</cite></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#wise.project.AnalysisContext.save_core_offset_pos_file" title="wise.project.AnalysisContext.save_core_offset_pos_file"><tt class="xref py py-obj docutils literal"><span class="pre">save_core_offset_pos_file</span></tt></a>()</td>
-<td>Create a core position definition object based on self.config.data.core_offset_fct</td>
+<td>Create a core position definition object based on self.config.data.core_offset_fct and save the result on disk using path defined in self.config.data.core_offset_filename.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#wise.project.AnalysisContext.save_mask_file" title="wise.project.AnalysisContext.save_mask_file"><tt class="xref py py-obj docutils literal"><span class="pre">save_mask_file</span></tt></a>(mask_fct)</td>
 <td>Create a mask image based on <cite>mask_fct</cite> and save the result on disk using path defined in self.config.data.mask_filename.</td>
@@ -166,13 +165,16 @@
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">add_config</span></tt>(config)</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">doc</span></tt>()</td>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">doc</span></tt>([max_level])</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">to_file</span></tt>(filename)</td>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">from_file</span></tt>(filename)</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">values</span></tt>()</td>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">to_file</span></tt>(filename)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">values</span></tt>([max_level])</td>
 <td></td>
 </tr>
 </tbody>
@@ -208,7 +210,7 @@
 </table>
 </div>
 <div class="section" id="module-wise.project">
-<span id="full-reference"></span><h2>Full reference:<a class="headerlink" href="#module-wise.project" title="Permalink to this headline">¶</a></h2>
+<span id="full-reference"></span><h2>Full reference<a class="headerlink" href="#module-wise.project" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="wise.project.DataConfiguration">
 <em class="property">class </em><tt class="descclassname">wise.project.</tt><tt class="descname">DataConfiguration</tt><a class="headerlink" href="#wise.project.DataConfiguration" title="Permalink to this definition">¶</a></dt>
@@ -474,8 +476,10 @@ and <tt class="xref py py-class docutils literal"><span class="pre">wise.matcher
 <dl class="method">
 <dt id="wise.project.AnalysisContext.build_stack_image">
 <tt class="descname">build_stack_image</tt><big>(</big><em>preprocess=False</em>, <em>nsigma=0</em>, <em>nsigma_connected=False</em><big>)</big><a class="headerlink" href="#wise.project.AnalysisContext.build_stack_image" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a stacked image (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.StackedImage</span></tt> of all
-the project images, aligning them if necessary.</p>
+<dd><dl class="docutils">
+<dt>Create a stacked image (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.StackedImage</span></tt> of all</dt>
+<dd>the project images, aligning them if necessary.</dd>
+</dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -527,7 +531,7 @@ mask as <tt class="xref py py-class docutils literal"><span class="pre">libwise.
 
 <dl class="method">
 <dt id="wise.project.AnalysisContext.detection">
-<tt class="descname">detection</tt><big>(</big><em>img</em>, <em>config=None</em>, <em>filter=None</em><big>)</big><a class="headerlink" href="#wise.project.AnalysisContext.detection" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">detection</tt><big>(</big><em>img</em>, <em>config=None</em>, <em>filter=None</em>, <em>verbose=True</em><big>)</big><a class="headerlink" href="#wise.project.AnalysisContext.detection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run detection on <cite>img</cite> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Image</span></tt>).</p>
 </dd></dl>
 
@@ -565,7 +569,7 @@ and it is possible to filter files by dates.</p>
 
 <dl class="method">
 <dt id="wise.project.AnalysisContext.match">
-<tt class="descname">match</tt><big>(</big><em>find_res1</em>, <em>find_res2</em><big>)</big><a class="headerlink" href="#wise.project.AnalysisContext.match" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">match</tt><big>(</big><em>find_res1</em>, <em>find_res2</em>, <em>verbose=True</em><big>)</big><a class="headerlink" href="#wise.project.AnalysisContext.match" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run match on <cite>find_res1</cite> and <cite>find_res2</cite> (both <tt class="xref py py-class docutils literal"><span class="pre">wise.wds.SegmentedScale</span></tt>)</p>
 </dd></dl>
 
@@ -583,8 +587,8 @@ and it is possible to filter files by dates.</p>
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Wise project module</a><ul>
-<li><a class="reference internal" href="#summary">Summary:</a></li>
-<li><a class="reference internal" href="#module-wise.project">Full reference:</a></li>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+<li><a class="reference internal" href="#module-wise.project">Full reference</a></li>
 </ul>
 </li>
 </ul>
@@ -638,7 +642,7 @@ and it is possible to filter files by dates.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2015, Florent Mertens.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

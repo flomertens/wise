@@ -1,7 +1,7 @@
 Wise utilities module
 =====================
 
-Summary:
+Summary
 --------
 
 The following functions will be used for detection:
@@ -14,7 +14,7 @@ The following functions will be used for matching:
 .. autosumfromtag:: wise.wiseutils
     :tag_names: plt_matching
 
-Full reference:
+Full reference
 ---------------
 
 .. automodule:: wise.wiseutils

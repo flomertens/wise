@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -54,7 +53,7 @@
   <div class="section" id="wise-utilities-module">
 <h1>Wise utilities module<a class="headerlink" href="#wise-utilities-module" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="summary">
-<h2>Summary:<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
 <p>The following functions will be used for detection:</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -114,7 +113,7 @@
 </table>
 </div>
 <div class="section" id="module-wise.wiseutils">
-<span id="full-reference"></span><h2>Full reference:<a class="headerlink" href="#module-wise.wiseutils" title="Permalink to this headline">¶</a></h2>
+<span id="full-reference"></span><h2>Full reference<a class="headerlink" href="#module-wise.wiseutils" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="wise.wiseutils.imshow_segmented_image">
 <tt class="descclassname">wise.wiseutils.</tt><tt class="descname">imshow_segmented_image</tt><big>(</big><em>ax</em>, <em>segmented_image</em>, <em>projection=None</em>, <em>title=True</em>, <em>beam=True</em>, <em>num=False</em>, <em>bg=None</em>, <em>mode='com'</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#wise.wiseutils.imshow_segmented_image" title="Permalink to this definition">¶</a></dt>
@@ -132,8 +131,7 @@
 <li><strong>num</strong> (<em>bool, optional</em>) &#8211; Whatever to optionally annotate the segments with there ids. Default is False.</li>
 <li><strong>bg</strong> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Image</span></tt>, optional) &#8211; Diplay bg as background image instead of the on from segmented_image.</li>
 <li><strong>mode</strong> (<em>str, optional</em>) &#8211; Coord mode for the location of the features: &#8216;lm&#8217;, &#8216;com&#8217; or &#8216;cos&#8217;.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></tt>.</p>
-</li>
+<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></tt>.</li>
 </ul>
 </td>
 </tr>
@@ -152,8 +150,7 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>ax</strong> (<tt class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></tt>.) &#8211; </li>
 <li><strong>segmented_image</strong> (<tt class="xref py py-class docutils literal"><span class="pre">wise.wds.SegmentedImages</span></tt>.) &#8211; </li>
-<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.plot_mask()</span></tt>.</p>
-</li>
+<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.plot_mask()</span></tt>.</li>
 </ul>
 </td>
 </tr>
@@ -176,8 +173,7 @@
 <li><strong>color_fct</strong> (<em>a function, optional</em>) &#8211; If set, it should be a function that take a feature as argument and return a color.</li>
 <li><strong>num</strong> (<em>bool, optional</em>) &#8211; Whatever to optionally annotate the segments with there ids.</li>
 <li><strong>num_offset</strong> (<em>list, optional</em>) &#8211; Offset in pixel for the id.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.plot_coords()</span></tt></p>
-</li>
+<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.plot_coords()</span></tt></li>
 </ul>
 </td>
 </tr>
@@ -199,8 +195,7 @@
 <li><strong>mode</strong> (<em>str, optional</em>) &#8211; Coord mode for the location of the features: &#8216;lm&#8217;, &#8216;com&#8217; or &#8216;cos&#8217;.</li>
 <li><strong>color_fct</strong> (<em>TYPE, optional</em>) &#8211; If set, it should be a function that take a feature as argument and return a color.</li>
 <li><strong>flag</strong> (<em>Attribute, optional</em>) &#8211; Default is DeltaInformation.DELTA_MATCH.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">matplotlib.pyltot.Arrow()</span></tt>.</p>
-</li>
+<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">matplotlib.pyltot.Arrow()</span></tt>.</li>
 </ul>
 </td>
 </tr>
@@ -229,8 +224,7 @@ one color for the segments of each SegmentedImage, will be used as bg.</p>
 <li><strong>bg</strong> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Image</span></tt>, optional) &#8211; The image to be used as background map.</li>
 <li><strong>beam</strong> (<em>bool, optional</em>) &#8211; Whatever to optionally display the beam of the image. Default is True.</li>
 <li><strong>cmap</strong> (<tt class="xref py py-class docutils literal"><span class="pre">matplotlib.cm.ColorMap</span></tt> or str, optional) &#8211; A color map for the background map.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <a class="reference internal" href="#wise.wiseutils.plot_displacement_vector" title="wise.wiseutils.plot_displacement_vector"><tt class="xref py py-func docutils literal"><span class="pre">plot_displacement_vector()</span></tt></a></p>
-</li>
+<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <a class="reference internal" href="#wise.wiseutils.plot_displacement_vector" title="wise.wiseutils.plot_displacement_vector"><tt class="xref py py-func docutils literal"><span class="pre">plot_displacement_vector()</span></tt></a></li>
 </ul>
 </td>
 </tr>
@@ -251,8 +245,7 @@ one color for the segments of each SegmentedImage, will be used as bg.</p>
 <li><strong>projection</strong> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></tt>) &#8211; </li>
 <li><strong>features</strong> (<tt class="xref py py-class docutils literal"><span class="pre">wise.features.FeaturesGroup</span></tt>) &#8211; </li>
 <li><strong>mode</strong> (<em>str, optional</em>) &#8211; Coord mode for the location of the features: &#8216;lm&#8217;, &#8216;com&#8217; or &#8216;cos&#8217;.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></tt>.</p>
-</li>
+<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></tt>.</li>
 </ul>
 </td>
 </tr>
@@ -273,8 +266,7 @@ one color for the segments of each SegmentedImage, will be used as bg.</p>
 <li><strong>projection</strong> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></tt>) &#8211; </li>
 <li><strong>features</strong> (<tt class="xref py py-class docutils literal"><span class="pre">wise.features.FeaturesGroup</span></tt>) &#8211; </li>
 <li><strong>mode</strong> (<em>str, optional</em>) &#8211; Coord mode for the location of the features: &#8216;lm&#8217;, &#8216;com&#8217; or &#8216;cos&#8217;.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></tt>.</p>
-</li>
+<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></tt>.</li>
 </ul>
 </td>
 </tr>
@@ -297,10 +289,9 @@ one color for the segments of each SegmentedImage, will be used as bg.</p>
 <li><strong>projection</strong> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></tt>) &#8211; </li>
 <li><strong>mode</strong> (<em>str, optional</em>) &#8211; Coord mode for the location of the features: &#8216;lm&#8217;, &#8216;com&#8217; or &#8216;cos&#8217;.</li>
 <li><strong>color_style</strong> (<em>str, optional</em>) &#8211; &#8216;scale&#8217;: display one color per scale. &#8216;date&#8217;: color correspond to the epoch.</li>
-<li><strong>colorbar_setting</strong> (:class:<a href="#id21"><span class="problematic" id="id22">`</span></a>libwise.ColorbarSetting, optional) &#8211; Settings for the color bar if color_style is &#8216;date&#8217;.</li>
+<li><strong>colorbar_setting</strong> (:class:<a href="#id7"><span class="problematic" id="id8">`</span></a>libwise.ColorbarSetting, optional) &#8211; Settings for the color bar if color_style is &#8216;date&#8217;.</li>
 <li><strong>map_cmap</strong> (<tt class="xref py py-class docutils literal"><span class="pre">matplotlib.cm.ColorMap</span></tt> or str, optional) &#8211; </li>
-<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></tt>.</p>
-</li>
+<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></tt>.</li>
 </ul>
 </td>
 </tr>
@@ -323,8 +314,7 @@ one color for the segments of each SegmentedImage, will be used as bg.</p>
 <li><strong>mode</strong> (<em>str, optional</em>) &#8211; Coord mode for the location of the features: &#8216;lm&#8217;, &#8216;com&#8217; or &#8216;cos&#8217;.</li>
 <li><strong>num</strong> (<em>bool, optional</em>) &#8211; Whatever to optionally annotate the links with there ids.</li>
 <li><strong>num_bbox</strong> (<em>dict, optional</em>) &#8211; </li>
-<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></tt>.</p>
-</li>
+<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></tt>.</li>
 </ul>
 </td>
 </tr>
@@ -347,8 +337,7 @@ one color for the segments of each SegmentedImage, will be used as bg.</p>
 <li><strong>fit_fct</strong> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.nputils.AbstractFct</span></tt>) &#8211; The function that will be used for the fit.</li>
 <li><strong>fit_min_size</strong> (<em>int, optional</em>) &#8211; Fit only links with size &gt;= fit_min_size.</li>
 <li><strong>mode</strong> (<em>str, optional</em>) &#8211; Coord mode for the location of the features: &#8216;lm&#8217;, &#8216;com&#8217; or &#8216;cos&#8217;.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></tt>.</p>
-</li>
+<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></tt>.</li>
 </ul>
 </td>
 </tr>
@@ -369,8 +358,7 @@ one color for the segments of each SegmentedImage, will be used as bg.</p>
 <li><strong>projection</strong> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></tt>) &#8211; </li>
 <li><strong>links</strong> (a list of <tt class="xref py py-class docutils literal"><span class="pre">wise.matcher.FeaturesLink</span></tt>) &#8211; </li>
 <li><strong>mode</strong> (<em>str, optional</em>) &#8211; Coord mode for the location of the features: &#8216;lm&#8217;, &#8216;com&#8217; or &#8216;cos&#8217;.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></tt></p>
-</li>
+<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></tt></li>
 </ul>
 </td>
 </tr>
@@ -391,8 +379,7 @@ one color for the segments of each SegmentedImage, will be used as bg.</p>
 <li><strong>projection</strong> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></tt>) &#8211; </li>
 <li><strong>links</strong> (a list of <tt class="xref py py-class docutils literal"><span class="pre">wise.matcher.FeaturesLink</span></tt>) &#8211; </li>
 <li><strong>mode</strong> (<em>str, optional</em>) &#8211; Coord mode for the location of the features: &#8216;lm&#8217;, &#8216;com&#8217; or &#8216;cos&#8217;.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></tt>.</p>
-</li>
+<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></tt>.</li>
 </ul>
 </td>
 </tr>
@@ -402,7 +389,7 @@ one color for the segments of each SegmentedImage, will be used as bg.</p>
 
 <dl class="function">
 <dt id="wise.wiseutils.plot_links_map">
-<tt class="descclassname">wise.wiseutils.</tt><tt class="descname">plot_links_map</tt><big>(</big><em>ax</em>, <em>img</em>, <em>projection</em>, <em>links</em>, <em>color_style='link'</em>, <em>mode='com'</em>, <em>colorbar_setting=None</em>, <em>map_cmap='jet'</em>, <em>vector_width=4</em>, <em>link_id_label=False</em>, <em>num_bbox=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#wise.wiseutils.plot_links_map" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">wise.wiseutils.</tt><tt class="descname">plot_links_map</tt><big>(</big><em>ax</em>, <em>img</em>, <em>projection</em>, <em>links</em>, <em>color_style='link'</em>, <em>mode='com'</em>, <em>colorbar_setting=None</em>, <em>map_cmap='jet'</em>, <em>vector_width=4</em>, <em>link_id_label=False</em>, <em>num_bbox=None</em>, <em>ang_vel_arrows=False</em>, <em>ang_vel_unit=Unit(&quot;mas / yr&quot;)</em>, <em>pix_per_ang_vel_unit=1</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#wise.wiseutils.plot_links_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display features links on a map.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -423,8 +410,7 @@ function: a function that take a feature as argument and return a color.</li>
 <li><strong>vector_width</strong> (<em>int, optional</em>) &#8211; Width of the displacements vector arrows. Default is 4.</li>
 <li><strong>link_id_label</strong> (<em>bool, optional</em>) &#8211; Annotate the links with there ids.</li>
 <li><strong>num_bbox</strong> (<em>dict, optional</em>) &#8211; </li>
-<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></tt>.</p>
-</li>
+<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></tt>.</li>
 </ul>
 </td>
 </tr>
@@ -504,8 +490,8 @@ spectral indexes.</p>
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Wise utilities module</a><ul>
-<li><a class="reference internal" href="#summary">Summary:</a></li>
-<li><a class="reference internal" href="#module-wise.wiseutils">Full reference:</a></li>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+<li><a class="reference internal" href="#module-wise.wiseutils">Full reference</a></li>
 </ul>
 </li>
 </ul>
@@ -553,7 +539,7 @@ spectral indexes.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2015, Florent Mertens.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

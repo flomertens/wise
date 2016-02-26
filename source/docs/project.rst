@@ -1,7 +1,7 @@
 Wise project module
 =====================
 
-Summary:
+Summary
 --------
 
 
@@ -19,7 +19,7 @@ Summary:
     :methods:
 
 
-Full reference:
+Full reference
 ---------------
 
 .. automodule:: wise.project

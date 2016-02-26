@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -153,7 +152,7 @@ One final component per line, described by a list of link id separated by a &#82
 <dl class="function">
 <dt id="wise.tasks.detection_all">
 <tt class="descclassname">wise.tasks.</tt><tt class="descname">detection_all</tt><big>(</big><em>ctx</em>, <em>filter=None</em><big>)</big><a class="headerlink" href="#wise.tasks.detection_all" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run wds on all selected files</p>
+<dd><p>Run the Segmented wavelet decomposition on all selected files</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -229,7 +228,7 @@ One final component per line, described by a list of link id separated by a &#82
 
 <dl class="function">
 <dt id="wise.tasks.view_all">
-<tt class="descclassname">wise.tasks.</tt><tt class="descname">view_all</tt><big>(</big><em>ctx</em>, <em>preprocess=True</em>, <em>show_mask=True</em>, <em>show_regions=</em><span class="optional">[</span><span class="optional">]</span>, <em>save_filename=None</em>, <em>align=True</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#wise.tasks.view_all" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">wise.tasks.</tt><tt class="descname">view_all</tt><big>(</big><em>ctx</em>, <em>preprocess=True</em>, <em>show_mask=True</em>, <em>show_regions=[]</em>, <em>save_filename=None</em>, <em>align=True</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#wise.tasks.view_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>Preview all images</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -242,8 +241,7 @@ One final component per line, described by a list of link id separated by a &#82
 <li><strong>show_regions</strong> (list of <tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Region</span></tt>, optional) &#8211; Plot the regions</li>
 <li><strong>save_filename</strong> (<em>str, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Arguments to pass to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></tt></p>
-</li>
+<li><strong>**kwargs</strong> &#8211; Arguments to pass to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></tt></li>
 </ul>
 </td>
 </tr>
@@ -253,7 +251,7 @@ with this filename.</li>
 
 <dl class="function">
 <dt id="wise.tasks.view_stack">
-<tt class="descclassname">wise.tasks.</tt><tt class="descname">view_stack</tt><big>(</big><em>ctx</em>, <em>preprocess=True</em>, <em>nsigma=0</em>, <em>nsigma_connected=False</em>, <em>show_mask=True</em>, <em>show_regions=</em><span class="optional">[</span><span class="optional">]</span>, <em>intensity_colorbar=False</em>, <em>save_filename=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#wise.tasks.view_stack" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">wise.tasks.</tt><tt class="descname">view_stack</tt><big>(</big><em>ctx</em>, <em>preprocess=True</em>, <em>nsigma=0</em>, <em>nsigma_connected=False</em>, <em>show_mask=True</em>, <em>show_regions=[]</em>, <em>intensity_colorbar=False</em>, <em>save_filename=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#wise.tasks.view_stack" title="Permalink to this definition">¶</a></dt>
 <dd><p>Preview the stack image</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -269,8 +267,7 @@ with this filename.</li>
 <li><strong>intensity_colorbar</strong> (<em>bool, optional</em>) &#8211; Add an intensity colorbar</li>
 <li><strong>save_filename</strong> (<em>str, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Arguments to pass to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></tt></p>
-</li>
+<li><strong>**kwargs</strong> &#8211; Arguments to pass to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></tt></li>
 </ul>
 </td>
 </tr>
@@ -292,8 +289,7 @@ with this filename.</li>
 <li><strong>num</strong> (<em>bool, optional</em>) &#8211; If True, annotate each segments</li>
 <li><strong>scales</strong> (<em>list or int, optional</em>) &#8211; Plot only for scale or list of scales (in pixel)</li>
 <li><strong>save_filename</strong> (<em>TYPE, optional</em>) &#8211; Description</li>
-<li><strong>**kwargs</strong> &#8211; <p>Description</p>
-</li>
+<li><strong>**kwargs</strong> &#8211; Description</li>
 </ul>
 </td>
 </tr>
@@ -303,7 +299,7 @@ with this filename.</li>
 
 <dl class="function">
 <dt id="wise.tasks.view_all_features">
-<tt class="descclassname">wise.tasks.</tt><tt class="descname">view_all_features</tt><big>(</big><em>ctx</em>, <em>scales</em>, <em>region_list=None</em>, <em>legend=True</em>, <em>feature_filter=None</em>, <em>save_filename=None</em>, <em>**img_kargs</em><big>)</big><a class="headerlink" href="#wise.tasks.view_all_features" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">wise.tasks.</tt><tt class="descname">view_all_features</tt><big>(</big><em>ctx</em>, <em>scales</em>, <em>region_list=None</em>, <em>legend=False</em>, <em>feature_filter=None</em>, <em>save_filename=None</em>, <em>**img_kargs</em><big>)</big><a class="headerlink" href="#wise.tasks.view_all_features" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot all features location</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -317,8 +313,7 @@ with this filename.</li>
 <li><strong>feature_filter</strong> (<tt class="xref py py-class docutils literal"><span class="pre">wise.features.FeatureFilter</span></tt>, optional) &#8211; Filter the results</li>
 <li><strong>save_filename</strong> (<em>TYPE, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
-<li><strong>**img_kargs</strong> &#8211; <p>Additional arguments to pass to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></tt></p>
-</li>
+<li><strong>**img_kargs</strong> &#8211; Additional arguments to pass to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></tt></li>
 </ul>
 </td>
 </tr>
@@ -346,8 +341,7 @@ with this filename.</li>
 <li><strong>fit_fct</strong> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.nputils.AbstractFct</span></tt>, optional) &#8211; Fit each links with provided fct</li>
 <li><strong>save_filename</strong> (<em>str, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to pass to <a class="reference internal" href="wiseutils.html#wise.wiseutils.plot_links_dfc" title="wise.wiseutils.plot_links_dfc"><tt class="xref py py-func docutils literal"><span class="pre">wise.wiseutils.plot_links_dfc()</span></tt></a></p>
-</li>
+<li><strong>**kwargs</strong> &#8211; Additional arguments to pass to <a class="reference internal" href="wiseutils.html#wise.wiseutils.plot_links_dfc" title="wise.wiseutils.plot_links_dfc"><tt class="xref py py-func docutils literal"><span class="pre">wise.wiseutils.plot_links_dfc()</span></tt></a></li>
 </ul>
 </td>
 </tr>
@@ -420,8 +414,7 @@ with this filename.</li>
 color_str: use color_str as color for all components</li>
 <li><strong>save_filename</strong> (<em>str, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to pass to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plot_links_map()</span></tt></p>
-</li>
+<li><strong>**kwargs</strong> &#8211; Additional arguments to pass to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plot_links_map()</span></tt></li>
 </ul>
 </td>
 </tr>
@@ -470,7 +463,7 @@ with this filename.</li>
 
 <dl class="function">
 <dt id="wise.tasks.preview_detection_stack">
-<tt class="descclassname">wise.tasks.</tt><tt class="descname">preview_detection_stack</tt><big>(</big><em>ctx</em>, <em>stack_detection_name</em>, <em>count_threshold=0</em>, <em>ms_set=None</em>, <em>date_filter=None</em>, <em>show_regions=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#wise.tasks.preview_detection_stack" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">wise.tasks.</tt><tt class="descname">preview_detection_stack</tt><big>(</big><em>ctx</em>, <em>stack_detection_name</em>, <em>count_threshold=0</em>, <em>ms_set=None</em>, <em>date_filter=None</em>, <em>show_regions=[]</em><big>)</big><a class="headerlink" href="#wise.tasks.preview_detection_stack" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot detection in stack</p>
 </dd></dl>
 
@@ -503,7 +496,7 @@ with this filename.</li>
 
 <dl class="function">
 <dt id="wise.tasks.bootstrap_scc">
-<tt class="descclassname">wise.tasks.</tt><tt class="descname">bootstrap_scc</tt><big>(</big><em>ctx</em>, <em>config</em>, <em>output_dir</em>, <em>n</em>, <em>append=False</em>, <em>seperate_scales=False</em><big>)</big><a class="headerlink" href="#wise.tasks.bootstrap_scc" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">wise.tasks.</tt><tt class="descname">bootstrap_scc</tt><big>(</big><em>ctx</em>, <em>config</em>, <em>output_dir</em>, <em>n</em>, <em>nwise=2</em>, <em>append=False</em>, <em>verbose=False</em>, <em>seperate_scales=False</em><big>)</big><a class="headerlink" href="#wise.tasks.bootstrap_scc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform Stack Cross Correlation analysis n time and store results in output_dir</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -619,7 +612,7 @@ One final component per line, described by a list of link id separated by a &#82
 <dl class="function">
 <dt>
 <tt class="descclassname">wise.tasks.</tt><tt class="descname">detection_all</tt><big>(</big><em>ctx</em>, <em>filter=None</em><big>)</big></dt>
-<dd><p>Run wds on all selected files</p>
+<dd><p>Run the Segmented wavelet decomposition on all selected files</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -695,7 +688,7 @@ One final component per line, described by a list of link id separated by a &#82
 
 <dl class="function">
 <dt>
-<tt class="descclassname">wise.tasks.</tt><tt class="descname">view_all</tt><big>(</big><em>ctx</em>, <em>preprocess=True</em>, <em>show_mask=True</em>, <em>show_regions=</em><span class="optional">[</span><span class="optional">]</span>, <em>save_filename=None</em>, <em>align=True</em>, <em>**kwargs</em><big>)</big></dt>
+<tt class="descclassname">wise.tasks.</tt><tt class="descname">view_all</tt><big>(</big><em>ctx</em>, <em>preprocess=True</em>, <em>show_mask=True</em>, <em>show_regions=[]</em>, <em>save_filename=None</em>, <em>align=True</em>, <em>**kwargs</em><big>)</big></dt>
 <dd><p>Preview all images</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -708,8 +701,7 @@ One final component per line, described by a list of link id separated by a &#82
 <li><strong>show_regions</strong> (list of <tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Region</span></tt>, optional) &#8211; Plot the regions</li>
 <li><strong>save_filename</strong> (<em>str, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Arguments to pass to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></tt></p>
-</li>
+<li><strong>**kwargs</strong> &#8211; Arguments to pass to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></tt></li>
 </ul>
 </td>
 </tr>
@@ -719,7 +711,7 @@ with this filename.</li>
 
 <dl class="function">
 <dt>
-<tt class="descclassname">wise.tasks.</tt><tt class="descname">view_stack</tt><big>(</big><em>ctx</em>, <em>preprocess=True</em>, <em>nsigma=0</em>, <em>nsigma_connected=False</em>, <em>show_mask=True</em>, <em>show_regions=</em><span class="optional">[</span><span class="optional">]</span>, <em>intensity_colorbar=False</em>, <em>save_filename=None</em>, <em>**kwargs</em><big>)</big></dt>
+<tt class="descclassname">wise.tasks.</tt><tt class="descname">view_stack</tt><big>(</big><em>ctx</em>, <em>preprocess=True</em>, <em>nsigma=0</em>, <em>nsigma_connected=False</em>, <em>show_mask=True</em>, <em>show_regions=[]</em>, <em>intensity_colorbar=False</em>, <em>save_filename=None</em>, <em>**kwargs</em><big>)</big></dt>
 <dd><p>Preview the stack image</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -735,8 +727,7 @@ with this filename.</li>
 <li><strong>intensity_colorbar</strong> (<em>bool, optional</em>) &#8211; Add an intensity colorbar</li>
 <li><strong>save_filename</strong> (<em>str, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Arguments to pass to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></tt></p>
-</li>
+<li><strong>**kwargs</strong> &#8211; Arguments to pass to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></tt></li>
 </ul>
 </td>
 </tr>
@@ -758,8 +749,7 @@ with this filename.</li>
 <li><strong>num</strong> (<em>bool, optional</em>) &#8211; If True, annotate each segments</li>
 <li><strong>scales</strong> (<em>list or int, optional</em>) &#8211; Plot only for scale or list of scales (in pixel)</li>
 <li><strong>save_filename</strong> (<em>TYPE, optional</em>) &#8211; Description</li>
-<li><strong>**kwargs</strong> &#8211; <p>Description</p>
-</li>
+<li><strong>**kwargs</strong> &#8211; Description</li>
 </ul>
 </td>
 </tr>
@@ -769,7 +759,7 @@ with this filename.</li>
 
 <dl class="function">
 <dt>
-<tt class="descclassname">wise.tasks.</tt><tt class="descname">view_all_features</tt><big>(</big><em>ctx</em>, <em>scales</em>, <em>region_list=None</em>, <em>legend=True</em>, <em>feature_filter=None</em>, <em>save_filename=None</em>, <em>**img_kargs</em><big>)</big></dt>
+<tt class="descclassname">wise.tasks.</tt><tt class="descname">view_all_features</tt><big>(</big><em>ctx</em>, <em>scales</em>, <em>region_list=None</em>, <em>legend=False</em>, <em>feature_filter=None</em>, <em>save_filename=None</em>, <em>**img_kargs</em><big>)</big></dt>
 <dd><p>Plot all features location</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -783,8 +773,7 @@ with this filename.</li>
 <li><strong>feature_filter</strong> (<tt class="xref py py-class docutils literal"><span class="pre">wise.features.FeatureFilter</span></tt>, optional) &#8211; Filter the results</li>
 <li><strong>save_filename</strong> (<em>TYPE, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
-<li><strong>**img_kargs</strong> &#8211; <p>Additional arguments to pass to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></tt></p>
-</li>
+<li><strong>**img_kargs</strong> &#8211; Additional arguments to pass to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></tt></li>
 </ul>
 </td>
 </tr>
@@ -812,8 +801,7 @@ with this filename.</li>
 <li><strong>fit_fct</strong> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.nputils.AbstractFct</span></tt>, optional) &#8211; Fit each links with provided fct</li>
 <li><strong>save_filename</strong> (<em>str, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to pass to <a class="reference internal" href="wiseutils.html#wise.wiseutils.plot_links_dfc" title="wise.wiseutils.plot_links_dfc"><tt class="xref py py-func docutils literal"><span class="pre">wise.wiseutils.plot_links_dfc()</span></tt></a></p>
-</li>
+<li><strong>**kwargs</strong> &#8211; Additional arguments to pass to <a class="reference internal" href="wiseutils.html#wise.wiseutils.plot_links_dfc" title="wise.wiseutils.plot_links_dfc"><tt class="xref py py-func docutils literal"><span class="pre">wise.wiseutils.plot_links_dfc()</span></tt></a></li>
 </ul>
 </td>
 </tr>
@@ -886,8 +874,7 @@ with this filename.</li>
 color_str: use color_str as color for all components</li>
 <li><strong>save_filename</strong> (<em>str, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to pass to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plot_links_map()</span></tt></p>
-</li>
+<li><strong>**kwargs</strong> &#8211; Additional arguments to pass to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plot_links_map()</span></tt></li>
 </ul>
 </td>
 </tr>
@@ -936,7 +923,7 @@ with this filename.</li>
 
 <dl class="function">
 <dt>
-<tt class="descclassname">wise.tasks.</tt><tt class="descname">preview_detection_stack</tt><big>(</big><em>ctx</em>, <em>stack_detection_name</em>, <em>count_threshold=0</em>, <em>ms_set=None</em>, <em>date_filter=None</em>, <em>show_regions=</em><span class="optional">[</span><span class="optional">]</span><big>)</big></dt>
+<tt class="descclassname">wise.tasks.</tt><tt class="descname">preview_detection_stack</tt><big>(</big><em>ctx</em>, <em>stack_detection_name</em>, <em>count_threshold=0</em>, <em>ms_set=None</em>, <em>date_filter=None</em>, <em>show_regions=[]</em><big>)</big></dt>
 <dd><p>Plot detection in stack</p>
 </dd></dl>
 
@@ -969,7 +956,7 @@ with this filename.</li>
 
 <dl class="function">
 <dt>
-<tt class="descclassname">wise.tasks.</tt><tt class="descname">bootstrap_scc</tt><big>(</big><em>ctx</em>, <em>config</em>, <em>output_dir</em>, <em>n</em>, <em>append=False</em>, <em>seperate_scales=False</em><big>)</big></dt>
+<tt class="descclassname">wise.tasks.</tt><tt class="descname">bootstrap_scc</tt><big>(</big><em>ctx</em>, <em>config</em>, <em>output_dir</em>, <em>n</em>, <em>nwise=2</em>, <em>append=False</em>, <em>verbose=False</em>, <em>seperate_scales=False</em><big>)</big></dt>
 <dd><p>Perform Stack Cross Correlation analysis n time and store results in output_dir</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -991,7 +978,7 @@ with this filename.</li>
 
 <dl class="data">
 <dt id="wise.tasks.test">
-<tt class="descclassname">wise.tasks.</tt><tt class="descname">test</tt><em class="property"> = [&lt;function bootstrap_scc at 0x5cecaa0&gt;, &lt;function stack_cross_correlation at 0x5ceca28&gt;]</em><a class="headerlink" href="#wise.tasks.test" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">wise.tasks.</tt><tt class="descname">test</tt><em class="property"> = [&lt;function bootstrap_scc at 0x7f6e11ce3758&gt;, &lt;function stack_cross_correlation at 0x7f6e11ce36e0&gt;]</em><a class="headerlink" href="#wise.tasks.test" title="Permalink to this definition">¶</a></dt>
 <dd><p>list() -&gt; new empty list
 list(iterable) -&gt; new list initialized from iterable&#8217;s items</p>
 </dd></dl>
@@ -1053,7 +1040,7 @@ list(iterable) -&gt; new list initialized from iterable&#8217;s items</p>
     </div>
     <div class="footer">
         &copy; Copyright 2015, Florent Mertens.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>
