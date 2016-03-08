@@ -3,7 +3,6 @@ import logging
 import datetime
 
 import numpy as np
-from scipy.signal import detrend
 from scipy.spatial import KDTree
 
 import astropy.units as u
@@ -654,6 +653,8 @@ class DeltaInformation(object):
         return new
 
     def discard_diff_outliers(self, nsigma):
+        from scipy.signal import detrend
+
         deltax, deltay = zip(*[k.get_delta() for k in self.deltas.values()])
         for delta in deltax, deltay:
             delta = detrend(delta)

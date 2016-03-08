@@ -2,7 +2,6 @@ import logging
 import datetime
 
 import numpy as np
-import pandas as pd
 
 import wds
 import matcher
@@ -26,9 +25,9 @@ p2i = imgutils.p2i
 logger = logging.getLogger(__name__)
 
 
-pd.set_option('display.max_rows', 500)
-pd.set_option('display.max_columns', 500)
-pd.set_option('display.width', 1000)
+# pd.set_option('display.max_rows', 500)
+# pd.set_option('display.max_columns', 500)
+# pd.set_option('display.width', 1000)
 
 
 def imshow_segmented_image(ax, segmented_image, projection=None, title=True, beam=True, num=False,
@@ -800,6 +799,8 @@ class CoreOffsetPositions(object):
 class SSPData(object):
 
     def __init__(self):
+        import pandas as pd
+
         self.df = pd.DataFrame()
 
     def add_features_group(self, features, projection, coord_mode='com', 
