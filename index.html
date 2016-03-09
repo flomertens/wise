@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="WISE 0.1 documentation" href="#" />
-    <link rel="next" title="Tutorials" href="tutorials/index.html" /> 
+    <link rel="next" title="Tutorials using the command line" href="tutorials_cmd/index.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,7 +37,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tutorials/index.html" title="Tutorials"
+          <a href="tutorials_cmd/index.html" title="Tutorials using the command line"
              accesskey="N">next</a> |</li>
         <li><a href="#">WISE 0.1 documentation</a> &raquo;</li> 
       </ul>
@@ -50,13 +50,78 @@
             
   <div class="section" id="wise-wavelet-image-segmentation-and-evaluation">
 <h1>WISE: Wavelet Image Segmentation and Evaluation<a class="headerlink" href="#wise-wavelet-image-segmentation-and-evaluation" title="Permalink to this headline">¶</a></h1>
+<p>The WISE package has been developed to address the issue of detecting
+significant features in radio interferometric images and obtaining reliable
+velocity field from cross-correlation of these regions in multi-epoch
+observations.</p>
+<p>It comprises three main constituents:</p>
+<ul class="simple">
+<li>Detection of structural information is performed using the segmented wavelet
+decomposition (SWD) method. The SWD algorithm provides a structural
+representation of astronomical images with exceptional sensitivity for
+identifying compact and marginally resolved features as well as large scale
+structural patterns. It delivers a set of two-dimensional significant structural
+patterns (SSP), which are identified at each scale of the wavelet decomposition.</li>
+<li>Tracking of these SSP detected in multiple-epoch images is performed with a
+multiscale cross-correlation (MCC) algorithm. It combines structural information
+on different scales of the wavelet decomposition and provides a robust and
+reliable cross-identification of related SSP.</li>
+<li>A stacked cross correlation (SCC) is introduced to recover multiple velocity
+components from partially overlapping emitting regions.</li>
+</ul>
+<a class="reference internal image-reference" href="_images/m87_combined.png"><img alt="_images/m87_combined.png" class="align-center" src="_images/m87_combined.png" style="width: 800px;" /></a>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>The WISE package can be installed using the conda package management system. You
+can install conda easily by downloading the installer corresponding to your OS
+and for Python 2.7 at:</p>
+<p><a class="reference external" href="http://conda.pydata.org/miniconda.html">http://conda.pydata.org/miniconda.html</a></p>
+<p>and following the installation instruction at:</p>
+<p><a class="reference external" href="http://conda.pydata.org/docs/install/quick.html">http://conda.pydata.org/docs/install/quick.html</a></p>
+<p>Once done, you can install WISE in just one command line:</p>
+<div class="highlight-python"><div class="highlight"><pre>conda install --channel https://conda.anaconda.org/flomertens wise
+</pre></div>
+</div>
+</div>
+<div class="section" id="alternative-manual-installation">
+<h2>Alternative manual installation:<a class="headerlink" href="#alternative-manual-installation" title="Permalink to this headline">¶</a></h2>
+<p>Latest version of WISE and libwise package can be download at:</p>
+<p><a class="reference external" href="https://github.com/flomertens/libwise/releases/">https://github.com/flomertens/libwise/releases/</a></p>
+<p><a class="reference external" href="https://github.com/flomertens/wise/releases/">https://github.com/flomertens/wise/releases/</a></p>
+<p>Each package can be installed with the command line:</p>
+<div class="highlight-python"><div class="highlight"><pre>python setup.py install
+</pre></div>
+</div>
+<p>Requirements:</p>
+<ul class="simple">
+<li>numpy (&gt;= 1.5)</li>
+<li>scipy (&gt;= 0.10)</li>
+<li>skimage (&gt;= 0.5)</li>
+<li>astropy (&gt;= 0.4)</li>
+<li>matplotlib (&gt;= 1.0)</li>
+<li>pyqt (&gt;= 4.8)</li>
+<li>pandas</li>
+<li>pyregion (<a class="reference external" href="https://pypi.python.org/pypi/pyregion">https://pypi.python.org/pypi/pyregion</a>)</li>
+<li>uncertainties (<a class="reference external" href="https://pypi.python.org/pypi/uncertainties">https://pypi.python.org/pypi/uncertainties</a>)</li>
+<li>pymorph (<a class="reference external" href="https://pypi.python.org/pypi/pymorph">https://pypi.python.org/pypi/pymorph</a>)</li>
+</ul>
+</div>
+<div class="section" id="using-wise">
+<h2>Using WISE<a class="headerlink" href="#using-wise" title="Permalink to this headline">¶</a></h2>
+<p>WISE can be used either from the command line or from an ipython notebook. Check
+the tutorials below to see how to use it.</p>
+</div>
 <div class="section" id="tutorials">
 <h2>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/Walkthrough3C120.html">Walkthrough 3C120</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/WalkthroughWaterDiffusion.html">Walkthrough particle diffusing in water</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials_cmd/index.html">Tutorials using the command line</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials_cmd/Walkthrough3C120.html">Walkthrough 3C120</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials_notebook/index.html">Tutorials using the IPython Notebook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials_notebook/Walkthrough3C120.html">Walkthrough 3C120</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials_notebook/WalkthroughWaterDiffusion.html">Walkthrough particle diffusing in water</a></li>
 </ul>
 </li>
 </ul>
@@ -94,6 +159,9 @@
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">WISE: Wavelet Image Segmentation and Evaluation</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#alternative-manual-installation">Alternative manual installation:</a></li>
+<li><a class="reference internal" href="#using-wise">Using WISE</a></li>
 <li><a class="reference internal" href="#tutorials">Tutorials</a></li>
 <li><a class="reference internal" href="#full-api-documentation">Full API documentation:</a></li>
 </ul>
@@ -102,8 +170,8 @@
 </ul>
 
   <h4>Next topic</h4>
-  <p class="topless"><a href="tutorials/index.html"
-                        title="next chapter">Tutorials</a></p>
+  <p class="topless"><a href="tutorials_cmd/index.html"
+                        title="next chapter">Tutorials using the command line</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/index.txt"
@@ -136,7 +204,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tutorials/index.html" title="Tutorials"
+          <a href="tutorials_cmd/index.html" title="Tutorials using the command line"
              >next</a> |</li>
         <li><a href="#">WISE 0.1 documentation</a> &raquo;</li> 
       </ul>

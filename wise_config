@@ -1,0 +1,52 @@
+[Data configuration]
+data_dir = None
+fits_extension = 0
+ref_image_filename = reference_image
+mask_filename = mask.fits
+bg_coords = None
+bg_use_ksigma_method = False
+roi_coords = None
+core_offset_filename = core.dat
+crval = None
+crpix = None
+projection_unit = mas
+projection_relative = True
+projection_center = pix_ref
+object_distance = None
+object_z = 0
+
+[Finder configuration]
+alpha_threashold = 3
+alpha_detection = 4
+min_scale = 1
+max_scale = 4
+scales_snr_filter = None
+ms_dec_klass = {"py/type": "wise.wds.WaveletMultiscaleDecomposition"}
+use_iwd = False
+dec = {"py/function": "libwise.wtutils.uiwt"}
+wd_wavelet = b1
+iwd_wavelet = b3
+exclude_border_dist = 1
+exclude_noise = True
+
+[Matcher configuration]
+use_upper_info = True
+upper_info_average_tol_factor = 10
+mscsc2_upper_delta_bonus_range = 0.4
+mscsc2_nitems_bonus_range = 0.4
+simple_merge = True
+correlation_threshold = 0.65
+ignore_features_at_border = False
+features_at_border_k1 = 0.5
+features_at_border_k2 = 0.25
+features_at_border_k3 = 0.25
+increase_tol_for_no_input_delta = True
+delta_range_filter = None
+mscsc_max_merge = 3
+tolerance_factor = 1
+method_klass = {"py/type": "wise.matcher.ScaleMatcherMSCSC2"}
+no_input_no_match_scales = []
+min_scale_tolerance = {"3": 4, "2": 4, "4": 6}
+find_distance_mode = min
+mscsc2_smooth = True
+

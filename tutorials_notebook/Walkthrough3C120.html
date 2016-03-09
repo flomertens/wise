@@ -1,0 +1,564 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Walkthrough 3C120 &mdash; WISE 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="WISE 0.1 documentation" href="../index.html" />
+    <link rel="up" title="Tutorials using the IPython Notebook" href="index.html" />
+    <link rel="next" title="Walkthrough particle diffusing in water" href="WalkthroughWaterDiffusion.html" />
+    <link rel="prev" title="Tutorials using the IPython Notebook" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="WalkthroughWaterDiffusion.html" title="Walkthrough particle diffusing in water"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Tutorials using the IPython Notebook"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">WISE 0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Tutorials using the IPython Notebook</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="walkthrough-3c120">
+<h1>Walkthrough 3C120<a class="headerlink" href="#walkthrough-3c120" title="Permalink to this headline">¶</a></h1>
+<p>In this walkthrough, I will show the basics of WISE analysis, by
+investigating the kinematic in the 3C120 jet. The original notebook can be downloaded <a class="reference download internal" href="../_downloads/Walkthrough_3C120.ipynb"><tt class="xref download docutils literal"><span class="pre">here</span></tt></a>.</p>
+<div class="section" id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<p>We will analyse maps of the 3C120 jet observed with VLBA at 15 GHZ as
+part of the MOJAVE project. They can be obtained from
+<a class="reference external" href="http://www.physics.purdue.edu/MOJAVE/sourcepages/0430+052.shtml">http://www.physics.purdue.edu/MOJAVE/sourcepages/0430+052.shtml</a> (FITS I
+image).</p>
+<p>The first step is to import the required python library:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">astropy.units</span> <span class="kn">as</span> <span class="nn">u</span>
+
+<span class="kn">import</span> <span class="nn">wise</span>
+<span class="kn">from</span> <span class="nn">wise</span> <span class="kn">import</span> <span class="n">tasks</span>
+<span class="kn">from</span> <span class="nn">libwise</span> <span class="kn">import</span> <span class="n">imgutils</span><span class="p">,</span> <span class="n">plotutils</span><span class="p">,</span> <span class="n">nputils</span>
+
+<span class="o">%</span><span class="n">matplotlib</span> <span class="n">qt4</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Applying preset: display
+</pre></div>
+</div>
+<p>We then initialize an AnalysisContext object that will handle the
+configurations and store the results:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ctx</span> <span class="o">=</span> <span class="n">wise</span><span class="o">.</span><span class="n">AnalysisContext</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-up-the-data-configuration">
+<h2>Setting up the data configuration:<a class="headerlink" href="#setting-up-the-data-configuration" title="Permalink to this headline">¶</a></h2>
+<p>The project configuration is separated into a data, detection and matcher configuration
+retrospectively stored in ctx.config.data, ctx.config.finder and ctx.config.matcher.
+To list the default configuration, we simply execute:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">doc</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Documentation for:Data configuration
+Option               |Documentation                     |Default         |
+--------------------------------------------------------------------------
+data_dir             |Base data directory               |None            |
+fits_extension       |Extension index                   |0               |
+ref_image_filename   |Reference image filename          |reference_image |
+mask_filename        |Mask filename                     |mask.fits       |
+bg_coords            |Background region in coordinates  |None            |
+                     |[Xa,Ya,Xb,Yb]                     |                |
+bg_use_ksigma_method |Use ksigma method to estimate the |False           |
+                     |background level                  |                |
+roi_coords           |Region of interest in coordinates |None            |
+                     |[Xa,Ya,Xb,Yb]                     |                |
+core_offset_filename |Core offset filename              |core.dat        |
+projection_unit      |Unit used for the projection      |mas             |
+projection_relative  |Use relative projection           |True            |
+projection_center    |Method used to get the center     |pix_ref         |
+object_distance      |Object distance                   |None            |
+object_z             |Object z                          |0               |
+</pre></div>
+</div>
+<p>data_dir is the directory where the results will be store. Setting a
+configuration is as simple as assigning a new value to it:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s">&quot;~/data/3c120/mojave&quot;</span><span class="p">)</span>
+
+<span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">&quot;run001&quot;</span><span class="p">)</span>
+<span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">object_z</span> <span class="o">=</span> <span class="mf">0.033</span>
+<span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">object_distance</span> <span class="o">=</span> <span class="mi">143</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">Mpc</span>
+</pre></div>
+</div>
+<p>To select the files to analyse, we use the ctx.select_files() function.
+This function accept shell like wildcards, and it is possible to filter
+files by dates. For this walkthrough, we will only analyse images
+starting from January 2012:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ctx</span><span class="o">.</span><span class="n">select_files</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">&quot;icn/*.icn.fits&quot;</span><span class="p">),</span> <span class="n">start_date</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2012</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Number of files selected: 13
+</pre></div>
+</div>
+<p>Now that we have selected our files, we want to preview them, in order
+to select the region that we will investigate. For that, we will execute
+a tasks called tasks.view_all(). A task is a small function that
+will execute a particular job. To list all currently available tasks,
+we can run:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tasks</span><span class="o">.</span><span class="n">list_tasks</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Name                      |Description                                                                     |
+------------------------------------------------------------------------------------------------------------
+bootstrap_scc             |Perform Stack Cross Correlation analysis n time and store results in output_dir |
+build_final_dfc           |Build a final separation file from a merge file                                 |
+create_poly_region        |Create a region file                                                            |
+detection_all             |Run wds on all selected files                                                   |
+info_files                |Print List of selected files with information on beam and pixel scales          |
+info_files_delta          |Print List of selected pair of files with information on velocity resolution    |
+list_saved_results        |List all saved results                                                          |
+list_tasks                |Lists all WISE tasks                                                            |
+load                      |Load result from files                                                          |
+match_all                 |Run matching on all selected files                                              |
+plot_all_features         |Plot all features distance from core with time                                  |
+plot_separation_from_core |Plot separation from core with time                                             |
+preview_detection_stack   |Plot detection in stack                                                         |
+save                      |Save current result to disk                                                     |
+stack_cross_correlation   |Perform a Stack Cross Correlation analysis                                      |
+view_all                  |Preview all images                                                              |
+view_all_features         |Plot all features location                                                      |
+view_displacements        |Plot individual match results at specified scale                                |
+view_links                |Plot all components trajectories on a map                                       |
+view_stack                |Preview the stack image                                                         |
+view_wds                  |Plot WDS decomposition                                                          |
+</pre></div>
+</div>
+<p>The task tasks.info_files() will list some information about the
+currently selected files:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tasks</span><span class="o">.</span><span class="n">info_files</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>File                           |Date                |Shape     |Pixel scale |Beam                        |
+----------------------------------------------------------------------------------------------------------
+0430+052.u.2012_01_14.icn.fits |2012-01-14 00:00:00 |2048x2048 |0.100 mas   |0.595 mas, 1.255 mas, -0.07 |
+0430+052.u.2012_03_04.icn.fits |2012-03-04 00:00:00 |2048x2048 |0.100 mas   |0.699 mas, 1.444 mas, 0.20  |
+0430+052.u.2012_04_29.icn.fits |2012-04-30 00:00:00 |2048x2048 |0.100 mas   |0.576 mas, 1.325 mas, -0.15 |
+0430+052.u.2012_05_24.icn.fits |2012-05-24 00:00:00 |2048x2048 |0.100 mas   |0.528 mas, 1.188 mas, -0.02 |
+0430+052.u.2012_07_12.icn.fits |2012-07-12 00:00:00 |2048x2048 |0.100 mas   |0.503 mas, 1.415 mas, -0.24 |
+0430+052.u.2012_08_03.icn.fits |2012-08-03 00:00:00 |2048x2048 |0.100 mas   |0.521 mas, 1.262 mas, -0.11 |
+0430+052.u.2012_09_02.icn.fits |2012-09-02 00:00:00 |2048x2048 |0.100 mas   |0.533 mas, 1.257 mas, -0.07 |
+0430+052.u.2012_11_02.icn.fits |2012-11-02 00:00:00 |2048x2048 |0.100 mas   |0.516 mas, 1.224 mas, -0.13 |
+0430+052.u.2012_11_28.icn.fits |2012-11-29 00:00:00 |2048x2048 |0.100 mas   |0.524 mas, 1.350 mas, -0.14 |
+0430+052.u.2012_12_23.icn.fits |2012-12-23 00:00:00 |2048x2048 |0.100 mas   |0.679 mas, 1.523 mas, 0.11  |
+0430+052.u.2013_01_21.icn.fits |2013-01-21 00:00:00 |2048x2048 |0.100 mas   |0.522 mas, 1.186 mas, -0.11 |
+0430+052.u.2013_02_10.icn.fits |2013-02-10 00:00:00 |2048x2048 |0.100 mas   |0.503 mas, 1.139 mas, -0.13 |
+0430+052.u.2013_02_28.icn.fits |2013-02-28 00:00:00 |2048x2048 |0.100 mas   |0.546 mas, 1.209 mas, -0.06 |
+
+Number of files: 13
+Mean beam: Bmin: 0.557, Bmaj: 1.291, Angle:-0.07
+</pre></div>
+</div>
+<p>while tasks.info_files_delta() gives information about the
+velocity resolution:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tasks</span><span class="o">.</span><span class="n">info_files_delta</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Date 1              |Date 2              |Delta (d) |Angular vel. res. (mas / yr) |Proper vel. res. (c) |
+---------------------------------------------------------------------------------------------------------
+2012-01-14 00:00:00 |2012-03-04 00:00:00 |50.0      |0.730499803077               |1.7063071511         |
+2012-03-04 00:00:00 |2012-04-30 00:00:00 |57.0      |0.640789300944               |1.49676065886        |
+2012-04-30 00:00:00 |2012-05-24 00:00:00 |24.0      |1.52187458974                |3.5548065648         |
+2012-05-24 00:00:00 |2012-07-12 00:00:00 |49.0      |0.745407962323               |1.74112974602        |
+2012-07-12 00:00:00 |2012-08-03 00:00:00 |22.0      |1.66022682517                |3.87797079796        |
+2012-08-03 00:00:00 |2012-09-02 00:00:00 |30.0      |1.21749970665                |2.84384522331        |
+2012-09-02 00:00:00 |2012-11-02 00:00:00 |61.0      |0.59877034753                |1.39861240491        |
+2012-11-02 00:00:00 |2012-11-29 00:00:00 |27.0      |1.35277745183                |3.1598280259         |
+2012-11-29 00:00:00 |2012-12-23 00:00:00 |24.0      |1.52187463331                |3.55480652913        |
+2012-12-23 00:00:00 |2013-01-21 00:00:00 |29.0      |1.25948245515                |2.9419088517         |
+2013-01-21 00:00:00 |2013-02-10 00:00:00 |20.0      |1.82624955997                |4.26576783496        |
+2013-02-10 00:00:00 |2013-02-28 00:00:00 |18.0      |2.02916617774                |4.73974203885        |
+
+Mean Delta time: 34.25 d +- 14.7880864212 d
+Mean Velocity resolution: 1.25871823445 mas / yr +- 0.46420269991 mas / yr
+Mean Velocity resolution: 2.94012381896 c +- 1.08428825211 c
+</pre></div>
+</div>
+<p>And to view all currently selected images, we run:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tasks</span><span class="o">.</span><span class="n">view_all</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will open a separate window in which you can walk through all the
+images.</p>
+<a class="reference internal image-reference" href="../_images/view_all.png"><img alt="../_images/view_all.png" src="../_images/view_all.png" style="width: 400px;" /></a>
+<p>To define our region of interest, we need to set a pre_process
+function. We will do similarly to define also a background region in the
+image:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">pre_process</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
+    <span class="n">img</span><span class="o">.</span><span class="n">crop</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">15</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="n">projection</span><span class="o">=</span><span class="n">ctx</span><span class="o">.</span><span class="n">get_projection</span><span class="p">(</span><span class="n">img</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">get_bg</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">img</span><span class="o">.</span><span class="n">data</span><span class="p">[:</span><span class="mi">200</span><span class="p">,</span> <span class="p">:</span><span class="mi">200</span><span class="p">]</span>
+
+<span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">bg_fct</span> <span class="o">=</span> <span class="n">get_bg</span>
+<span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">pre_process_fct</span> <span class="o">=</span> <span class="n">pre_process</span>
+</pre></div>
+</div>
+<p>We can also define a mask. We will use for that a convenient task that
+set the mask as the brightest connected structure above a certain
+threshold of the stacked image:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tasks</span><span class="o">.</span><span class="n">set_mask_from_stack_img</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">nsigma</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tasks</span><span class="o">.</span><span class="n">view_all</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/view_all_crop_mask2.png"><img alt="../_images/view_all_crop_mask2.png" src="../_images/view_all_crop_mask2.png" style="width: 500px;" /></a>
+</div>
+<div class="section" id="setting-up-the-detection-configuration">
+<h2>Setting up the detection configuration:<a class="headerlink" href="#setting-up-the-detection-configuration" title="Permalink to this headline">¶</a></h2>
+<p>Similarly to the data configuration, the detection configuration is
+stored in ctx.config.finder:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">finder</span><span class="o">.</span><span class="n">doc</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Documentation for:Finder configuration
+Option              |Documentation                          |Default   |
+------------------------------------------------------------------------
+alpha_threashold    |Significance threshold                 |3         |
+alpha_detection     |Detection threshold                    |4         |
+min_scale           |Minimum Wavelet scale                  |1         |
+max_scale           |Maximum Wavelet scale                  |4         |
+use_iwd             |Use Intermediate Wavelet Decomposition |False     |
+exclude_border_dist |Number of pixel from border to exclude |1         |
+</pre></div>
+</div>
+<p>We will perform the analysis for scales 2 and 3, with intermediate scale
+wavelet decomposition:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">finder</span><span class="o">.</span><span class="n">min_scale</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">finder</span><span class="o">.</span><span class="n">max_scale</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">finder</span><span class="o">.</span><span class="n">use_iwd</span> <span class="o">=</span> <span class="bp">True</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="running-the-detection-task">
+<h2>Running the detection task<a class="headerlink" href="#running-the-detection-task" title="Permalink to this headline">¶</a></h2>
+<p>Starting the detection is done with a task:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tasks</span><span class="o">.</span><span class="n">detection_all</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Start detection on: FitsImage(0430+052.u.2012_01_14.icn.fits)
+Start detection on: FitsImage(0430+052.u.2012_03_04.icn.fits)
+Start detection on: FitsImage(0430+052.u.2012_04_29.icn.fits)
+Start detection on: FitsImage(0430+052.u.2012_05_24.icn.fits)
+Start detection on: FitsImage(0430+052.u.2012_07_12.icn.fits)
+Start detection on: FitsImage(0430+052.u.2012_08_03.icn.fits)
+Start detection on: FitsImage(0430+052.u.2012_09_02.icn.fits)
+Start detection on: FitsImage(0430+052.u.2012_11_02.icn.fits)
+Start detection on: FitsImage(0430+052.u.2012_11_28.icn.fits)
+Start detection on: FitsImage(0430+052.u.2012_12_23.icn.fits)
+Start detection on: FitsImage(0430+052.u.2013_01_21.icn.fits)
+Start detection on: FitsImage(0430+052.u.2013_02_10.icn.fits)
+Start detection on: FitsImage(0430+052.u.2013_02_28.icn.fits)
+</pre></div>
+</div>
+<p>Different tasks can be used to look at the results:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tasks</span><span class="o">.</span><span class="n">view_wds</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">scales</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/view_wds.png"><img alt="../_images/view_wds.png" src="../_images/view_wds.png" style="width: 500px;" /></a>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tasks</span><span class="o">.</span><span class="n">plot_all_features</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">scales</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="n">pa</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">feature_filter</span><span class="o">=</span><span class="n">wise</span><span class="o">.</span><span class="n">DfcFilter</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">mas</span><span class="p">))</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/plot_all_features.png"><img alt="../_images/plot_all_features.png" src="../_images/plot_all_features.png" style="width: 500px;" /></a>
+</div>
+<div class="section" id="setting-up-the-matching-configuration">
+<h2>Setting up the matching configuration:<a class="headerlink" href="#setting-up-the-matching-configuration" title="Permalink to this headline">¶</a></h2>
+<p>The matching configuration is stored in ctx.config.matcher:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">matcher</span><span class="o">.</span><span class="n">doc</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Documentation for:Matcher configuration
+Option                          |Documentation                            |Default                                 |
+--------------------------------------------------------------------------------------------------------------------
+use_upper_info                  |Use Pyramidal scheme for matching        |True                                    |
+upper_info_average_tol_factor   |Tolerance factor that define the number  |10                                      |
+                                |of features for average upper delta      |                                        |
+                                |calculation                              |                                        |
+mscsc2_upper_delta_bonus_range  |Bonus for delta close to upper delta     |0.4                                     |
+mscsc2_nitems_bonus_range       |Bonus for fewer merge                    |0.4                                     |
+simple_merge                    |MSCI: use segment merging                |True                                    |
+correlation_threshold           |Correlation threshold                    |0.65                                    |
+ignore_features_at_border       |Ignore feature art border for matching   |False                                   |
+features_at_border_k1           |At border param k1                       |0.5                                     |
+features_at_border_k2           |At border param k2                       |0.25                                    |
+features_at_border_k3           |At border param k3                       |0.25                                    |
+maximum_delta                   |Deprecated: use delta_range_filter       |40                                      |
+range_delta_x                   |Deprecated: use delta_range_filter       |[-40, 40]                               |
+range_delta_y                   |Deprecated: use delta_range_filter       |[-40, 40]                               |
+increase_tol_for_no_input_delta |Increase tolerance when no initial guess |True                                    |
+delta_range_filter              |Delta range filter                       |None                                    |
+mscsc_max_merge                 |MSCSC: Maximum number of segment merged  |3                                       |
+tolerance_factor                |Tolerance factor                         |1                                       |
+method_klass                    |Matching method                          |&lt;class &#39;wise.matcher.ScaleMatcherMSCC&#39;&gt; |
+no_input_no_match_scales        |List of scales at which no match is      |[]                                      |
+                                |performed if no initial guess            |                                        |
+min_scale_tolerance             |Per scale tolerance factor               |{2: 4, 3: 4, 4: 6}                      |
+find_distance_mode              |Method used for distance measure         |min                                     |
+mscsc2_smooth                   |Apply smooth on merged features before   |True                                    |
+                                |correlation                              |                                        |
+</pre></div>
+</div>
+<p>We will use the method ScaleMatcherMSCSC2 for the matching job. We also
+restrict the range of allowed displacement with a DeltaRangeFilter:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">JET_ANGLE</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.4</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">rad</span>
+<span class="n">direction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">JET_ANGLE</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">JET_ANGLE</span><span class="p">)])</span>
+
+<span class="n">delta_filter</span> <span class="o">=</span> <span class="n">wise</span><span class="o">.</span><span class="n">DeltaRangeFilter</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">mas</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">x_dir</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span> <span class="n">pix_limit</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">matcher</span><span class="o">.</span><span class="n">delta_range_filter</span> <span class="o">=</span> <span class="n">delta_filter</span>
+<span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">matcher</span><span class="o">.</span><span class="n">ignore_features_at_border</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">matcher</span><span class="o">.</span><span class="n">tolerance_factor</span> <span class="o">=</span> <span class="mf">1.5</span>
+<span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">matcher</span><span class="o">.</span><span class="n">method_klass</span> <span class="o">=</span> <span class="n">wise</span><span class="o">.</span><span class="n">ScaleMatcherMSCSC2</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="running-the-matching-task">
+<h2>Running the matching task<a class="headerlink" href="#running-the-matching-task" title="Permalink to this headline">¶</a></h2>
+<p>Starting the matching is also done with a task:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tasks</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Several tasks are available to view the results.</p>
+<p>We can look displacements from epoch to epoch individually at a specified
+scale. The scale parameter in all tasks is in pixel.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tasks</span><span class="o">.</span><span class="n">view_displacements</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/view_displacements.png"><img alt="../_images/view_displacements.png" src="../_images/view_displacements.png" style="width: 500px;" /></a>
+<a class="reference internal image-reference" href="../_images/view_displacements2.png"><img alt="../_images/view_displacements2.png" src="../_images/view_displacements2.png" style="width: 500px;" /></a>
+<p>We can also view how the different components evolve as the travel away
+from the core:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tasks</span><span class="o">.</span><span class="n">plot_separation_from_core</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/plot_separation_from_core_scale4.png"><img alt="../_images/plot_separation_from_core_scale4.png" src="../_images/plot_separation_from_core_scale4.png" style="width: 500px;" /></a>
+<a class="reference internal image-reference" href="../_images/plot_separation_from_core_scale8.png"><img alt="../_images/plot_separation_from_core_scale8.png" src="../_images/plot_separation_from_core_scale8.png" style="width: 500px;" /></a>
+<p>plot_separation_from_core() have several options. It is possible to
+additionally plot the position angle of the features, and filter them:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tasks</span><span class="o">.</span><span class="n">plot_separation_from_core</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">min_link_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">pa</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">feature_filter</span><span class="o">=</span><span class="n">wise</span><span class="o">.</span><span class="n">DfcFilter</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">mas</span><span class="p">))</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/plot_separation_from_core_pa_scale4.png"><img alt="../_images/plot_separation_from_core_pa_scale4.png" src="../_images/plot_separation_from_core_pa_scale4.png" style="width: 500px;" /></a>
+<a class="reference internal image-reference" href="../_images/plot_separation_from_core_pa_scale8.png"><img alt="../_images/plot_separation_from_core_pa_scale8.png" src="../_images/plot_separation_from_core_pa_scale8.png" style="width: 500px;" /></a>
+<p>We can also fit a fct to the trajectory. The task then return a
+dictionary with all the fit result:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fit_result</span> <span class="o">=</span> <span class="n">tasks</span><span class="o">.</span><span class="n">plot_separation_from_core</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">scales</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">fit_fct</span><span class="o">=</span><span class="n">nputils</span><span class="o">.</span><span class="n">LinearFct</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                                                 <span class="n">min_link_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">feature_filter</span><span class="o">=</span><span class="n">wise</span><span class="o">.</span><span class="n">DfcFilter</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">mas</span><span class="p">))</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/plot_separation_from_core_fit_scale4.png"><img alt="../_images/plot_separation_from_core_fit_scale4.png" src="../_images/plot_separation_from_core_fit_scale4.png" style="width: 500px;" /></a>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">link</span><span class="p">,</span> <span class="n">fit_fct</span> <span class="ow">in</span> <span class="n">fit_result</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">print</span> <span class="s">&quot;Fit result for link </span><span class="si">%s</span><span class="s">: </span><span class="si">%.2f</span><span class="s"> +- </span><span class="si">%.2f</span><span class="s"> mas / year&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">link</span><span class="o">.</span><span class="n">get_id</span><span class="p">(),</span> <span class="n">fit_fct</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">fit_fct</span><span class="o">.</span><span class="n">ea</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Fit result for link 4:5: 1.74 +- 0.12 mas / year
+Fit result for link 4:7: 2.50 +- 0.09 mas / year
+Fit result for link 4:8: 2.99 +- 0.03 mas / year
+Fit result for link 4:4: 2.21 +- 0.81 mas / year
+Fit result for link 4:14: 0.56 +- 0.28 mas / year
+Fit result for link 4:9: 2.64 +- 0.08 mas / year
+Fit result for link 4:6: 2.40 +- 0.08 mas / year
+</pre></div>
+</div>
+<p>To view the trajectories on a map, we can set first a reference image
+that will be used as background. We will use a stacked image of the all
+set using a convenient tasks for that:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tasks</span><span class="o">.</span><span class="n">set_stack_image_as_ref</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tasks</span><span class="o">.</span><span class="n">view_links</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">contour</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="n">map_cmap</span><span class="o">=</span><span class="s">&#39;gray&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/view_links.png"><img alt="../_images/view_links.png" src="../_images/view_links.png" style="width: 500px;" /></a>
+<p>The result can be saved on disk using the save() task:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tasks</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="s">&quot;walkthrough_test&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Saved MultiScaleImageSet @ /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test.ms.dat
+Saved link builder @ /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test_4.ms.dfc.dat
+Saved link builder @ /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test_6.ms.dfc.dat
+Saved link builder @ /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test_8.ms.dfc.dat
+Saved link builder @ /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test_12.ms.dfc.dat
+Saved image set @ /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test.set.dat
+</pre></div>
+</div>
+<p>And can later be loaded using the load() task:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tasks</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="s">&quot;walkthrough_test&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Loaded image set from /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test.set.dat
+Loaded MultiScaleImageSet from /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test.ms.dat
+Loaded link builder from /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test_4.ms.dfc.dat
+Loaded link builder from /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test_6.ms.dfc.dat
+Loaded link builder from /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test_8.ms.dfc.dat
+Loaded link builder from /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test_12.ms.dfc.dat
+</pre></div>
+</div>
+</div>
+<div class="section" id="going-further-from-the-basics">
+<h2>Going further from the basics<a class="headerlink" href="#going-further-from-the-basics" title="Permalink to this headline">¶</a></h2>
+<p>To explore further your results, the wise package provide different
+options:</p>
+<ul class="simple">
+<li>The full wise results can be obtained using either
+ctx.get_detection_result() or ctx.get_match_result() depending on
+your need. This later function return a MultiScaleMatchResultSet and a
+MultiScaleFeaturesLinkBuilder:</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ms_result_set</span><span class="p">,</span> <span class="n">ms_link_builder</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">get_match_result</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This is two different and compatible data structures that handle the
+result in a different way. The MultiScaleFeaturesLinkBuilder contains a
+set of FeaturesLinkBuilder object, one for each scale, and each of this
+objects contains a set of FeaturesLink object. The
+MultiScaleMatchResultSet contains a set of MultiScaleMatchResult one for
+each epoch, which contains a set of ScaleMatchResult object for each
+scales.</p>
+<ul class="simple">
+<li>The results can also be loaded into a pandas data structure
+(<a class="reference external" href="http://pandas.pydata.org/">http://pandas.pydata.org/</a>):</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">data</span> <span class="o">=</span> <span class="n">tasks</span><span class="o">.</span><span class="n">get_velocities_data</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">min_link_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">scales</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>data is a spreadsheet like object with attributes as columns. The
+following attributes are provided:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;angular_sep&#39;</span><span class="p">,</span> <span class="s">&#39;angular_velocity&#39;</span><span class="p">,</span> <span class="s">&#39;angular_velocity_error&#39;</span><span class="p">,</span> <span class="s">&#39;angular_velocity_error_dec&#39;</span><span class="p">,</span> <span class="s">&#39;angular_velocity_error_ra&#39;</span><span class="p">,</span> <span class="s">&#39;dec&#39;</span><span class="p">,</span> <span class="s">&#39;dec_error&#39;</span><span class="p">,</span> <span class="s">&#39;delta_dec&#39;</span><span class="p">,</span> <span class="s">&#39;delta_ra&#39;</span><span class="p">,</span> <span class="s">&#39;delta_time&#39;</span><span class="p">,</span> <span class="s">&#39;dfc&#39;</span><span class="p">,</span> <span class="s">&#39;epoch&#39;</span><span class="p">,</span> <span class="s">&#39;features&#39;</span><span class="p">,</span> <span class="s">&#39;intensity&#39;</span><span class="p">,</span> <span class="s">&#39;link_id&#39;</span><span class="p">,</span> <span class="s">&#39;match&#39;</span><span class="p">,</span> <span class="s">&#39;pa&#39;</span><span class="p">,</span> <span class="s">&#39;proper_velocity&#39;</span><span class="p">,</span> <span class="s">&#39;proper_velocity_error&#39;</span><span class="p">,</span> <span class="s">&#39;proper_velocity_error_dec&#39;</span><span class="p">,</span> <span class="s">&#39;proper_velocity_error_ra&#39;</span><span class="p">,</span> <span class="s">&#39;ra&#39;</span><span class="p">,</span> <span class="s">&#39;ra_error&#39;</span><span class="p">,</span> <span class="s">&#39;scale&#39;</span><span class="p">,</span> <span class="s">&#39;sep_pa&#39;</span><span class="p">,</span> <span class="s">&#39;snr&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>One can for example group the result by link_id and display the
+proper_velocity with distance from the core for each detected segments:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ax</span> <span class="o">=</span> <span class="n">plotutils</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">data_epoch</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s">&#39;link_id&#39;</span><span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">data_epoch</span><span class="o">.</span><span class="n">dfc</span><span class="p">,</span> <span class="n">data_epoch</span><span class="o">.</span><span class="n">proper_velocity</span><span class="p">,</span> <span class="n">yerr</span><span class="o">=</span><span class="n">data_epoch</span><span class="o">.</span><span class="n">proper_velocity_error</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&quot;Distance from core (mas)&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&quot;Apparent velocity (c)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/pandas_velocity_plot.png"><img alt="../_images/pandas_velocity_plot.png" src="../_images/pandas_velocity_plot.png" style="width: 500px;" /></a>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Walkthrough 3C120</a><ul>
+<li><a class="reference internal" href="#setup">Setup</a></li>
+<li><a class="reference internal" href="#setting-up-the-data-configuration">Setting up the data configuration:</a></li>
+<li><a class="reference internal" href="#setting-up-the-detection-configuration">Setting up the detection configuration:</a></li>
+<li><a class="reference internal" href="#running-the-detection-task">Running the detection task</a></li>
+<li><a class="reference internal" href="#setting-up-the-matching-configuration">Setting up the matching configuration:</a></li>
+<li><a class="reference internal" href="#running-the-matching-task">Running the matching task</a></li>
+<li><a class="reference internal" href="#going-further-from-the-basics">Going further from the basics</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Tutorials using the IPython Notebook</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="WalkthroughWaterDiffusion.html"
+                        title="next chapter">Walkthrough particle diffusing in water</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/tutorials_notebook/Walkthrough3C120.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="WalkthroughWaterDiffusion.html" title="Walkthrough particle diffusing in water"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Tutorials using the IPython Notebook"
+             >previous</a> |</li>
+        <li><a href="../index.html">WISE 0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Tutorials using the IPython Notebook</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Florent Mertens.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

@@ -3,7 +3,7 @@ Walkthrough 3C120
 =================
 
 In this walkthrough, I will show the basics of WISE analysis, by
-investigating the kinematic in the 3C120 jet.
+investigating the kinematic in the 3C120 jet. The original notebook can be downloaded :download:`here <nb/Walkthrough_3C120.ipynb>`.
 
 Setup
 -----
@@ -27,7 +27,7 @@ The first step is to import the required python library:
     from wise import tasks
     from libwise import imgutils, plotutils, nputils
     
-    %matplotlib gtk
+    %matplotlib qt4
 
 .. parsed-literal::
 
@@ -55,28 +55,24 @@ To list the default configuration, we simply execute:
 .. parsed-literal::
 
     Documentation for:Data configuration
-    Option               |Documentation                           |Default               |
-    --------------------------------------------------------------------------------------
-    data_dir             |Base data directory                     |None                  |
-    fits_extension       |Extension index                         |0                     |
-    stack_image_filename |Stack Image filename                    |full_stack_image.fits |
-    ref_image_filename   |Stack Image filename                    |reference_image       |
-    mask_filename        |Mask filename                           |mask.fits             |
-    mask_fct             |Mask generation fct                     |None                  |
-    bg_fct               |Background extraction fct               |None                  |
-    core_offset_filename |Core offset filename                    |core.dat              |
-    core_offset_fct      |Core offset generation fct              |None                  |
-    pre_bg_process_fct   |Initial processing before bg extraction |None                  |
-    pre_process_fct      |Pre detection processing                |None                  |
-    post_process_fct     |Post detection processing               |None                  |
-    crval                |CRVAL                                   |None                  |
-    crpix                |CRPIX                                   |None                  |
-    projection_unit      |Unit used for the projection            |mas                   |
-    projection_relative  |Use relative projection                 |True                  |
-    projection_center    |Method used to get the center           |pix_ref               |
-    object_distance      |Object distance                         |None                  |
-    object_z             |Object z                                |0                     |
-    
+    Option               |Documentation                     |Default         |
+    --------------------------------------------------------------------------
+    data_dir             |Base data directory               |None            |
+    fits_extension       |Extension index                   |0               |
+    ref_image_filename   |Reference image filename          |reference_image |
+    mask_filename        |Mask filename                     |mask.fits       |
+    bg_coords            |Background region in coordinates  |None            |
+                         |[Xa,Ya,Xb,Yb]                     |                |
+    bg_use_ksigma_method |Use ksigma method to estimate the |False           |
+                         |background level                  |                |
+    roi_coords           |Region of interest in coordinates |None            |
+                         |[Xa,Ya,Xb,Yb]                     |                |
+    core_offset_filename |Core offset filename              |core.dat        |
+    projection_unit      |Unit used for the projection      |mas             |
+    projection_relative  |Use relative projection           |True            |
+    projection_center    |Method used to get the center     |pix_ref         |
+    object_distance      |Object distance                   |None            |
+    object_z             |Object z                          |0               |
 
 data\_dir is the directory where the results will be store. Setting a
 configuration is as simple as assigning a new value to it:
@@ -253,27 +249,14 @@ stored in ctx.config.finder:
 .. parsed-literal::
 
     Documentation for:Finder configuration
-    Option              |Documentation                           |Default                                    |
-    ----------------------------------------------------------------------------------------------------------
-    alpha_threashold    |Significance threshold                  |3                                          |
-    alpha_detection     |Detection threshold                     |4                                          |
-    min_scale           |Minimum Wavelet scale                   |1                                          |
-    max_scale           |Maximum Wavelet scale                   |4                                          |
-    scales_snr_filter   |Per scales detection threshold          |None                                       |
-    ms_dec_klass        |Multiscale decompostion class           |<class                                     |
-                        |                                        |'wise.wds.WaveletMultiscaleDecomposition'> |
-    dec                 |Multiscale decompostion class           |<function uiwt at 0x5c99410>               |
-    wd_wavelet          |Wavelet to use for the Wavelet          |b1                                         |
-                        |Decomposition                           |                                           |
-    iwd_wavelet         |Wavelet to use for the Intermediate     |b3                                         |
-                        |Wavelet Decomposition                   |                                           |
-    dog_step            |DOG                                     |True                                       |
-    dog_angle           |DOG                                     |True                                       |
-    dog_ellipticity     |DOG                                     |True                                       |
-    exclude_border_dist |Number of pixel from border to exclude  |1                                          |
-    exclude_noise       |Include coefficients below threshold in |True                                       |
-                        |resulting image                         |                                           |
-    
+    Option              |Documentation                          |Default   |
+    ------------------------------------------------------------------------
+    alpha_threashold    |Significance threshold                 |3         |
+    alpha_detection     |Detection threshold                    |4         |
+    min_scale           |Minimum Wavelet scale                  |1         |
+    max_scale           |Maximum Wavelet scale                  |4         |
+    use_iwd             |Use Intermediate Wavelet Decomposition |False     |
+    exclude_border_dist |Number of pixel from border to exclude |1         |    
 
 
 We will perform the analysis for scales 2 and 3, with intermediate scale
@@ -283,9 +266,7 @@ wavelet decomposition:
 
     ctx.config.finder.min_scale = 2
     ctx.config.finder.max_scale = 4
-    ctx.config.finder.alpha_threashold = 3
-    ctx.config.finder.exclude_noise = False
-    ctx.config.finder.ms_dec_klass = wise.InterscalesWaveletMultiscaleDecomposition
+    ctx.config.finder.use_iwd = True
 
 Running the detection task
 ---------------------
@@ -318,7 +299,7 @@ Different tasks can be used to look at the results:
 
 .. code-block:: python
 
-    tasks.view_wds(ctx, title=False)
+    tasks.view_wds(ctx, scales=[4, 8])
 
 .. image:: imgs/3c120/view_wds.png
    :width: 500px

@@ -1,0 +1,425 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Walkthrough 3C120 &mdash; WISE 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="WISE 0.1 documentation" href="../index.html" />
+    <link rel="up" title="Tutorials using the command line" href="index.html" />
+    <link rel="next" title="Tutorials using the IPython Notebook" href="../tutorials_notebook/index.html" />
+    <link rel="prev" title="Tutorials using the command line" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../tutorials_notebook/index.html" title="Tutorials using the IPython Notebook"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Tutorials using the command line"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">WISE 0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Tutorials using the command line</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="walkthrough-3c120">
+<h1>Walkthrough 3C120<a class="headerlink" href="#walkthrough-3c120" title="Permalink to this headline">¶</a></h1>
+<p>In this walkthrough, I will show the basics of WISE, analysing the kinematic in the jet of 3C120.</p>
+<div class="section" id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<p>We will analyse maps of 3C120 observed with VLBA at 15 GHZ as part of the MOJAVE
+project. A tar file including all the required maps can be downloaded <a class="reference external" href="https://drive.google.com/uc?export=download&amp;id=0B0UfRiAdZRJ0OEptcjV3UWFLckE">here</a>
+Alternatively, you can get them directly from the <a class="reference external" href="http://www.physics.purdue.edu/MOJAVE/sourcepages/0430+052.shtml">MOJAVE website</a> (look at
+FITS I image). We recommend to create a directory where you will run WISE, and
+to extract the images FITS files in a <em>data</em> directory inside it.</p>
+</div>
+<div class="section" id="the-wise-command-line-and-tasks">
+<h2>The WISE command line and tasks<a class="headerlink" href="#the-wise-command-line-and-tasks" title="Permalink to this headline">¶</a></h2>
+<p>All the tasks are run directly using the wise command line. Executing it without
+arguments will return a list of all the available tasks:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">wise</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Usage: wise TASK [OPTIONS]
+
+Available tasks:
+  detect                Run the Segmented wavelet decomposition
+  info                  Give information on beam, pixel scales or velocity resolution
+  match                 Run the matching procedure
+  plot_features         Plot all features on a distance from core vs epoch
+  plot_sep_from_core    Plot separation from core with time
+  region                View and create DS9 type region files
+  select_files          Build a list of files and output the listing in OUTPUT_FILE.
+  settings              Set and get WISE configuration.
+  stack                 Stack images
+  view                  Simple image viewer
+  view_features         Plot all features location on the reference image.
+  view_links            Plot all components trajectories on the reference map
+</pre></div>
+</div>
+<p>The <em>info</em> task is used to list information on FITS files:</p>
+<div class="highlight-python"><div class="highlight"><pre>wise info data/*2012*
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>File                           |Date                |Shape     |Pixel scale |Beam                        |
+----------------------------------------------------------------------------------------------------------
+0430+052.u.2012_01_14.icn.fits |2012-01-14 00:00:00 |2048x2048 |0.100 mas   |0.595 mas, 1.255 mas, -0.07 |
+0430+052.u.2012_03_04.icn.fits |2012-03-04 00:00:00 |2048x2048 |0.100 mas   |0.699 mas, 1.444 mas, 0.20  |
+0430+052.u.2012_04_29.icn.fits |2012-04-30 00:00:00 |2048x2048 |0.100 mas   |0.576 mas, 1.325 mas, -0.15 |
+0430+052.u.2012_05_24.icn.fits |2012-05-24 00:00:00 |2048x2048 |0.100 mas   |0.528 mas, 1.188 mas, -0.02 |
+0430+052.u.2012_07_12.icn.fits |2012-07-12 00:00:00 |2048x2048 |0.100 mas   |0.503 mas, 1.415 mas, -0.24 |
+0430+052.u.2012_08_03.icn.fits |2012-08-03 00:00:00 |2048x2048 |0.100 mas   |0.521 mas, 1.262 mas, -0.11 |
+0430+052.u.2012_09_02.icn.fits |2012-09-02 00:00:00 |2048x2048 |0.100 mas   |0.533 mas, 1.257 mas, -0.07 |
+0430+052.u.2012_11_02.icn.fits |2012-11-02 00:00:00 |2048x2048 |0.100 mas   |0.516 mas, 1.224 mas, -0.13 |
+0430+052.u.2012_11_28.icn.fits |2012-11-29 00:00:00 |2048x2048 |0.100 mas   |0.524 mas, 1.350 mas, -0.14 |
+0430+052.u.2012_12_23.icn.fits |2012-12-23 00:00:00 |2048x2048 |0.100 mas   |0.679 mas, 1.523 mas, 0.11  |
+
+Number of files: 10
+Mean beam: Bmin: 0.567, Bmaj: 1.324, Angle:-0.06
+</pre></div>
+</div>
+<p>The <em>view</em> task is used to visualize fits files:</p>
+<div class="highlight-python"><div class="highlight"><pre>wise view data/0430+052.u.2010_02_11.icn.fits
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/wise_view_full.png"><img alt="../_images/wise_view_full.png" src="../_images/wise_view_full.png" style="width: 500px;" /></a>
+<p>For all tasks, the &#8211;help option can be used to obtain description and available options for each tasks:</p>
+<div class="highlight-python"><div class="highlight"><pre>wise view --help
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Simple image viewer
+
+Usage: wise view FILES
+
+Additional options:
+--no-crop, -n: do not crop images according to the data.roi_coords configuration
+--no-align: do not align images according to the data.core_offset_filename file
+--show-mask, -m: overplot the images with the mask, if it exist
+--reg-file=FILE: -r FILE: overplot region, multiple option possible
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-up-the-data-configuration">
+<h2>Setting up the data configuration<a class="headerlink" href="#setting-up-the-data-configuration" title="Permalink to this headline">¶</a></h2>
+<p>The <em>settings</em> task is used to get and set the wise configuration. Running the task without argument will return the full configuration:</p>
+<div class="highlight-python"><div class="highlight"><pre>wise settings
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Data configuration:
+Option               |Value           |
+---------------------------------------
+data_dir             |None            |
+fits_extension       |0               |
+ref_image_filename   |reference_image |
+mask_filename        |mask.fits       |
+bg_coords            |None            |
+bg_use_ksigma_method |False           |
+roi_coords           |None            |
+core_offset_filename |core.dat        |
+projection_unit      |mas             |
+projection_relative  |True            |
+projection_center    |pix_ref         |
+object_distance      |None            |
+object_z             |0               |
+
+Finder configuration:
+Option              |Value     |
+--------------------------------
+alpha_threashold    |3         |
+alpha_detection     |4         |
+min_scale           |1         |
+max_scale           |4         |
+use_iwd             |False     |
+exclude_border_dist |1         |
+
+Matcher configuration:
+Option                    |Value     |
+--------------------------------------
+use_upper_info            |True      |
+correlation_threshold     |0.65      |
+ignore_features_at_border |False     |
+delta_range_filter        |None      |
+tolerance_factor          |1         |
+</pre></div>
+</div>
+<p>and to view only the data configuration, one can use:</p>
+<div class="highlight-python"><div class="highlight"><pre>wise settings view data
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Option               |Value           |
+---------------------------------------
+data_dir             |None            |
+fits_extension       |0               |
+ref_image_filename   |reference_image |
+mask_filename        |mask.fits       |
+bg_coords            |None            |
+bg_use_ksigma_method |False           |
+roi_coords           |None            |
+core_offset_filename |core.dat        |
+projection_unit      |mas             |
+projection_relative  |True            |
+projection_center    |pix_ref         |
+object_distance      |None            |
+object_z             |0               |
+</pre></div>
+</div>
+<p>Some of the important settings there are <em>roi_coords</em> which define the region on
+which WISE will be run on, and <em>bg_coords</em> which define a region in the image
+which contains only noise, and which will be used by wise to compute the
+threshold. Looking at the map above, we use the following:</p>
+<div class="highlight-python"><div class="highlight"><pre>wise settings set data.roi_coords=5,-15,-25,5 data.bg_coords=100,-100,50,-50
+</pre></div>
+</div>
+<p>And we can have a look again at the maps, to check our settings:</p>
+<div class="highlight-python"><div class="highlight"><pre>wise view data/*.fits
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/wise_view_after_crop.png"><img alt="../_images/wise_view_after_crop.png" src="../_images/wise_view_after_crop.png" style="width: 500px;" /></a>
+<p>As you see in this image, the core is not properly aligned with the zero
+coordinate. You may create a file with coordinates of the core position and use
+it to properly align the maps. For our case, I have prepared a core position
+file that you can download <a class="reference external" href="https://drive.google.com/uc?export=download&amp;id=0B0UfRiAdZRJ0TjdwRUZPVVFqV1E">here</a> and save in
+your current directory. Once done, we set the corresponding wise setting:</p>
+<div class="highlight-python"><div class="highlight"><pre>wise settings set data.core_offset_filename=3c120_core.dat
+</pre></div>
+</div>
+<p>It is also convenient to define a mask that will restrict further the region in
+which SSP are detected. We will create for that a stack image with a three sigma threshold:</p>
+<div class="highlight-python"><div class="highlight"><pre>wise stack data/*.fits --nsigma=3 --nsigma_connected --output=stack_img_3nsigma.fits
+
+wise settings set data.mask_filename=stack_img_3nsigma.fits
+</pre></div>
+</div>
+<p>We will also use this stack image as reference image for later on:</p>
+<div class="highlight-python"><div class="highlight"><pre>wise settings set data.ref_image_filename=stack_img_3nsigma.fits
+</pre></div>
+</div>
+<p>We can have a look again at our maps and check that the mask is correctly set:</p>
+<div class="highlight-python"><div class="highlight"><pre>wise view data/*.fits --show-mask
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-up-the-detection-configuration">
+<h2>Setting up the detection configuration<a class="headerlink" href="#setting-up-the-detection-configuration" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>wise settings show finder
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Option              |Value     |
+--------------------------------
+alpha_threashold    |3.0       |
+alpha_detection     |4.0       |
+min_scale           |1         |
+max_scale           |4         |
+use_iwd             |False     |
+exclude_border_dist |1         |
+</pre></div>
+</div>
+<p>We will perform the analysis for scales 2 and 3, with intermediate scale
+wavelet decomposition:</p>
+<div class="highlight-python"><div class="highlight"><pre>wise settings set finder.min_scale=2 finder.max_scale=4 finder.use_iwd=true
+</pre></div>
+</div>
+</div>
+<div class="section" id="running-the-detection-task">
+<h2>Running the detection task<a class="headerlink" href="#running-the-detection-task" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>wise detect data/*.fits
+</pre></div>
+</div>
+<p>At the end of the process, you have the possibility to view the resulting
+decomposition for any scale (in pixel).</p>
+<a class="reference internal image-reference" href="../_images/wise_wds_scales4_8.png"><img alt="../_images/wise_wds_scales4_8.png" src="../_images/wise_wds_scales4_8.png" style="width: 800px;" /></a>
+<p>You can also save the result.</p>
+<p>Different tasks can be used to look at the results. The task <em>view_features</em>
+is used to plot the locations of each SSP on the reference image.</p>
+<div class="highlight-python"><div class="highlight"><pre>wise view_features detection_result 8
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/wise_view_features_scale8.png"><img alt="../_images/wise_view_features_scale8.png" src="../_images/wise_view_features_scale8.png" style="width: 500px;" /></a>
+<p>The task <em>plot_features</em> plot the distance from the core of each feature as a
+function of time.</p>
+<div class="highlight-python"><div class="highlight"><pre>wise plot_features detection_result 4,8,12
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/wise_plot_features_scale4_8_12.png"><img alt="../_images/wise_plot_features_scale4_8_12.png" src="../_images/wise_plot_features_scale4_8_12.png" style="width: 500px;" /></a>
+</div>
+<div class="section" id="setting-up-the-matching-configuration">
+<h2>Setting up the matching configuration<a class="headerlink" href="#setting-up-the-matching-configuration" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>wise settings show matcher
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Matcher configuration:
+Option                    |Value     |
+--------------------------------------
+use_upper_info            |True      |
+correlation_threshold     |0.65      |
+ignore_features_at_border |False     |
+delta_range_filter        |None      |
+tolerance_factor          |1.0       |
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>wise settings set matcher.tolerance_factor=1.5
+</pre></div>
+</div>
+<p>We also restrict the range of allowed displacement with. This is done with the command:</p>
+<div class="highlight-python"><div class="highlight"><pre>wise settings set matcher.delta_range_filter
+</pre></div>
+</div>
+<p>At the prompt, enter the velocity unit, the direction of the velocity direction
+vector, and the velocity restriction in X and Y In our case, the jet is orianted
+with an angle of -0.4 radian, which correspond to a direction vector of -0.921, -0.389:</p>
+<div class="highlight-python"><div class="highlight"><pre>Restrict delta range filter to a region? (Yes/[No]) No
+Velocity unit: mas/year
+Direction vector (default=[1,0]): -0.92106099 -0.38941834
+Velocity range in X direction: -1 10
+Velocity range in Y direction: -4 4
+</pre></div>
+</div>
+</div>
+<div class="section" id="running-the-matching-task">
+<h2>Running the matching task<a class="headerlink" href="#running-the-matching-task" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>wise match data/*.fits
+</pre></div>
+</div>
+<p>At the end of the process, you have the possibility to view the resulting
+matching for any scale (in pixel).</p>
+<a class="reference internal image-reference" href="../_images/wise_displacements_scale8.png"><img alt="../_images/wise_displacements_scale8.png" src="../_images/wise_displacements_scale8.png" style="width: 500px;" /></a>
+<p>You can also save the result.</p>
+<p>Several other tasks are also available to view the results.</p>
+<p>We can view how the different components evolve as they travel away from
+the core:</p>
+<div class="highlight-python"><div class="highlight"><pre>wise plot_sep_from_core match_result 4
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/wise_plot_sep_core_scale4.png"><img alt="../_images/wise_plot_sep_core_scale4.png" src="../_images/wise_plot_sep_core_scale4.png" style="width: 500px;" /></a>
+<p>We can also do a linear fit to the trajectory:</p>
+<div class="highlight-python"><div class="highlight"><pre>wise plot_sep_from_core match_result 4 --fit --min-link-size=4 --num
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/wise_plot_sep_core_scale4_fit.png"><img alt="../_images/wise_plot_sep_core_scale4_fit.png" src="../_images/wise_plot_sep_core_scale4_fit.png" style="width: 500px;" /></a>
+<div class="highlight-python"><div class="highlight"><pre>Fit result for link 4:26: 2.20 +- 0.07 mas / year
+Fit result for link 4:15: 2.72 +- 0.04 mas / year
+Fit result for link 4:32: 2.12 +- 0.25 mas / year
+Fit result for link 4:3: 0.25 +- 0.47 mas / year
+Fit result for link 4:21: 2.55 +- 0.08 mas / year
+Fit result for link 4:11: 1.84 +- 0.06 mas / year
+Fit result for link 4:10: 2.59 +- 0.04 mas / year
+Fit result for link 4:36: 0.56 +- 0.28 mas / year
+Fit result for link 4:1: -0.02 +- 0.01 mas / year
+Fit result for link 4:2: 2.86 +- 0.09 mas / year
+Fit result for link 4:16: 2.12 +- 0.05 mas / year
+Fit result for link 4:5: 1.78 +- 0.06 mas / year
+</pre></div>
+</div>
+<p>Finally you can plot the trajectory on the reference image:</p>
+<div class="highlight-python"><div class="highlight"><pre>wise view_links match_result 4 --min-link-size=4
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/wise_view_links_scale4.png"><img alt="../_images/wise_view_links_scale4.png" src="../_images/wise_view_links_scale4.png" style="width: 500px;" /></a>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Walkthrough 3C120</a><ul>
+<li><a class="reference internal" href="#setup">Setup</a></li>
+<li><a class="reference internal" href="#the-wise-command-line-and-tasks">The WISE command line and tasks</a></li>
+<li><a class="reference internal" href="#setting-up-the-data-configuration">Setting up the data configuration</a></li>
+<li><a class="reference internal" href="#setting-up-the-detection-configuration">Setting up the detection configuration</a></li>
+<li><a class="reference internal" href="#running-the-detection-task">Running the detection task</a></li>
+<li><a class="reference internal" href="#setting-up-the-matching-configuration">Setting up the matching configuration</a></li>
+<li><a class="reference internal" href="#running-the-matching-task">Running the matching task</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Tutorials using the command line</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../tutorials_notebook/index.html"
+                        title="next chapter">Tutorials using the IPython Notebook</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/tutorials_cmd/Walkthrough3C120.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../tutorials_notebook/index.html" title="Tutorials using the IPython Notebook"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Tutorials using the command line"
+             >previous</a> |</li>
+        <li><a href="../index.html">WISE 0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Tutorials using the command line</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Florent Mertens.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
