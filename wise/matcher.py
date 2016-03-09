@@ -11,7 +11,7 @@ from wds import *
 from features import *
 
 from libwise import nputils, imgutils, plotutils
-from libwise.nputils import validator_is, is_callable, validator_in_range
+from libwise.nputils import validator_is, is_callable, validator_in_range, validator_in
 from libwise.nputils import validator_list, validator_is_class, str2bool, str2jsonclass
 
 import jsonpickle as jp
@@ -805,8 +805,11 @@ class ScaleMatcherMSCI(BaseScaleMatcher):
                         # print "Merge2", f2peer.get_segmentid(), f2.get_segmentid(), f1.get_segmentid()
                         features2.merge_segments(f2peer, f2)
 
+        coord_mode = self.config.get('msci_coord_mode')
+        delta_fct = lambda x, y: y.get_coord(coord_mode) - x.get_coord(coord_mode)
+
         delta_info = DeltaInformation(features1, features1.get_scale() * 10)
-        delta_info.add_match(match)
+        delta_info.add_match(match, delta_fct=delta_fct)
 
         return match, delta_info
 
@@ -2166,6 +2169,7 @@ class MatcherConfiguration(nputils.BaseConfiguration):
             validator_in_range(0, 1), float, str, 1],
         ["mscsc2_nitems_bonus_range", 0.4, "Bonus for fewer merge", validator_in_range(0, 1), float, str, 1],
         ["simple_merge", True, "MSCI: use segment merging", validator_is(bool), str2bool, str, 1],
+        ["msci_coord_mode", 'com', "Coord mode used to determine the delta", validator_in(['lm', 'com']), str, str, 1],
         ["correlation_threshold", 0.65, "Correlation threshold", validator_in_range(0, 1), float, str, 0],
         ["ignore_features_at_border", False, "Ignore feature art border for matching", 
             validator_is(bool), str2bool, str, 0],

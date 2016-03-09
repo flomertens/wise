@@ -60,9 +60,9 @@ def delta_range_filter_handler(config):
     check_vector = lambda s: len(str2vector(s)) == 2
 
     unit = u.Unit(sh.ask("Velocity unit:"))
+    direction = str2vector(sh.ask("Direction vector (default=[1,0]):", check_fct=check_vector, default="1,0"))
     vx = str2vector(sh.ask("Velocity range in X direction:", check_fct=check_vector))
     vy = str2vector(sh.ask("Velocity range in Y direction:", check_fct=check_vector))
-    direction = str2vector(sh.ask("Direction vector (default=[1,0]):", check_fct=check_vector, default="1,0"))
     
     range_filter = wise.DeltaRangeFilter(vxrange=vx, vyrange=vy, unit=unit, pix_limit=4, x_dir=direction)
     if region is not None:

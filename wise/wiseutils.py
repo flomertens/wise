@@ -778,7 +778,7 @@ class CoreOffsetPositions(object):
 
     def save(self, filename):
         l = []
-        for epoch, (x, y) in self.cores.items():
+        for epoch, (x, y) in nputils.get_items_sorted_by_keys(self.cores):
             r, theta = nputils.coord_xy_to_rtheta(x, y)
             l.append([epoch.strftime("%Y-%m-%d"), 0, r, np.degrees(theta)])
 
@@ -805,6 +805,8 @@ class SSPData(object):
 
     def add_features_group(self, features, projection, coord_mode='com', 
                            scale=None, min_snr=2, max_snr=10):
+        import pandas as pd
+
         coords = p2i(features.get_coords(mode=coord_mode))
         ra, dec = zip(*projection.p2s(coords))
         
@@ -847,6 +849,8 @@ class SSPData(object):
         return df
 
     def add_col_region(self, region_list):
+        import pandas as pd
+
         region = [region_list.get_region(f) for f in self.df.features]
         self.df['region'] = pd.Series(region, index=self.df.index)
 
@@ -874,6 +878,8 @@ class VelocityData(SSPData):
 
     def add_delta_info(self, delta_info, match, projection, link_builder=None, 
                        coord_mode='com', scale=None, min_snr=2, max_snr=10):
+        import pandas as pd
+        
         features = delta_info.get_features(flag=wfeatures.DeltaInformation.DELTA_MATCH)
         cdf = self.add_features_group(features, projection, coord_mode=coord_mode, 
                                       scale=scale, min_snr=min_snr, max_snr=max_snr)

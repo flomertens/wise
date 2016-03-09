@@ -435,7 +435,7 @@ def view_all(ctx, preprocess=True, show_mask=True, show_regions=[], save_filenam
             if core_offset is not None:
                 x, y = core_offset.get(img.get_epoch())
                 x, y = prj.s2p([x, y])
-                print core_offset, x, y
+                # print core_offset, x, y
                 ax.scatter(x, y, marker='*', s=40, c=plotutils.black)
         # if not preprocess:
         #     bg_mask = imgutils.Image(np.zeros_like(img.data, dtype=np.int8))

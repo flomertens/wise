@@ -909,7 +909,7 @@ class DeltaRangeFilter(AbstractDeltaRangeFilter):
 
     def __str__(self):
         d = (self.vxrange, self.vyrange, self.normrange, self.unit, self.pix_limit, self.x_dir)
-        return "DeltaRangeFilter(vs=%s, vy=%s, v=%s, u=%s, pix=%s, dir=%s)" % d
+        return "DeltaRangeFilter(vx=%s, vy=%s, v=%s, u=%s, pix=%s, dir=%s)" % d
 
     def __getstate__(self):
         state = self.__dict__.copy()
