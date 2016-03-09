@@ -148,7 +148,7 @@ and to view only the data configuration, one can use:
 
 ::
 
-    wise settings view data
+    wise settings show data
 
 
 ::
