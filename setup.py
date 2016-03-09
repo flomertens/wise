@@ -10,7 +10,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = 'wise',
-    version = '0.2',
+    version = '0.3',
     description = 'Wavelet Image Segmentation and Evaluation',
     url = 'https://github.com/flomertens/wise',
     author = 'Florent Mertens',
