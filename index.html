@@ -26,8 +26,8 @@
     <link rel="top" title="WISE 0.1 documentation" href="#" />
     <link rel="next" title="Tutorials using the command line" href="tutorials_cmd/index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -39,14 +39,14 @@
         <li class="right" >
           <a href="tutorials_cmd/index.html" title="Tutorials using the command line"
              accesskey="N">next</a> |</li>
-        <li><a href="#">WISE 0.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">WISE 0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="wise-wavelet-image-segmentation-and-evaluation">
 <h1>WISE: Wavelet Image Segmentation and Evaluation<a class="headerlink" href="#wise-wavelet-image-segmentation-and-evaluation" title="Permalink to this headline">¶</a></h1>
@@ -70,6 +70,15 @@ reliable cross-identification of related SSP.</li>
 components from partially overlapping emitting regions.</li>
 </ul>
 <a class="reference internal image-reference" href="_images/m87_combined.png"><img alt="_images/m87_combined.png" class="align-center" src="_images/m87_combined.png" style="width: 800px;" /></a>
+<p>This software is based on a method introduced and described in:</p>
+<div class="line-block">
+<div class="line"><em>&#8220;Wavelet-based decomposition and analysis of structural patterns in astronomical image&#8221;</em></div>
+<div class="line">Mertens, F., Lobanov, A.P. 2015, Astronomy &amp; Astrophysics, 574, 67 <a class="reference external" href="http://adsabs.harvard.edu/abs/2015A%26A...574A..67M">ADS</a></div>
+</div>
+<div class="line-block">
+<div class="line"><em>&#8220;Detection of multiple velocity components in partially overlapping emitting regions&#8221;</em></div>
+<div class="line">Mertens, F., Lobanov, A.P. 2016, Astronomy &amp; Astrophysics, 587, 52 <a class="reference external" href="http://adsabs.harvard.edu/abs/2016A%26A...587A..52M">ADS</a></div>
+</div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <p>The WISE package can be installed using the conda package management system. You
@@ -79,7 +88,7 @@ and for Python 2.7 at:</p>
 <p>and following the installation instruction at:</p>
 <p><a class="reference external" href="http://conda.pydata.org/docs/install/quick.html">http://conda.pydata.org/docs/install/quick.html</a></p>
 <p>Once done, you can install WISE in just one command line:</p>
-<div class="highlight-python"><div class="highlight"><pre>conda install --channel https://conda.anaconda.org/flomertens wise
+<div class="highlight-python"><div class="highlight"><pre><span></span>conda install --channel https://conda.anaconda.org/flomertens wise
 </pre></div>
 </div>
 </div>
@@ -89,7 +98,7 @@ and for Python 2.7 at:</p>
 <p><a class="reference external" href="https://github.com/flomertens/libwise/releases/">https://github.com/flomertens/libwise/releases/</a></p>
 <p><a class="reference external" href="https://github.com/flomertens/wise/releases/">https://github.com/flomertens/wise/releases/</a></p>
 <p>Each package can be installed with the command line:</p>
-<div class="highlight-python"><div class="highlight"><pre>python setup.py install
+<div class="highlight-python"><div class="highlight"><pre><span></span>python setup.py install
 </pre></div>
 </div>
 <p>Requirements:</p>
@@ -144,9 +153,9 @@ the tutorials below to see how to use it.</p>
 <div class="section" id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
-<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
-<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+<li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
 </ul>
 </div>
 
@@ -154,7 +163,7 @@ the tutorials below to see how to use it.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
@@ -172,12 +181,14 @@ the tutorials below to see how to use it.</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="tutorials_cmd/index.html"
                         title="next chapter">Tutorials using the command line</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/index.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -194,7 +205,7 @@ the tutorials below to see how to use it.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -206,12 +217,12 @@ the tutorials below to see how to use it.</p>
         <li class="right" >
           <a href="tutorials_cmd/index.html" title="Tutorials using the command line"
              >next</a> |</li>
-        <li><a href="#">WISE 0.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">WISE 0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2015, Florent Mertens.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

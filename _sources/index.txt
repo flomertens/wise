@@ -27,6 +27,14 @@ It comprises three main constituents:
     :width: 800px
     :align: center
 
+This software is based on a method introduced and described in:
+
+| *"Wavelet-based decomposition and analysis of structural patterns in astronomical image"*
+| Mertens, F., Lobanov, A.P. 2015, Astronomy & Astrophysics, 574, 67 `ADS <http://adsabs.harvard.edu/abs/2015A%26A...574A..67M>`_
+
+| *"Detection of multiple velocity components in partially overlapping emitting regions"*
+| Mertens, F., Lobanov, A.P. 2016, Astronomy & Astrophysics, 587, 52 `ADS <http://adsabs.harvard.edu/abs/2016A%26A...587A..52M>`_
+
 Installation
 -------------
 

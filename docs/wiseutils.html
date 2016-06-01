@@ -27,8 +27,8 @@
     <link rel="up" title="Documentation" href="index.html" />
     <link rel="prev" title="Wise tasks module" href="tasks.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -40,15 +40,15 @@
         <li class="right" >
           <a href="tasks.html" title="Wise tasks module"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">WISE 0.1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WISE 0.1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="wise-utilities-module">
 <h1>Wise utilities module<a class="headerlink" href="#wise-utilities-module" title="Permalink to this headline">¶</a></h1>
@@ -61,22 +61,22 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#wise.wiseutils.imshow_segmented_image" title="wise.wiseutils.imshow_segmented_image"><tt class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.imshow_segmented_image</span></tt></a>(ax,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#wise.wiseutils.imshow_segmented_image" title="wise.wiseutils.imshow_segmented_image"><code class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.imshow_segmented_image</span></code></a>(ax,&nbsp;...)</td>
 <td>Display the segmented image on the axes.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#wise.wiseutils.plot_features" title="wise.wiseutils.plot_features"><tt class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_features</span></tt></a>(ax,&nbsp;features[,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#wise.wiseutils.plot_features" title="wise.wiseutils.plot_features"><code class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_features</span></code></a>(ax,&nbsp;features[,&nbsp;...])</td>
 <td>Plots the segments location and optionally the segments ids on a map.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#wise.wiseutils.plot_features_dfc" title="wise.wiseutils.plot_features_dfc"><tt class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_features_dfc</span></tt></a>(ax,&nbsp;...[,&nbsp;mode])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#wise.wiseutils.plot_features_dfc" title="wise.wiseutils.plot_features_dfc"><code class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_features_dfc</span></code></a>(ax,&nbsp;...[,&nbsp;mode])</td>
 <td>Plot features distance from core vs epoch.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#wise.wiseutils.plot_features_pa" title="wise.wiseutils.plot_features_pa"><tt class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_features_pa</span></tt></a>(ax,&nbsp;...[,&nbsp;mode])</td>
+<tr class="row-even"><td><a class="reference internal" href="#wise.wiseutils.plot_features_pa" title="wise.wiseutils.plot_features_pa"><code class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_features_pa</span></code></a>(ax,&nbsp;...[,&nbsp;mode])</td>
 <td>Plot features PA vs epoch.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#wise.wiseutils.plot_ms_set_map" title="wise.wiseutils.plot_ms_set_map"><tt class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_ms_set_map</span></tt></a>(ax,&nbsp;img,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#wise.wiseutils.plot_ms_set_map" title="wise.wiseutils.plot_ms_set_map"><code class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_ms_set_map</span></code></a>(ax,&nbsp;img,&nbsp;...)</td>
 <td>Display all features of ms_set on a map.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#wise.wiseutils.plot_segments_contour" title="wise.wiseutils.plot_segments_contour"><tt class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_segments_contour</span></tt></a>(ax,&nbsp;...)</td>
+<tr class="row-even"><td><a class="reference internal" href="#wise.wiseutils.plot_segments_contour" title="wise.wiseutils.plot_segments_contour"><code class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_segments_contour</span></code></a>(ax,&nbsp;...)</td>
 <td>Display the segments contour of a segmented_image on a map.</td>
 </tr>
 </tbody>
@@ -88,25 +88,25 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#wise.wiseutils.plot_displacement_vector" title="wise.wiseutils.plot_displacement_vector"><tt class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_displacement_vector</span></tt></a>(ax,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#wise.wiseutils.plot_displacement_vector" title="wise.wiseutils.plot_displacement_vector"><code class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_displacement_vector</span></code></a>(ax,&nbsp;...)</td>
 <td>Display displacements vectors represented as arrows.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#wise.wiseutils.plot_displacements" title="wise.wiseutils.plot_displacements"><tt class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_displacements</span></tt></a>(ax,&nbsp;...[,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#wise.wiseutils.plot_displacements" title="wise.wiseutils.plot_displacements"><code class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_displacements</span></code></a>(ax,&nbsp;...[,&nbsp;...])</td>
 <td>Display displacements of features on a map.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#wise.wiseutils.plot_links_dfc" title="wise.wiseutils.plot_links_dfc"><tt class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_links_dfc</span></tt></a>(ax,&nbsp;...[,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#wise.wiseutils.plot_links_dfc" title="wise.wiseutils.plot_links_dfc"><code class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_links_dfc</span></code></a>(ax,&nbsp;...[,&nbsp;...])</td>
 <td>Plot features link on a distance from core vs epoch plot.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#wise.wiseutils.plot_links_dfc_fit" title="wise.wiseutils.plot_links_dfc_fit"><tt class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_links_dfc_fit</span></tt></a>(ax,&nbsp;...[,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#wise.wiseutils.plot_links_dfc_fit" title="wise.wiseutils.plot_links_dfc_fit"><code class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_links_dfc_fit</span></code></a>(ax,&nbsp;...[,&nbsp;...])</td>
 <td>Plot features link fit on a distance from core vs epoch plot.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#wise.wiseutils.plot_links_map" title="wise.wiseutils.plot_links_map"><tt class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_links_map</span></tt></a>(ax,&nbsp;img,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#wise.wiseutils.plot_links_map" title="wise.wiseutils.plot_links_map"><code class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_links_map</span></code></a>(ax,&nbsp;img,&nbsp;...)</td>
 <td>Display features links on a map.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#wise.wiseutils.plot_links_pa" title="wise.wiseutils.plot_links_pa"><tt class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_links_pa</span></tt></a>(ax,&nbsp;projection,&nbsp;...)</td>
+<tr class="row-even"><td><a class="reference internal" href="#wise.wiseutils.plot_links_pa" title="wise.wiseutils.plot_links_pa"><code class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_links_pa</span></code></a>(ax,&nbsp;projection,&nbsp;...)</td>
 <td>Plot features link on a PA vs epoch plot.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#wise.wiseutils.plot_links_snr" title="wise.wiseutils.plot_links_snr"><tt class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_links_snr</span></tt></a>(ax,&nbsp;...[,&nbsp;mode])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#wise.wiseutils.plot_links_snr" title="wise.wiseutils.plot_links_snr"><code class="xref py py-obj docutils literal"><span class="pre">wise.wiseutils.plot_links_snr</span></code></a>(ax,&nbsp;...[,&nbsp;mode])</td>
 <td>Plot features link on a SNR vs epoch plot.</td>
 </tr>
 </tbody>
@@ -116,22 +116,23 @@
 <span id="full-reference"></span><h2>Full reference<a class="headerlink" href="#module-wise.wiseutils" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="wise.wiseutils.imshow_segmented_image">
-<tt class="descclassname">wise.wiseutils.</tt><tt class="descname">imshow_segmented_image</tt><big>(</big><em>ax</em>, <em>segmented_image</em>, <em>projection=None</em>, <em>title=True</em>, <em>beam=True</em>, <em>num=False</em>, <em>bg=None</em>, <em>mode='com'</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#wise.wiseutils.imshow_segmented_image" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">wise.wiseutils.</code><code class="descname">imshow_segmented_image</code><span class="sig-paren">(</span><em>ax</em>, <em>segmented_image</em>, <em>projection=None</em>, <em>title=True</em>, <em>beam=True</em>, <em>num=False</em>, <em>bg=None</em>, <em>mode='com'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#wise.wiseutils.imshow_segmented_image" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display the segmented image on the axes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ax</strong> (<tt class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></tt>) &#8211; </li>
-<li><strong>segmented_image</strong> (<tt class="xref py py-class docutils literal"><span class="pre">wise.wds.SegmentedImages</span></tt>) &#8211; </li>
-<li><strong>projection</strong> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></tt>, optional) &#8211; </li>
+<li><strong>ax</strong> (<code class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></code>) &#8211; </li>
+<li><strong>segmented_image</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.wds.SegmentedImages</span></code>) &#8211; </li>
+<li><strong>projection</strong> (<code class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></code>, optional) &#8211; </li>
 <li><strong>title</strong> (<em>bool, optional</em>) &#8211; Whatever to optionally display a title. Default is True.</li>
 <li><strong>beam</strong> (<em>bool, optional</em>) &#8211; Whatever to optionally display the beam of the image. Default is True.</li>
 <li><strong>num</strong> (<em>bool, optional</em>) &#8211; Whatever to optionally annotate the segments with there ids. Default is False.</li>
-<li><strong>bg</strong> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Image</span></tt>, optional) &#8211; Diplay bg as background image instead of the on from segmented_image.</li>
+<li><strong>bg</strong> (<code class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Image</span></code>, optional) &#8211; Diplay bg as background image instead of the on from segmented_image.</li>
 <li><strong>mode</strong> (<em>str, optional</em>) &#8211; Coord mode for the location of the features: &#8216;lm&#8217;, &#8216;com&#8217; or &#8216;cos&#8217;.</li>
-<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></tt>.</li>
+<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <code class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></code>.</p>
+</li>
 </ul>
 </td>
 </tr>
@@ -141,16 +142,17 @@
 
 <dl class="function">
 <dt id="wise.wiseutils.plot_segments_contour">
-<tt class="descclassname">wise.wiseutils.</tt><tt class="descname">plot_segments_contour</tt><big>(</big><em>ax</em>, <em>segmented_image</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#wise.wiseutils.plot_segments_contour" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">wise.wiseutils.</code><code class="descname">plot_segments_contour</code><span class="sig-paren">(</span><em>ax</em>, <em>segmented_image</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#wise.wiseutils.plot_segments_contour" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display the segments contour of a segmented_image on a map.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ax</strong> (<tt class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></tt>.) &#8211; </li>
-<li><strong>segmented_image</strong> (<tt class="xref py py-class docutils literal"><span class="pre">wise.wds.SegmentedImages</span></tt>.) &#8211; </li>
-<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.plot_mask()</span></tt>.</li>
+<li><strong>ax</strong> (<code class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></code>.) &#8211; </li>
+<li><strong>segmented_image</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.wds.SegmentedImages</span></code>.) &#8211; </li>
+<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <code class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.plot_mask()</span></code>.</p>
+</li>
 </ul>
 </td>
 </tr>
@@ -160,20 +162,21 @@
 
 <dl class="function">
 <dt id="wise.wiseutils.plot_features">
-<tt class="descclassname">wise.wiseutils.</tt><tt class="descname">plot_features</tt><big>(</big><em>ax, features, mode='com', color_fct=None, num=False, num_offset=[3, -3], **kwargs</em><big>)</big><a class="headerlink" href="#wise.wiseutils.plot_features" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">wise.wiseutils.</code><code class="descname">plot_features</code><span class="sig-paren">(</span><em>ax, features, mode='com', color_fct=None, num=False, num_offset=[3, -3], **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#wise.wiseutils.plot_features" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots the segments location and optionally the segments ids on a map.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ax</strong> (<tt class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></tt>) &#8211; </li>
-<li><strong>features</strong> (<tt class="xref py py-class docutils literal"><span class="pre">wise.features.FeaturesGroup</span></tt>) &#8211; Any FeaturesGroup objects that store Features.</li>
+<li><strong>ax</strong> (<code class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></code>) &#8211; </li>
+<li><strong>features</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.features.FeaturesGroup</span></code>) &#8211; Any FeaturesGroup objects that store Features.</li>
 <li><strong>mode</strong> (<em>str, optional</em>) &#8211; Coord mode for the location of the features: &#8216;lm&#8217;, &#8216;com&#8217; or &#8216;cos&#8217;.</li>
 <li><strong>color_fct</strong> (<em>a function, optional</em>) &#8211; If set, it should be a function that take a feature as argument and return a color.</li>
 <li><strong>num</strong> (<em>bool, optional</em>) &#8211; Whatever to optionally annotate the segments with there ids.</li>
 <li><strong>num_offset</strong> (<em>list, optional</em>) &#8211; Offset in pixel for the id.</li>
-<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.plot_coords()</span></tt></li>
+<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <code class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.plot_coords()</span></code></p>
+</li>
 </ul>
 </td>
 </tr>
@@ -183,19 +186,20 @@
 
 <dl class="function">
 <dt id="wise.wiseutils.plot_displacement_vector">
-<tt class="descclassname">wise.wiseutils.</tt><tt class="descname">plot_displacement_vector</tt><big>(</big><em>ax</em>, <em>delta_info</em>, <em>mode='com'</em>, <em>color_fct=None</em>, <em>flag=2</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#wise.wiseutils.plot_displacement_vector" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">wise.wiseutils.</code><code class="descname">plot_displacement_vector</code><span class="sig-paren">(</span><em>ax</em>, <em>delta_info</em>, <em>mode='com'</em>, <em>color_fct=None</em>, <em>flag=2</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#wise.wiseutils.plot_displacement_vector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display displacements vectors represented as arrows.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ax</strong> (<tt class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></tt>) &#8211; </li>
-<li><strong>delta_info</strong> (<tt class="xref py py-class docutils literal"><span class="pre">wise.features.DeltaInformation</span></tt>) &#8211; An object containing the displacements to display.</li>
+<li><strong>ax</strong> (<code class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></code>) &#8211; </li>
+<li><strong>delta_info</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.features.DeltaInformation</span></code>) &#8211; An object containing the displacements to display.</li>
 <li><strong>mode</strong> (<em>str, optional</em>) &#8211; Coord mode for the location of the features: &#8216;lm&#8217;, &#8216;com&#8217; or &#8216;cos&#8217;.</li>
 <li><strong>color_fct</strong> (<em>TYPE, optional</em>) &#8211; If set, it should be a function that take a feature as argument and return a color.</li>
 <li><strong>flag</strong> (<em>Attribute, optional</em>) &#8211; Default is DeltaInformation.DELTA_MATCH.</li>
-<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">matplotlib.pyltot.Arrow()</span></tt>.</li>
+<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <code class="xref py py-func docutils literal"><span class="pre">matplotlib.pyltot.Arrow()</span></code>.</p>
+</li>
 </ul>
 </td>
 </tr>
@@ -205,7 +209,7 @@
 
 <dl class="function">
 <dt id="wise.wiseutils.plot_displacements">
-<tt class="descclassname">wise.wiseutils.</tt><tt class="descname">plot_displacements</tt><big>(</big><em>ax</em>, <em>features1</em>, <em>features2</em>, <em>delta_info</em>, <em>num=False</em>, <em>projection=None</em>, <em>mode='com'</em>, <em>bg=None</em>, <em>beam=True</em>, <em>cmap=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#wise.wiseutils.plot_displacements" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">wise.wiseutils.</code><code class="descname">plot_displacements</code><span class="sig-paren">(</span><em>ax</em>, <em>features1</em>, <em>features2</em>, <em>delta_info</em>, <em>num=False</em>, <em>projection=None</em>, <em>mode='com'</em>, <em>bg=None</em>, <em>beam=True</em>, <em>cmap=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#wise.wiseutils.plot_displacements" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display displacements of features on a map.</p>
 <p>If bg is not set and features1 and features2 are both SegmentedImage, a two color map,
 one color for the segments of each SegmentedImage, will be used as bg.</p>
@@ -214,17 +218,18 @@ one color for the segments of each SegmentedImage, will be used as bg.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ax</strong> (<tt class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></tt>) &#8211; </li>
-<li><strong>features1</strong> (<tt class="xref py py-class docutils literal"><span class="pre">wise.features.FeaturesGroup</span></tt>) &#8211; The features of the first epoch.</li>
-<li><strong>features2</strong> (<tt class="xref py py-class docutils literal"><span class="pre">wise.features.FeaturesGroup</span></tt>) &#8211; The features of the second epoch.</li>
-<li><strong>delta_info</strong> (<tt class="xref py py-class docutils literal"><span class="pre">wise.features.DeltaInformation</span></tt>) &#8211; An object containing the displacements information.</li>
+<li><strong>ax</strong> (<code class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></code>) &#8211; </li>
+<li><strong>features1</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.features.FeaturesGroup</span></code>) &#8211; The features of the first epoch.</li>
+<li><strong>features2</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.features.FeaturesGroup</span></code>) &#8211; The features of the second epoch.</li>
+<li><strong>delta_info</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.features.DeltaInformation</span></code>) &#8211; An object containing the displacements information.</li>
 <li><strong>num</strong> (<em>bool, optional</em>) &#8211; Whatever to optionally annotate the segments with there ids.</li>
-<li><strong>projection</strong> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></tt>, optional) &#8211; </li>
+<li><strong>projection</strong> (<code class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></code>, optional) &#8211; </li>
 <li><strong>mode</strong> (<em>str, optional</em>) &#8211; Coord mode for the location of the features: &#8216;lm&#8217;, &#8216;com&#8217; or &#8216;cos&#8217;.</li>
-<li><strong>bg</strong> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Image</span></tt>, optional) &#8211; The image to be used as background map.</li>
+<li><strong>bg</strong> (<code class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Image</span></code>, optional) &#8211; The image to be used as background map.</li>
 <li><strong>beam</strong> (<em>bool, optional</em>) &#8211; Whatever to optionally display the beam of the image. Default is True.</li>
-<li><strong>cmap</strong> (<tt class="xref py py-class docutils literal"><span class="pre">matplotlib.cm.ColorMap</span></tt> or str, optional) &#8211; A color map for the background map.</li>
-<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <a class="reference internal" href="#wise.wiseutils.plot_displacement_vector" title="wise.wiseutils.plot_displacement_vector"><tt class="xref py py-func docutils literal"><span class="pre">plot_displacement_vector()</span></tt></a></li>
+<li><strong>cmap</strong> (<code class="xref py py-class docutils literal"><span class="pre">matplotlib.cm.ColorMap</span></code> or str, optional) &#8211; A color map for the background map.</li>
+<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <a class="reference internal" href="#wise.wiseutils.plot_displacement_vector" title="wise.wiseutils.plot_displacement_vector"><code class="xref py py-func docutils literal"><span class="pre">plot_displacement_vector()</span></code></a></p>
+</li>
 </ul>
 </td>
 </tr>
@@ -234,18 +239,19 @@ one color for the segments of each SegmentedImage, will be used as bg.</p>
 
 <dl class="function">
 <dt id="wise.wiseutils.plot_features_dfc">
-<tt class="descclassname">wise.wiseutils.</tt><tt class="descname">plot_features_dfc</tt><big>(</big><em>ax</em>, <em>projection</em>, <em>features</em>, <em>mode='com'</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#wise.wiseutils.plot_features_dfc" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">wise.wiseutils.</code><code class="descname">plot_features_dfc</code><span class="sig-paren">(</span><em>ax</em>, <em>projection</em>, <em>features</em>, <em>mode='com'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#wise.wiseutils.plot_features_dfc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot features distance from core vs epoch.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ax</strong> (<tt class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></tt>) &#8211; </li>
-<li><strong>projection</strong> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></tt>) &#8211; </li>
-<li><strong>features</strong> (<tt class="xref py py-class docutils literal"><span class="pre">wise.features.FeaturesGroup</span></tt>) &#8211; </li>
+<li><strong>ax</strong> (<code class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></code>) &#8211; </li>
+<li><strong>projection</strong> (<code class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></code>) &#8211; </li>
+<li><strong>features</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.features.FeaturesGroup</span></code>) &#8211; </li>
 <li><strong>mode</strong> (<em>str, optional</em>) &#8211; Coord mode for the location of the features: &#8216;lm&#8217;, &#8216;com&#8217; or &#8216;cos&#8217;.</li>
-<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></tt>.</li>
+<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <code class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></code>.</p>
+</li>
 </ul>
 </td>
 </tr>
@@ -255,18 +261,19 @@ one color for the segments of each SegmentedImage, will be used as bg.</p>
 
 <dl class="function">
 <dt id="wise.wiseutils.plot_features_pa">
-<tt class="descclassname">wise.wiseutils.</tt><tt class="descname">plot_features_pa</tt><big>(</big><em>ax</em>, <em>projection</em>, <em>features</em>, <em>mode='com'</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#wise.wiseutils.plot_features_pa" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">wise.wiseutils.</code><code class="descname">plot_features_pa</code><span class="sig-paren">(</span><em>ax</em>, <em>projection</em>, <em>features</em>, <em>mode='com'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#wise.wiseutils.plot_features_pa" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot features PA vs epoch.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ax</strong> (<tt class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></tt>) &#8211; </li>
-<li><strong>projection</strong> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></tt>) &#8211; </li>
-<li><strong>features</strong> (<tt class="xref py py-class docutils literal"><span class="pre">wise.features.FeaturesGroup</span></tt>) &#8211; </li>
+<li><strong>ax</strong> (<code class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></code>) &#8211; </li>
+<li><strong>projection</strong> (<code class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></code>) &#8211; </li>
+<li><strong>features</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.features.FeaturesGroup</span></code>) &#8211; </li>
 <li><strong>mode</strong> (<em>str, optional</em>) &#8211; Coord mode for the location of the features: &#8216;lm&#8217;, &#8216;com&#8217; or &#8216;cos&#8217;.</li>
-<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></tt>.</li>
+<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <code class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></code>.</p>
+</li>
 </ul>
 </td>
 </tr>
@@ -276,22 +283,23 @@ one color for the segments of each SegmentedImage, will be used as bg.</p>
 
 <dl class="function">
 <dt id="wise.wiseutils.plot_ms_set_map">
-<tt class="descclassname">wise.wiseutils.</tt><tt class="descname">plot_ms_set_map</tt><big>(</big><em>ax</em>, <em>img</em>, <em>ms_set</em>, <em>projection</em>, <em>mode='com'</em>, <em>color_style='date'</em>, <em>colorbar_setting=None</em>, <em>map_cmap='jet'</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#wise.wiseutils.plot_ms_set_map" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">wise.wiseutils.</code><code class="descname">plot_ms_set_map</code><span class="sig-paren">(</span><em>ax</em>, <em>img</em>, <em>ms_set</em>, <em>projection</em>, <em>mode='com'</em>, <em>color_style='date'</em>, <em>colorbar_setting=None</em>, <em>map_cmap='jet'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#wise.wiseutils.plot_ms_set_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display all features of ms_set on a map.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ax</strong> (<tt class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></tt>) &#8211; </li>
+<li><strong>ax</strong> (<code class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></code>) &#8211; </li>
 <li><strong>img</strong> (<em>Image</em>) &#8211; An image to be used as background map.</li>
-<li><strong>ms_set</strong> (<tt class="xref py py-class docutils literal"><span class="pre">wise.wds.MultiScaleImageSet</span></tt>) &#8211; An object containing all the features to be displayed.</li>
-<li><strong>projection</strong> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></tt>) &#8211; </li>
+<li><strong>ms_set</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.wds.MultiScaleImageSet</span></code>) &#8211; An object containing all the features to be displayed.</li>
+<li><strong>projection</strong> (<code class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></code>) &#8211; </li>
 <li><strong>mode</strong> (<em>str, optional</em>) &#8211; Coord mode for the location of the features: &#8216;lm&#8217;, &#8216;com&#8217; or &#8216;cos&#8217;.</li>
 <li><strong>color_style</strong> (<em>str, optional</em>) &#8211; &#8216;scale&#8217;: display one color per scale. &#8216;date&#8217;: color correspond to the epoch.</li>
-<li><strong>colorbar_setting</strong> (:class:<a href="#id7"><span class="problematic" id="id8">`</span></a>libwise.ColorbarSetting, optional) &#8211; Settings for the color bar if color_style is &#8216;date&#8217;.</li>
-<li><strong>map_cmap</strong> (<tt class="xref py py-class docutils literal"><span class="pre">matplotlib.cm.ColorMap</span></tt> or str, optional) &#8211; </li>
-<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></tt>.</li>
+<li><strong>colorbar_setting</strong> (:class:<a href="#id21"><span class="problematic" id="id22">`</span></a>libwise.ColorbarSetting, optional) &#8211; Settings for the color bar if color_style is &#8216;date&#8217;.</li>
+<li><strong>map_cmap</strong> (<code class="xref py py-class docutils literal"><span class="pre">matplotlib.cm.ColorMap</span></code> or str, optional) &#8211; </li>
+<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <code class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></code>.</p>
+</li>
 </ul>
 </td>
 </tr>
@@ -301,20 +309,21 @@ one color for the segments of each SegmentedImage, will be used as bg.</p>
 
 <dl class="function">
 <dt id="wise.wiseutils.plot_links_dfc">
-<tt class="descclassname">wise.wiseutils.</tt><tt class="descname">plot_links_dfc</tt><big>(</big><em>ax</em>, <em>projection</em>, <em>links</em>, <em>mode='com'</em>, <em>num=False</em>, <em>num_bbox=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#wise.wiseutils.plot_links_dfc" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">wise.wiseutils.</code><code class="descname">plot_links_dfc</code><span class="sig-paren">(</span><em>ax</em>, <em>projection</em>, <em>links</em>, <em>mode='com'</em>, <em>num=False</em>, <em>num_bbox=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#wise.wiseutils.plot_links_dfc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot features link on a distance from core vs epoch plot.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ax</strong> (<tt class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></tt>) &#8211; </li>
-<li><strong>projection</strong> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></tt>) &#8211; </li>
-<li><strong>links</strong> (a list of <tt class="xref py py-class docutils literal"><span class="pre">wise.matcher.FeaturesLink</span></tt>) &#8211; </li>
+<li><strong>ax</strong> (<code class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></code>) &#8211; </li>
+<li><strong>projection</strong> (<code class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></code>) &#8211; </li>
+<li><strong>links</strong> (a list of <code class="xref py py-class docutils literal"><span class="pre">wise.matcher.FeaturesLink</span></code>) &#8211; </li>
 <li><strong>mode</strong> (<em>str, optional</em>) &#8211; Coord mode for the location of the features: &#8216;lm&#8217;, &#8216;com&#8217; or &#8216;cos&#8217;.</li>
 <li><strong>num</strong> (<em>bool, optional</em>) &#8211; Whatever to optionally annotate the links with there ids.</li>
 <li><strong>num_bbox</strong> (<em>dict, optional</em>) &#8211; </li>
-<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></tt>.</li>
+<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <code class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></code>.</p>
+</li>
 </ul>
 </td>
 </tr>
@@ -324,20 +333,21 @@ one color for the segments of each SegmentedImage, will be used as bg.</p>
 
 <dl class="function">
 <dt id="wise.wiseutils.plot_links_dfc_fit">
-<tt class="descclassname">wise.wiseutils.</tt><tt class="descname">plot_links_dfc_fit</tt><big>(</big><em>ax</em>, <em>projection</em>, <em>links</em>, <em>fit_fct</em>, <em>fit_min_size=3</em>, <em>mode='com'</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#wise.wiseutils.plot_links_dfc_fit" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">wise.wiseutils.</code><code class="descname">plot_links_dfc_fit</code><span class="sig-paren">(</span><em>ax</em>, <em>projection</em>, <em>links</em>, <em>fit_fct</em>, <em>fit_min_size=3</em>, <em>mode='com'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#wise.wiseutils.plot_links_dfc_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot features link fit on a distance from core vs epoch plot.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ax</strong> (<tt class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></tt>) &#8211; </li>
-<li><strong>projection</strong> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></tt>) &#8211; </li>
-<li><strong>links</strong> (a list of <tt class="xref py py-class docutils literal"><span class="pre">wise.matcher.FeaturesLink</span></tt>) &#8211; </li>
-<li><strong>fit_fct</strong> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.nputils.AbstractFct</span></tt>) &#8211; The function that will be used for the fit.</li>
+<li><strong>ax</strong> (<code class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></code>) &#8211; </li>
+<li><strong>projection</strong> (<code class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></code>) &#8211; </li>
+<li><strong>links</strong> (a list of <code class="xref py py-class docutils literal"><span class="pre">wise.matcher.FeaturesLink</span></code>) &#8211; </li>
+<li><strong>fit_fct</strong> (<code class="xref py py-class docutils literal"><span class="pre">libwise.nputils.AbstractFct</span></code>) &#8211; The function that will be used for the fit.</li>
 <li><strong>fit_min_size</strong> (<em>int, optional</em>) &#8211; Fit only links with size &gt;= fit_min_size.</li>
 <li><strong>mode</strong> (<em>str, optional</em>) &#8211; Coord mode for the location of the features: &#8216;lm&#8217;, &#8216;com&#8217; or &#8216;cos&#8217;.</li>
-<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></tt>.</li>
+<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <code class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></code>.</p>
+</li>
 </ul>
 </td>
 </tr>
@@ -347,18 +357,19 @@ one color for the segments of each SegmentedImage, will be used as bg.</p>
 
 <dl class="function">
 <dt id="wise.wiseutils.plot_links_pa">
-<tt class="descclassname">wise.wiseutils.</tt><tt class="descname">plot_links_pa</tt><big>(</big><em>ax</em>, <em>projection</em>, <em>links</em>, <em>mode='com'</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#wise.wiseutils.plot_links_pa" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">wise.wiseutils.</code><code class="descname">plot_links_pa</code><span class="sig-paren">(</span><em>ax</em>, <em>projection</em>, <em>links</em>, <em>mode='com'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#wise.wiseutils.plot_links_pa" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot features link on a PA vs epoch plot.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ax</strong> (<tt class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></tt>) &#8211; </li>
-<li><strong>projection</strong> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></tt>) &#8211; </li>
-<li><strong>links</strong> (a list of <tt class="xref py py-class docutils literal"><span class="pre">wise.matcher.FeaturesLink</span></tt>) &#8211; </li>
+<li><strong>ax</strong> (<code class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></code>) &#8211; </li>
+<li><strong>projection</strong> (<code class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></code>) &#8211; </li>
+<li><strong>links</strong> (a list of <code class="xref py py-class docutils literal"><span class="pre">wise.matcher.FeaturesLink</span></code>) &#8211; </li>
 <li><strong>mode</strong> (<em>str, optional</em>) &#8211; Coord mode for the location of the features: &#8216;lm&#8217;, &#8216;com&#8217; or &#8216;cos&#8217;.</li>
-<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></tt></li>
+<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <code class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></code></p>
+</li>
 </ul>
 </td>
 </tr>
@@ -368,18 +379,19 @@ one color for the segments of each SegmentedImage, will be used as bg.</p>
 
 <dl class="function">
 <dt id="wise.wiseutils.plot_links_snr">
-<tt class="descclassname">wise.wiseutils.</tt><tt class="descname">plot_links_snr</tt><big>(</big><em>ax</em>, <em>projection</em>, <em>links</em>, <em>mode='com'</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#wise.wiseutils.plot_links_snr" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">wise.wiseutils.</code><code class="descname">plot_links_snr</code><span class="sig-paren">(</span><em>ax</em>, <em>projection</em>, <em>links</em>, <em>mode='com'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#wise.wiseutils.plot_links_snr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot features link on a SNR vs epoch plot.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ax</strong> (<tt class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></tt>) &#8211; </li>
-<li><strong>projection</strong> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></tt>) &#8211; </li>
-<li><strong>links</strong> (a list of <tt class="xref py py-class docutils literal"><span class="pre">wise.matcher.FeaturesLink</span></tt>) &#8211; </li>
+<li><strong>ax</strong> (<code class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></code>) &#8211; </li>
+<li><strong>projection</strong> (<code class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></code>) &#8211; </li>
+<li><strong>links</strong> (a list of <code class="xref py py-class docutils literal"><span class="pre">wise.matcher.FeaturesLink</span></code>) &#8211; </li>
 <li><strong>mode</strong> (<em>str, optional</em>) &#8211; Coord mode for the location of the features: &#8216;lm&#8217;, &#8216;com&#8217; or &#8216;cos&#8217;.</li>
-<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></tt>.</li>
+<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <code class="xref py py-func docutils literal"><span class="pre">matplotlib.pyplot.plot()</span></code>.</p>
+</li>
 </ul>
 </td>
 </tr>
@@ -389,28 +401,29 @@ one color for the segments of each SegmentedImage, will be used as bg.</p>
 
 <dl class="function">
 <dt id="wise.wiseutils.plot_links_map">
-<tt class="descclassname">wise.wiseutils.</tt><tt class="descname">plot_links_map</tt><big>(</big><em>ax</em>, <em>img</em>, <em>projection</em>, <em>links</em>, <em>color_style='link'</em>, <em>mode='com'</em>, <em>colorbar_setting=None</em>, <em>map_cmap='jet'</em>, <em>vector_width=4</em>, <em>link_id_label=False</em>, <em>num_bbox=None</em>, <em>ang_vel_arrows=False</em>, <em>ang_vel_unit=Unit(&quot;mas / yr&quot;)</em>, <em>pix_per_ang_vel_unit=1</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#wise.wiseutils.plot_links_map" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">wise.wiseutils.</code><code class="descname">plot_links_map</code><span class="sig-paren">(</span><em>ax</em>, <em>img</em>, <em>projection</em>, <em>links</em>, <em>color_style='link'</em>, <em>mode='com'</em>, <em>colorbar_setting=None</em>, <em>map_cmap='jet'</em>, <em>vector_width=4</em>, <em>link_id_label=False</em>, <em>num_bbox=None</em>, <em>ang_vel_arrows=False</em>, <em>ang_vel_unit=Unit(&quot;mas / yr&quot;)</em>, <em>pix_per_ang_vel_unit=1</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#wise.wiseutils.plot_links_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display features links on a map.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ax</strong> (<tt class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></tt>) &#8211; </li>
+<li><strong>ax</strong> (<code class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></code>) &#8211; </li>
 <li><strong>img</strong> (<em>Image</em>) &#8211; An image to be used as background map.</li>
-<li><strong>projection</strong> (<tt class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></tt>) &#8211; </li>
-<li><strong>links</strong> (a list of <tt class="xref py py-class docutils literal"><span class="pre">wise.matcher.FeaturesLink</span></tt>) &#8211; </li>
+<li><strong>projection</strong> (<code class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></code>) &#8211; </li>
+<li><strong>links</strong> (a list of <code class="xref py py-class docutils literal"><span class="pre">wise.matcher.FeaturesLink</span></code>) &#8211; </li>
 <li><strong>color_style</strong> (<em>str, optional</em>) &#8211; &#8216;link&#8217;: one color per link.
 &#8216;date&#8217;: map the features epochs to a color.
 any color string: use one color for each displacements vectors.
 function: a function that take a feature as argument and return a color.</li>
 <li><strong>mode</strong> (<em>str, optional</em>) &#8211; Coord mode for the location of the features: &#8216;lm&#8217;, &#8216;com&#8217; or &#8216;cos&#8217;.</li>
 <li><strong>colorbar_setting</strong> (<em>ColorBar, optional</em>) &#8211; Settings for the color bar if color_style is &#8216;date&#8217;.</li>
-<li><strong>map_cmap</strong> (<tt class="xref py py-class docutils literal"><span class="pre">matplotlib.cm.ColorMap</span></tt> or str, optional) &#8211; </li>
+<li><strong>map_cmap</strong> (<code class="xref py py-class docutils literal"><span class="pre">matplotlib.cm.ColorMap</span></code> or str, optional) &#8211; </li>
 <li><strong>vector_width</strong> (<em>int, optional</em>) &#8211; Width of the displacements vector arrows. Default is 4.</li>
 <li><strong>link_id_label</strong> (<em>bool, optional</em>) &#8211; Annotate the links with there ids.</li>
 <li><strong>num_bbox</strong> (<em>dict, optional</em>) &#8211; </li>
-<li><strong>**kwargs</strong> &#8211; Additional arguments to be passed to <tt class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></tt>.</li>
+<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to be passed to <code class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></code>.</p>
+</li>
 </ul>
 </td>
 </tr>
@@ -420,7 +433,7 @@ function: a function that take a feature as argument and return a color.</li>
 
 <dl class="class">
 <dt id="wise.wiseutils.DifmapComponent">
-<em class="property">class </em><tt class="descclassname">wise.wiseutils.</tt><tt class="descname">DifmapComponent</tt><big>(</big><em>flux</em>, <em>radius</em>, <em>theta</em>, <em>major=0</em>, <em>ratio=0</em>, <em>phi=0</em>, <em>t=0</em>, <em>freq=0</em>, <em>specind=0</em><big>)</big><a class="headerlink" href="#wise.wiseutils.DifmapComponent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">wise.wiseutils.</code><code class="descname">DifmapComponent</code><span class="sig-paren">(</span><em>flux</em>, <em>radius</em>, <em>theta</em>, <em>major=0</em>, <em>ratio=0</em>, <em>phi=0</em>, <em>t=0</em>, <em>freq=0</em>, <em>specind=0</em><span class="sig-paren">)</span><a class="headerlink" href="#wise.wiseutils.DifmapComponent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Format is: Flux (Jy) Radius (mas) Theta (deg) Major (mas) Axial ratio Phi (deg) T Freq (Hz):</p>
 <p>Flux     -  The integrated flux in the component (Jy).
 Radius   -  The radial distance of the component center from the</p>
@@ -460,7 +473,7 @@ spectral indexes.</p>
 </div></blockquote>
 <dl class="method">
 <dt id="wise.wiseutils.DifmapComponent.get_coord">
-<tt class="descname">get_coord</tt><big>(</big><big>)</big><a class="headerlink" href="#wise.wiseutils.DifmapComponent.get_coord" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_coord</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wise.wiseutils.DifmapComponent.get_coord" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return coord as index: yx</p>
 </dd></dl>
 
@@ -468,13 +481,13 @@ spectral indexes.</p>
 
 <dl class="class">
 <dt id="wise.wiseutils.DifmapModel">
-<em class="property">class </em><tt class="descclassname">wise.wiseutils.</tt><tt class="descname">DifmapModel</tt><a class="headerlink" href="#wise.wiseutils.DifmapModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">wise.wiseutils.</code><code class="descname">DifmapModel</code><a class="headerlink" href="#wise.wiseutils.DifmapModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>See DifmapComponent for information on format</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="wise.wiseutils.CoreOffsetPositions">
-<em class="property">class </em><tt class="descclassname">wise.wiseutils.</tt><tt class="descname">CoreOffsetPositions</tt><a class="headerlink" href="#wise.wiseutils.CoreOffsetPositions" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">wise.wiseutils.</code><code class="descname">CoreOffsetPositions</code><a class="headerlink" href="#wise.wiseutils.CoreOffsetPositions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Format is: epoch (iso:%Y-%m-%d), id (always 0), dist, pa (in degrees). All space separated</p>
 </dd></dl>
 
@@ -485,7 +498,7 @@ spectral indexes.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
@@ -499,12 +512,14 @@ spectral indexes.</p>
   <h4>Previous topic</h4>
   <p class="topless"><a href="tasks.html"
                         title="previous chapter">Wise tasks module</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/docs/wiseutils.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/docs/wiseutils.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -521,7 +536,7 @@ spectral indexes.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -533,13 +548,13 @@ spectral indexes.</p>
         <li class="right" >
           <a href="tasks.html" title="Wise tasks module"
              >previous</a> |</li>
-        <li><a href="../index.html">WISE 0.1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WISE 0.1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2015, Florent Mertens.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>
