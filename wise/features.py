@@ -760,7 +760,7 @@ class MaskFilter(FeatureFilter):
         if not nputils.check_index(self.img.data, *feature_pixel_mask_coord):
             return False
 
-        return bool(self.img.data[tuple(feature_pixel_mask_coord)])
+        return bool(self.img.data[tuple(feature_pixel_mask_coord.astype(int))])
 
 
 class DateFilter(FeatureFilter):

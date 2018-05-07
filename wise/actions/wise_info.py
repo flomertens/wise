@@ -1,7 +1,5 @@
 #! /usr/bin/env python
 
-import os
-
 import libwise
 import libwise.scriptshelper as sh
 

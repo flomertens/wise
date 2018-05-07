@@ -218,7 +218,7 @@ class SegmentedImages(DatedFeaturesGroup):
         features = features.sorted_list(cmp=cmp_intensity)[::-1]
 
         for i, feature in enumerate(features):
-            markers[tuple(feature.get_coord())] = i + 2
+            markers[tuple(feature.get_coord().astype(int))] = i + 2
 
         self.labels = watershed(- self.img.data, markers, mask=mask)
         self.labels[self.labels == 1] = 0
@@ -380,7 +380,7 @@ class SegmentedImages(DatedFeaturesGroup):
     def get_segment_from_coord(self, x, y):
         if not nputils.check_index(self.labels, x, y):
             return None
-        return self.get_segment_from_id(self.labels[x, y])
+        return self.get_segment_from_id(self.labels[int(x), int(y)])
 
     def region_filter(self, region):
         for feature in self.features[:]:
@@ -402,7 +402,7 @@ class SegmentedImages(DatedFeaturesGroup):
     def filter_out_snr(self, min_snr):
         for feature in self.get_features():
             if feature.get_snr() < min_snr:
-                self.remove_feature(feature)   
+                self.remove_feature(feature)
 
     def get_values(self, coords):
         xs, ys = np.array(coords).T

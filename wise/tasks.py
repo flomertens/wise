@@ -942,7 +942,8 @@ def view_links(ctx, scales=None, feature_filter=None, min_link_size=2, map_cmap=
         stack.show()
 
 
-def get_velocities_data(ctx, scales=None, region_list=None, min_link_size=2, feature_filter=None,
+def get_velocities_data(ctx, scales=None, region_list=None, min_link_size=2, 
+                        feature_filter=None, add_match_features=False,
                         **kargs):
     if not ctx.result.has_match_result():
         print "No result found. Run match_all() first."
@@ -958,10 +959,21 @@ def get_velocities_data(ctx, scales=None, region_list=None, min_link_size=2, fea
     prj = ctx.get_projection(ref_img)
 
     data = wiseutils.VelocityData.from_results(ctx.get_result(), prj, scales=scales, **kargs)
+    
     if feature_filter is not None:
         data.filter(feature_filter)
 
     data.df = data.df.groupby('link_id').filter(lambda x: len(x) > min_link_size)
+    
+    if add_match_features:
+        features = wfeatures.FeaturesGroup()
+        added_idx = [] 
+        for idx, match in zip(data.df.index, data.df.match):
+            if not match in data.df.features.values:
+                features.add_feature(match)
+                added_idx.append(idx)
+        data.add_features_group(features, prj)
+        data.df.loc[[f.get_id() for f in features], 'link_id'] = data.df.loc[added_idx, 'link_id'].values
 
     if region_list is not None:
         data.add_col_region(region_list)

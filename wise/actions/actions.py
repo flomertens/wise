@@ -7,6 +7,7 @@ import wise
 
 CONFIG_FILE = 'wise_config'
 
+
 def get_config(create_if_none=False):
     config = wise.AnalysisConfiguration()
     if os.path.exists(CONFIG_FILE):
@@ -15,6 +16,7 @@ def get_config(create_if_none=False):
         config.to_file(CONFIG_FILE)
 
     return config
+
 
 def select_files(ctx, args):
     if imgutils.is_fits(args[0]) or imgutils.is_img(args[0]):
@@ -37,7 +39,7 @@ def load(name):
     all_results_dirs = map(os.path.dirname, all_results_set)
     all_results_names = map(os.path.basename, all_results_dirs)
 
-    if not name in all_results_names:
+    if name not in all_results_names:
         return None
 
     idx = all_results_names.index(name)
