@@ -16,7 +16,7 @@ import jsonpickle
 try:
     from jsonpickle.compat import unicode
 except ImportError:
-    from jsonpickle.compat import unicode_literals as unicode
+    from jsonpickle.compat import ustr as unicode
 
 __all__ = ['register_handlers', 'unregister_handlers']
 
