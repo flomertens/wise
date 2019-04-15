@@ -106,7 +106,7 @@ class Segment(ImageFeature):
         if self.image_region is None:
             shape = self.segmented_image.get_img().data.shape
             self.image_region = imgutils.ImageRegion(self.get_cropped_segment_image(),
-                                     self.get_cropped_index(), cropped=True, shape=shape)
+                                                     self.get_cropped_index(), cropped=True, shape=shape)
         return self.image_region
 
     def get_center_of_shape(self):
@@ -477,7 +477,7 @@ class SegmentedScale(AbstractScale, SegmentedImages):
         return measurements.maximum(self.original_image.data, self.labels, segment.get_segmentid()) / self.rms_noise
 
     def copy(self):
-        new = SegmentedScale(self.img, [k.copy() for k in self.features], self.labels.copy(), self.rms_noise, 
+        new = SegmentedScale(self.img, [k.copy() for k in self.features], self.labels.copy(), self.rms_noise,
                              self.original_image, self.scale)
         for feature in new.get_features():
             feature.segmented_image = new
@@ -494,27 +494,29 @@ class DatedFeaturesGroupScale(AbstractScale, DatedFeaturesGroup):
         return DatedFeaturesGroupScale(self.scale, [k.copy() for k in self.features], epoch=self.epoch)
 
 
-
 class FinderConfiguration(nputils.BaseConfiguration):
 
     def __init__(self):
         data = [
-        ["alpha_threashold", 3, "Significance threshold", validator_in_range(0.1, 20), float, str, 0],
-        ["alpha_detection", 4, "Detection threshold", validator_in_range(0.1, 20), float, str, 0],
-        ["min_scale", 1, "Minimum Wavelet scale", validator_in_range(0, 10, instance=int), int, str, 0],
-        ["max_scale", 4, "Maximum Wavelet scale", validator_in_range(1, 10, instance=int), int, str, 0],
-        ["scales_snr_filter", None, "Per scales detection threshold", validator_is(dict), jp.decode, jp.encode, 1],
-        ["ms_dec_klass", WaveletMultiscaleDecomposition, "Multiscale decompostion class", 
-            validator_is_class(AbstractMultiScaleDecomposition), lambda s: jp.decode(str2jsonclass(s)), jp.encode, 1],
-        ["use_iwd", False, "Use Intermediate Wavelet Decomposition", validator_is(bool), str2bool, str, 0],
-        ["dec", wtutils.uiwt, "Multiscale decompostion class", is_callable, lambda s: jp.decode(str2jsonfunction(s)), jp.encode, 1],
-        ["wd_wavelet", 'b1', "Wavelet to use for the Wavelet Decomposition", validator_is(str), str, str, 1],
-        ["iwd_wavelet", 'b3', "Wavelet to use for the Intermediate Wavelet Decomposition", validator_is(str), str, str, 1],
-        ["dog_step", True, "DOG", validator_is(int), None, None, 2],
-        ["dog_angle", True, "DOG", validator_is((int, float)), None, None, 2],
-        ["dog_ellipticity", True, "DOG", validator_is((int, float)), None, None, 2],
-        ["exclude_border_dist", 1, "Number of pixel from border to exclude", validator_is(int), int, str, 0],
-        ["exclude_noise", True, "Include coefficients below threshold in resulting image", validator_is(bool), str2bool, str, 1],
+            ["alpha_threashold", 3, "Significance threshold", validator_in_range(0.1, 20), float, str, 0],
+            ["alpha_detection", 4, "Detection threshold", validator_in_range(0.1, 20), float, str, 0],
+            ["min_scale", 1, "Minimum Wavelet scale", validator_in_range(0, 10, instance=int), int, str, 0],
+            ["max_scale", 4, "Maximum Wavelet scale", validator_in_range(1, 10, instance=int), int, str, 0],
+            ["scales_snr_filter", None, "Per scales detection threshold", validator_is(dict), jp.decode, jp.encode, 1],
+            ["ms_dec_klass", WaveletMultiscaleDecomposition, "Multiscale decompostion class",
+             validator_is_class(AbstractMultiScaleDecomposition), lambda s: jp.decode(str2jsonclass(s)), jp.encode, 1],
+            ["use_iwd", False, "Use Intermediate Wavelet Decomposition", validator_is(bool), str2bool, str, 0],
+            ["dec", wtutils.uiwt, "Multiscale decompostion class", is_callable,
+                lambda s: jp.decode(str2jsonfunction(s)), jp.encode, 1],
+            ["wd_wavelet", 'b1', "Wavelet to use for the Wavelet Decomposition", validator_is(str), str, str, 1],
+            ["iwd_wavelet", 'b3', "Wavelet to use for the Intermediate Wavelet Decomposition",
+                validator_is(str), str, str, 1],
+            ["dog_step", True, "DOG", validator_is(int), None, None, 2],
+            ["dog_angle", True, "DOG", validator_is((int, float)), None, None, 2],
+            ["dog_ellipticity", True, "DOG", validator_is((int, float)), None, None, 2],
+            ["exclude_border_dist", 1, "Number of pixel from border to exclude", validator_is(int), int, str, 0],
+            ["exclude_noise", True, "Include coefficients below threshold in resulting image",
+                validator_is(bool), str2bool, str, 1],
         ]
 
         super(FinderConfiguration, self).__init__(data, title="Finder configuration")
@@ -536,7 +538,7 @@ class Node(object):
         return "Node(%s)" % self.get_id()
 
     def show(self, level):
-        print " " * level + "\-- %s" %self.get_id()
+        print " " * level + "\-- %s" % self.get_id()
         for child in self.childs:
             child.show(level + 1)
 
@@ -738,14 +740,14 @@ class MultiScaleImage(BaseMultiScaleImage):
         return tree
 
     def get_segmented_scale(self, scale):
-        ''' Not optimized''' 
+        ''' Not optimized'''
         for segments in self:
             if segments.get_scale() == scale:
                 return segments
 
     def get_combined_representation(self):
         # Experimental
-        #TODO: make use of MSTree instead
+        # TODO: make use of MSTree instead
         ms_relation = MultiScaleRelation(self)
         img = imgutils.Image.from_image(self.original_img)
         labels = np.zeros_like(self.original_img.data)
@@ -851,9 +853,14 @@ class MultiScaleImageSet(AbstractKeyList):
                     snr = feature.get_snr()
                     l.append([epoch, x, y, intensity, snr, scale])
 
-        np.savetxt(filename, l, ["%f", "%.5f", "%.5f", "%.6f", "%.6f", "%f"], delimiter=' ')
+        unit = projection.unit
+        header = 'WISE Features lists\n'
+        header += 'Epoch, X (%s), Y (%s), Intensity, SNR, Scale (%s)\n' % (unit, unit, unit)
+
+        np.savetxt(filename, l, ["%f", "%.5f", "%.5f", "%.6f", "%.6f", "%f"],
+                   delimiter=' ', header=header)
         print "Saved MultiScaleImageSet @ %s" % filename
-    
+
     @staticmethod
     def from_file_full(self, projection, image_set):
         pass
@@ -934,7 +941,7 @@ class WaveletMultiscaleDecomposition(AbstractMultiScaleDecomposition):
         scales_noise = wtutils.wave_noise_factor(bg, wavelet_fct, max_scale, wt_dec, beam=img.get_beam())
         scales_noise = scales_noise[min_scale:]
 
-        if wavelet_fct in ['b3', 'triangle2'] :
+        if wavelet_fct in ['b3', 'triangle2']:
             scales_width = [max(1.5, 3 * min(1, j) * pow(2, max(0, j - 1))) for j in range(min_scale, max_scale)]
         else:
             scales_width = [max(1, 2 * min(1, j) * pow(2, max(0, j - 1))) for j in range(min_scale, max_scale)]
@@ -992,8 +999,8 @@ class DoGMultiscaleDecomposition(WaveletMultiscaleDecomposition):
         scales = [nputils.resize_like(s, self.img.data) for s in scales]
 
         scales_noises = wtutils.dog_noise_factor(self.bg, widths=widths, angle=angle,
-                                            ellipticity=ellipticity, beam=self.img.get_beam())
-        
+                                                 ellipticity=ellipticity, beam=self.img.get_beam())
+
         return zip(scales, scales_noises, widths)
 
 
@@ -1021,7 +1028,7 @@ class MinScaleMultiscaleDecomposition(WaveletMultiscaleDecomposition):
         scales = [nputils.resize_like(s, self.img.data) for s in scales]
 
         scales_noises = wtutils.dec_noise_factor(wtutils.pyramiddec, self.bg, widths=widths, angle=angle,
-                                            ellipticity=ellipticity, beam=self.img.get_beam())
+                                                 ellipticity=ellipticity, beam=self.img.get_beam())
 
         return zip(scales, scales_noises, widths)
 
@@ -1045,7 +1052,7 @@ class FeaturesFinder(object):
         ms_dec_klass = self.config.get("ms_dec_klass")
 
         if self.config.get("use_iwd"):
-            ms_dec_klass = InterscalesWaveletMultiscaleDecomposition            
+            ms_dec_klass = InterscalesWaveletMultiscaleDecomposition
 
         dec = ms_dec_klass(self.img, self.background, self.config)
         decomposed = dec.decompose()
@@ -1058,8 +1065,8 @@ class FeaturesFinder(object):
 
             if self.segment:
                 exculde_dist = self.config.get("exclude_border_dist")
-                features = FeaturesGroup.from_img_peaks(scale_img, min(width, 8), 
-                    detection, exclude_border_dist=exculde_dist)
+                features = FeaturesGroup.from_img_peaks(scale_img, min(width, 8),
+                                                        detection, exclude_border_dist=exculde_dist)
                 mask = (scale.real > threshold)
 
                 res = SegmentedScale(scale_img, [], None, scale_noise, self.img, width)

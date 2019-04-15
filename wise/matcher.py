@@ -25,8 +25,8 @@ logger = logging.getLogger(__name__)
 class FeaturesLink(object):
 
     def __init__(self, first, color, id, delta=None):
-        # MEM ISSUE: using dict here does not scale well with increasing 
-        # number of features. 
+        # MEM ISSUE: using dict here does not scale well with increasing
+        # number of features.
         self.features = dict()
         self.relations = dict()
         self.features[first.get_epoch()] = first
@@ -276,7 +276,7 @@ class FeaturesLinkBuilder(object):
 
         match_results = dict()
         for epoch in epochs:
-            match_result = ScaleMatchResult(features1[epoch], features2[epoch], 
+            match_result = ScaleMatchResult(features1[epoch], features2[epoch],
                                             matchs[epoch], delta_infos[epoch], None)
             match_results[epoch] = match_result
 
@@ -307,7 +307,7 @@ class FeaturesLinkBuilder(object):
             elif coord in coord_feature_map:
                 linked_links = [coord_feature_map.get(coord)]
             linked_links = list(set([k for k in linked_links if k is not None]))
-                        
+
             # print "Possible links:", [k.get_id() for k in linked_links]
             if len(linked_links) == 0:
                 new_link = self.add_new(feature1)
@@ -396,12 +396,19 @@ class FeaturesLinkBuilder(object):
                 else:
                     related_id = related.get_id()
                 l.append([epoch, x, y, intensity, snr, id, related_id, delta_x, delta_y])
-                #TODO: need rotation independant delta!!
+                # TODO: need rotation independant delta!!
                 delta_x, delta_y = projection.pixel_scales() * p2i(delta_info.get_delta(feature))
+
+        unit = projection.unit
+        header = 'WISE matched components list at scale %f %s\n' % (self.get_scale(projection), unit)
+        header += 'Delta is between previous and current feature.\n'
+        header += ('Epoch, X (%s), Y (%s), Intensity, SNR, Component ID, Related Component ID, '
+                   'Delta_X (%s), Delta_Y (%s)\n' % (unit, unit, unit, unit))
 
         l = np.array(l, dtype=object)
         filename = file + suffix
-        np.savetxt(filename, l, ["%f", "%.5f", "%.5f", "%.6f", "%.3f", "%s", "%s", "%.5f", "%.5f"], delimiter=' ')
+        np.savetxt(filename, l, ["%f", "%.5f", "%.5f", "%.6f", "%.3f", "%s", "%s", "%.5f", "%.5f"],
+                   delimiter=' ', header=header)
         print "Saved link builder @ %s" % filename
 
     @staticmethod
@@ -419,7 +426,7 @@ class FeaturesLinkBuilder(object):
         for line in array:
             date = nputils.epoch_to_datetime(line[0])
             x, y = np.array(map(float, line[2:4]))
-            #TODO: check why we need -x
+            # TODO: check why we need -x
             x, y = projection.s2p([-x, y])
             component_id = str(line[5])
             if filter is not None and not component_id in filter:
@@ -476,7 +483,7 @@ class FeaturesLinkBuilder(object):
                 snr = float(line[4])
                 inext = 5
             component_id = str(line[inext])
-            related_id = str(line[inext+1])
+            related_id = str(line[inext + 1])
             if filter is not None and not component_id in filter:
                 continue
             if date not in img_metas:
@@ -489,7 +496,7 @@ class FeaturesLinkBuilder(object):
                 if format == 0:
                     delta = f.get_coord() - component.last().get_coord()
                 else:
-                    delta = p2i(np.array(line[inext+2:inext+4], dtype=float) / projection.pixel_scales())
+                    delta = p2i(np.array(line[inext + 2:inext + 4], dtype=float) / projection.pixel_scales())
                 component.add(f, delta)
             if related_id != 'None':
                 relations.append([date, component, related_id])
@@ -588,7 +595,7 @@ class MultiScaleFeaturesLinkBuilder(object):
         for file in glob.glob(filename + '_*' + MultiScaleFeaturesLinkBuilder.TYPE):
             if re.match(regex, os.path.basename(file)):
                 scale = float(file.split('_')[-1].split(MultiScaleFeaturesLinkBuilder.TYPE)[0])
-                link_builder = FeaturesLinkBuilder.from_file(file, projection, image_set, 
+                link_builder = FeaturesLinkBuilder.from_file(file, projection, image_set,
                                                              suffix='', min_link_size=min_link_size)
                 link_builder.set_scale(scale)
                 new.link_builders[scale] = link_builder
@@ -606,9 +613,9 @@ class MergedFeatureLink(FeaturesLink):
             link, start_epoch, end_epoch = links[i].get()
             # print link, start_epoch, end_epoch
             if start_epoch is None and i > 0:
-                start_epoch = links[i-1].end
+                start_epoch = links[i - 1].end
             if end_epoch is None and i < len(links):
-                end_epoch = links[i+1].end
+                end_epoch = links[i + 1].end
             for feature in link.get_features(start_epoch=start_epoch, end_epoch=end_epoch):
                 self.add(feature, link.get_delta(feature))
 
@@ -640,31 +647,31 @@ class MergeLinkId(object):
             start = link.get_first_epoch()
         if end is None:
             end = link.get_last_epoch()
-            
+
         return MergeLinkId(link, start, end)
 
 
 class MergedFeatureLinkBuilder(FeaturesLinkBuilder):
 
-        def __init__(self, ms_link_bulder, merge_file):
-            FeaturesLinkBuilder.__init__(self)
-            self.ms_link_builder = ms_link_bulder
-            self.merge_file = merge_file
-            self.build()
+    def __init__(self, ms_link_bulder, merge_file):
+        FeaturesLinkBuilder.__init__(self)
+        self.ms_link_builder = ms_link_bulder
+        self.merge_file = merge_file
+        self.build()
 
-        def build(self):
-            all_links_id = []
-            with open(self.merge_file) as file:
-                for i, line in enumerate(file.readlines()):
-                    line = line.strip()
-                    if not line.startswith("#") and len(line) > 0:
-                        all_links_id.append(line.split(','))
+    def build(self):
+        all_links_id = []
+        with open(self.merge_file) as file:
+            for i, line in enumerate(file.readlines()):
+                line = line.strip()
+                if not line.startswith("#") and len(line) > 0:
+                    all_links_id.append(line.split(','))
 
-            for i, links_id in enumerate(all_links_id):
-                start = end = None
-                links = [MergeLinkId.parse(self.ms_link_builder, id) for id in links_id]
-                link = MergedFeatureLink(links, self.color_selector.get(), i)
-                self.add(link)
+        for i, links_id in enumerate(all_links_id):
+            start = end = None
+            links = [MergeLinkId.parse(self.ms_link_builder, id) for id in links_id]
+            link = MergedFeatureLink(links, self.color_selector.get(), i)
+            self.add(link)
 
 
 class BaseScaleMatcher(object):
@@ -1130,7 +1137,7 @@ class ScaleMatcherMSCSC2(BaseScaleMatcher):
                     r1.img = nputils.smooth(r1.img, 3, boundary="zero", mode="same")
                 if min(r2.get_shape_region()) > 3:
                     r2.img = nputils.smooth(r2.img, 3, boundary="zero", mode="same")
-                
+
             i1 = r1.get_data()
             i2 = r2.get_data()
 
@@ -1148,7 +1155,7 @@ class ScaleMatcherMSCSC2(BaseScaleMatcher):
         if cb is not None:
             title = [u.get_segmentid() for u in segments1], "->", [u.get_segmentid() for u in segments2]
             cb(title, region1.get_data(), region2.get_data())
-        
+
         return coef, delta, window_search_offset + delta
 
     def get_correlation(self, features1, features2, cb=None):
@@ -1219,14 +1226,15 @@ class ScaleMatcherMSCSC2(BaseScaleMatcher):
     def optimize(self, indep_item, cb=None):
         results = []
         pmax = 6
-        total_features = len(indep_item.set1()) + len(indep_item.set2())        
+        total_features = len(indep_item.set1()) + len(indep_item.set2())
         img2 = self.get_segment_image(indep_item.set2())[0]
 
         if total_features > pmax:
             print "Warning: high total features to optimize:", str([u.get_segmentid() for u in indep_item.set1()]) + " -> " + str([u.get_segmentid() for u in indep_item.set2()])
-        
-        self.log("Optimize group:", str([u.get_segmentid() for u in indep_item.set1()]) + " -> " + str([u.get_segmentid() for u in indep_item.set2()]))
-        
+
+        self.log("Optimize group:", str([u.get_segmentid() for u in indep_item.set1()]
+                                        ) + " -> " + str([u.get_segmentid() for u in indep_item.set2()]))
+
         for group in self.get_combinations(indep_item):
             total_coef = 0
             total_matched_features = 0
@@ -1342,7 +1350,7 @@ class ScaleMatcherMSCSC2(BaseScaleMatcher):
 
             if verbose:
                 print "Matching features: %s / %s (%s %%)" % (match.size(), to_match1.size(),
-                                                        (match.size() / float(to_match1.size()) * 100))
+                                                              (match.size() / float(to_match1.size()) * 100))
             if verbose:
                 print "Correlation:", total_correlation / match.size(), "SSD:", ssd
 
@@ -2162,38 +2170,40 @@ class MatcherConfiguration(nputils.BaseConfiguration):
 
     def __init__(self):
         data = [
-        ["use_upper_info", True, "Use Pyramidal scheme for matching", validator_is(bool), str2bool, str, 0],
-        ["upper_info_average_tol_factor", 10, "Tolerance factor that define the number of features for average upper delta calculation", 
-            validator_is(int), int, str, 1],
-        ["mscsc2_upper_delta_bonus_range", 0.4, "Bonus for delta close to upper delta", 
-            validator_in_range(0, 1), float, str, 1],
-        ["mscsc2_nitems_bonus_range", 0.4, "Bonus for fewer merge", validator_in_range(0, 1), float, str, 1],
-        ["simple_merge", True, "MSCI: use segment merging", validator_is(bool), str2bool, str, 1],
-        ["msci_coord_mode", 'com', "Coord mode used to determine the delta", validator_in(['lm', 'com']), str, str, 1],
-        ["correlation_threshold", 0.65, "Correlation threshold", validator_in_range(0, 1), float, str, 0],
-        ["ignore_features_at_border", False, "Ignore feature art border for matching", 
-            validator_is(bool), str2bool, str, 0],
-        ["features_at_border_k1", 0.5, "At border param k1", validator_in_range(0, 2), float, str, 1],
-        ["features_at_border_k2", 0.25, "At border param k2", validator_in_range(0, 2), float, str, 1],
-        ["features_at_border_k3", 0.25, "At border param k3", validator_in_range(0, 2), float, str, 1],
-        ["maximum_delta", 40, "Deprecated: use delta_range_filter", None, None, None, 2],
-        ["range_delta_x", [-40, 40], "Deprecated: use delta_range_filter", None, None, None, 2],
-        ["range_delta_y", [-40, 40], "Deprecated: use delta_range_filter", None, None, None, 2],
-        ["increase_tol_for_no_input_delta", True, "Increase tolerance when no initial guess", 
-            validator_is(bool), str2bool, str, 1],
-        ["delta_range_filter", None, "Delta range filter", validator_is(nputils.AbstractFilter),
-            jp.decode, jp.encode, 0],
-        ["mscsc_max_merge", 3, "MSCSC: Maximum number of segment merged", validator_in_range(1, 5, instance=int),
-            int, str, 1],
-        ["tolerance_factor", 1, "Tolerance factor", validator_in_range(0, 4), float, str, 0],
-        ["method_klass", ScaleMatcherMSCSC2, "Matching method", validator_is_class(BaseScaleMatcher),
-            lambda s: jp.decode(str2jsonclass(s)), jp.encode, 1],
-        ["no_input_no_match_scales", [], "List of scales at which no match is performed if no initial guess", 
-            validator_is(list), jp.decode, jp.encode, 1],
-        ["min_scale_tolerance", {2: 4, 3: 4, 4: 6}, "Per scale tolerance in pixel", validator_is(dict),
-            jp.decode, jp.encode, 1],
-        ["find_distance_mode", "min" , "Method used for distance measure", validator_is(str), str, str, 1],
-        ["mscsc2_smooth", True , "Apply smooth on merged features before correlation", validator_is(bool), str2bool, str, 1],
+            ["use_upper_info", True, "Use Pyramidal scheme for matching", validator_is(bool), str2bool, str, 0],
+            ["upper_info_average_tol_factor", 10, "Tolerance factor that define the number of features for average upper delta calculation",
+             validator_is(int), int, str, 1],
+            ["mscsc2_upper_delta_bonus_range", 0.4, "Bonus for delta close to upper delta",
+             validator_in_range(0, 1), float, str, 1],
+            ["mscsc2_nitems_bonus_range", 0.4, "Bonus for fewer merge", validator_in_range(0, 1), float, str, 1],
+            ["simple_merge", True, "MSCI: use segment merging", validator_is(bool), str2bool, str, 1],
+            ["msci_coord_mode", 'com', "Coord mode used to determine the delta",
+                validator_in(['lm', 'com']), str, str, 1],
+            ["correlation_threshold", 0.65, "Correlation threshold", validator_in_range(0, 1), float, str, 0],
+            ["ignore_features_at_border", False, "Ignore feature art border for matching",
+             validator_is(bool), str2bool, str, 0],
+            ["features_at_border_k1", 0.5, "At border param k1", validator_in_range(0, 2), float, str, 1],
+            ["features_at_border_k2", 0.25, "At border param k2", validator_in_range(0, 2), float, str, 1],
+            ["features_at_border_k3", 0.25, "At border param k3", validator_in_range(0, 2), float, str, 1],
+            ["maximum_delta", 40, "Deprecated: use delta_range_filter", None, None, None, 2],
+            ["range_delta_x", [-40, 40], "Deprecated: use delta_range_filter", None, None, None, 2],
+            ["range_delta_y", [-40, 40], "Deprecated: use delta_range_filter", None, None, None, 2],
+            ["increase_tol_for_no_input_delta", True, "Increase tolerance when no initial guess",
+             validator_is(bool), str2bool, str, 1],
+            ["delta_range_filter", None, "Delta range filter", validator_is(nputils.AbstractFilter),
+             jp.decode, jp.encode, 0],
+            ["mscsc_max_merge", 3, "MSCSC: Maximum number of segment merged", validator_in_range(1, 5, instance=int),
+             int, str, 1],
+            ["tolerance_factor", 1, "Tolerance factor", validator_in_range(0, 4), float, str, 0],
+            ["method_klass", ScaleMatcherMSCSC2, "Matching method", validator_is_class(BaseScaleMatcher),
+             lambda s: jp.decode(str2jsonclass(s)), jp.encode, 1],
+            ["no_input_no_match_scales", [], "List of scales at which no match is performed if no initial guess",
+             validator_is(list), jp.decode, jp.encode, 1],
+            ["min_scale_tolerance", {2: 4, 3: 4, 4: 6}, "Per scale tolerance in pixel", validator_is(dict),
+             jp.decode, jp.encode, 1],
+            ["find_distance_mode", "min", "Method used for distance measure", validator_is(str), str, str, 1],
+            ["mscsc2_smooth", True, "Apply smooth on merged features before correlation",
+                validator_is(bool), str2bool, str, 1],
         ]
 
         super(MatcherConfiguration, self).__init__(data, title="Matcher configuration")
@@ -2244,7 +2254,7 @@ class ScaleMatchResult:
         return self.delta_info
 
     def get_features1(self):
-        return self.segments1 
+        return self.segments1
 
     def get_features2(self):
         return self.segments2
@@ -2292,7 +2302,7 @@ class ImageMatcher(object):
         self.match_config = match_config
         self.filter = filter
 
-    def get_match_scale(self, features1, features2, upper_delta_info, 
+    def get_match_scale(self, features1, features2, upper_delta_info,
                         do_merge=True, cb=None, verbose=True):
         klass = self.match_config.get("method_klass")
         matcher = klass(features1, features2, upper_delta_info, self.match_config)
@@ -2313,8 +2323,8 @@ class ImageMatcher(object):
                 upper_delta_info = build_delta_information_scale2(finder_res1[i],
                                                                   result[-1] if len(result) > 0 else None,
                                                                   average_tol_factor=average_tol_factor)
-            scale_match_result = self.get_match_scale(finder_res1[i], finder_res2[i], 
-                upper_delta_info, i > 0, cb=cb, verbose=verbose)
+            scale_match_result = self.get_match_scale(finder_res1[i], finder_res2[i],
+                                                      upper_delta_info, i > 0, cb=cb, verbose=verbose)
             result.append(scale_match_result)
 
         result.sort(key=lambda k: k.get_scale())

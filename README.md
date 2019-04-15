@@ -1,10 +1,22 @@
 WISE
 ====
 
+WISE is the Wavelet Image Segmentation and Evaluation tool, developed to address the issue of detecting significant features in radio interferometric images and obtaining reliable velocity field from cross-correlation of these regions in multi-epoch observations.
+
+Please check https://flomertens.github.io/wise/ for more information, documentation and tutorials.
+
 Installation
 ------------
 
-To install WISE globally:
+You should be able to install WISE using pip or conda:
+
+    pip install wise
+
+or
+
+    conda install -c flomertens wise
+
+Alternatively, to install WISE globally:
 
     python setup.py install
 
@@ -27,4 +39,5 @@ You need to install the following packages for WISE to work:
 - pyregion (https://pypi.python.org/pypi/pyregion)
 - uncertainties (https://pypi.python.org/pypi/uncertainties)
 - pymorph (https://pypi.python.org/pypi/pymorph)
+- jsonpickle (https://pypi.org/project/jsonpickle/)
 
