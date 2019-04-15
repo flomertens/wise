@@ -12,7 +12,11 @@ import numpy as np
 
 import ast
 import jsonpickle
-from jsonpickle.compat import unicode
+# import unicode from jsonpickle, depending on its version apparently function name is different.
+try:
+    from jsonpickle.compat import unicode
+except ImportError:
+    from jsonpickle.compat import ustr as unicode
 
 __all__ = ['register_handlers', 'unregister_handlers']
 
