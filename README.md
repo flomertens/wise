@@ -27,15 +27,16 @@ or to install it locally:
 Requirements
 ------------
 
-You need to install the following packages for WISE to work:
+You need to install (if not done by pip/conda) the following packages for WISE to work:
 
-- libwise
+- libwise (https://github.com/flomertens/libwise)
 - numpy (>= 1.5)
 - scipy (>= 0.10)
 - skimage (>= 0.5)
 - astropy (>= 0.4)
 - matplotlib (>= 1.0)
-- pygtk (>= 2.22)
+- pyqt (>= 4.8)
+- pandas
 - pyregion (https://pypi.python.org/pypi/pyregion)
 - uncertainties (https://pypi.python.org/pypi/uncertainties)
 - pymorph (https://pypi.python.org/pypi/pymorph)
