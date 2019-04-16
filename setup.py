@@ -16,7 +16,6 @@ setup(
     author='Florent Mertens',
     author_email='flomertens@gmail.com',
     license='GPL2',
-    zip_safe=False,
 
     include_package_data=True,
     packages=find_packages(),
