@@ -29,6 +29,7 @@ setup(
         'matplotlib',
         'pyregion',
         'uncertainties',
-        'pymorph']
+        'pymorph',
+        'jsonpickle']
 
 )
