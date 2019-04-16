@@ -14,7 +14,7 @@ You should be able to install WISE using pip or conda:
 
 or
 
-    conda install -c flomertens -c conda-forge wise
+    conda install -c flomertens -c conda-forge wise cython dask
 
 Alternatively, to install WISE globally:
 
