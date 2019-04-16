@@ -1,6 +1,5 @@
 #! /usr/bin/env python
 
-import libwise
 import libwise.scriptshelper as sh
 
 import wise
@@ -16,7 +15,7 @@ Additional options:
 
 
 def main():
-    sh.init(libwise.get_version(), USAGE)
+    sh.init(wise.get_version(), USAGE)
 
     velocity = sh.get_opt_bool('velocity', 'V')
 

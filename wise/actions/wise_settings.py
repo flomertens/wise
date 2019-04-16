@@ -3,17 +3,15 @@
 import os
 import re
 
-import libwise
 from libwise import imgutils, uiutils
 import libwise.scriptshelper as sh
 
 import wise
 import actions
 
-import numpy as np
 import astropy.units as u
 
-USAGE = '''Set and get WISE configuration. 
+USAGE = '''Set and get WISE configuration.
 
 Possible actions are:
 
@@ -27,7 +25,7 @@ SECTION is one of data, finder or matcher
 
 
 def get_section(section_name, config):
-    if not section_name in ['data', 'finder', 'matcher']:
+    if section_name not in ['data', 'finder', 'matcher']:
         print "Error: SECTION should be one of data, finder or matcher\n"
         sh.usage(True)
     return getattr(config, section_name)
@@ -45,17 +43,17 @@ def delta_range_filter_handler(config):
     print "Current delta range filter:", current_filter
     if current_filter is not None:
         append = sh.askbool("Do you want to add a new delta range filter to the existing one?")
-    
+
     region = None
     if sh.askbool("Restrict delta range filter to a region?"):
         region_filename = uiutils.open_file()
         try:
             region = imgutils.Region(region_filename)
-        except:
+        except Exception:
             print "Warning: opening region file failed"
     if region is not None:
         print "Delta range filter for region:", region.get_name()
-    
+
     str2vector = lambda s: [float(k) for k in re.findall("[-0-9.]+", s)]
     check_vector = lambda s: len(str2vector(s)) == 2
 
@@ -63,7 +61,7 @@ def delta_range_filter_handler(config):
     direction = str2vector(sh.ask("Direction vector (default=[1,0]):", check_fct=check_vector, default="1,0"))
     vx = str2vector(sh.ask("Velocity range in X direction:", check_fct=check_vector))
     vy = str2vector(sh.ask("Velocity range in Y direction:", check_fct=check_vector))
-    
+
     range_filter = wise.DeltaRangeFilter(vxrange=vx, vyrange=vy, unit=unit, pix_limit=4, x_dir=direction)
     if region is not None:
         range_filter = wise.DeltaRegionFilter(wise.RegionFilter(region), range_filter)
@@ -76,7 +74,7 @@ def delta_range_filter_handler(config):
 
 
 def main():
-    sh.init(libwise.get_version(), USAGE)
+    sh.init(wise.get_version(), USAGE)
 
     args = sh.get_args(min_nargs=0)
 
@@ -102,7 +100,7 @@ def main():
             try:
                 full_option, value = arg.split('=', 2)
                 section_name, option = full_option.split('.', 2)
-            except: 
+            except Exception:
                 print "Error: setting option should be of the form SECTION.OPTION=VALUE\n"
                 sh.usage(True)
             section = get_section(section_name, config)
@@ -132,7 +130,7 @@ def main():
         try:
             config.from_file(args[1])
             config.to_file(actions.CONFIG_FILE)
-        except:
+        except Exception:
             print "Error: restoring configuration from %s failed\n" % args[1]
             raise
         print "Configuration restored from %s" % args[1]

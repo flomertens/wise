@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 import os
-import libwise
+import wise
 from libwise import imgutils
 from libwise.app import PolyRegionEditor
 import libwise.scriptshelper as sh
@@ -12,7 +12,7 @@ Usage: wise region IMG [REG_FILE]'''
 
 
 def main():
-    sh.init(libwise.get_version(), USAGE)
+    sh.init(wise.get_version(), USAGE)
     args = sh.get_args(min_nargs=1)
 
     img = imgutils.guess_and_open(args[0])

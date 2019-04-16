@@ -19,7 +19,7 @@ to process.
 
 
 def main():
-    sh.init(libwise.get_version(), USAGE)
+    sh.init(wise.get_version(), USAGE)
 
     args = sh.get_args(min_nargs=1)
 

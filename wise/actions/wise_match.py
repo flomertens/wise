@@ -1,9 +1,7 @@
 #! /usr/bin/env python
 
-import os
 import sys
 
-import libwise
 from libwise import nputils
 import libwise.scriptshelper as sh
 
@@ -20,7 +18,7 @@ to process.
 
 
 def main():
-    sh.init(libwise.get_version(), USAGE)
+    sh.init(wise.get_version(), USAGE)
 
     args = sh.get_args(min_nargs=1)
 
@@ -35,7 +33,7 @@ def main():
 
     check = lambda s: nputils.is_str_number(s) and float(s) in ctx.result.get_scales()
 
-    txt ="View scales (available: %s) (press enter to leave):" % ctx.result.get_scales()
+    txt = "View scales (available: %s) (press enter to leave):" % ctx.result.get_scales()
 
     while True:
         scale = float(sh.ask(txt, check_fct=check, default=0))
@@ -44,7 +42,7 @@ def main():
         wise.tasks.view_displacements(ctx, scale)
 
     save = sh.askbool("Save the result ?")
-        
+
     if save:
         name = str(sh.ask("Name (default=result):", default='result'))
         wise.tasks.save(ctx, name)

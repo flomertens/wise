@@ -1,8 +1,5 @@
 #! /usr/bin/env python
 
-import os
-
-import libwise
 from libwise import imgutils, nputils
 import libwise.scriptshelper as sh
 
@@ -33,7 +30,7 @@ def get_date(date, option):
 
 
 def main():
-    sh.init(libwise.get_version(), USAGE)
+    sh.init(wise.get_version(), USAGE)
 
     start_date = get_date(sh.get_opt_value('start-date', 's'), 'start-date')
     end_date = get_date(sh.get_opt_value('end-date', 'e'), 'end-date')
@@ -42,8 +39,8 @@ def main():
 
     args = sh.get_args(min_nargs=1)
 
-    files = imgutils.fast_sorted_fits(args, start_date=start_date, 
-                            end_date=end_date, filter_dates=filter_dates)
+    files = imgutils.fast_sorted_fits(args, start_date=start_date,
+                                      end_date=end_date, filter_dates=filter_dates)
 
     print "Outputing %s files in '%s'" % (len(files), output_filename)
 

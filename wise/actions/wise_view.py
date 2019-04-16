@@ -1,9 +1,6 @@
 #! /usr/bin/env python
 
-import os
-
-import libwise
-from libwise import imgutils, plotutils
+from libwise import imgutils
 import libwise.scriptshelper as sh
 
 import wise
@@ -22,7 +19,7 @@ Additional options:
 
 
 def main():
-    sh.init(libwise.get_version(), USAGE)
+    sh.init(wise.get_version(), USAGE)
 
     preprocess = not sh.get_opt_bool('no-crop', 'n')
     align = not sh.get_opt_bool('no-align', None)
@@ -32,7 +29,7 @@ def main():
     regions = []
     try:
         regions = [imgutils.Region(file) for file in region_files]
-    except:
+    except Exception:
         print "Error: failed to read a region file"
         sh.usage(True)
 
@@ -42,7 +39,7 @@ def main():
     ctx = wise.AnalysisContext(config)
     actions.select_files(ctx, args)
 
-    wise.tasks.view_all(ctx, preprocess=preprocess, show_regions=regions, 
+    wise.tasks.view_all(ctx, preprocess=preprocess, show_regions=regions,
                         show_mask=show_mask, align=align)
 
 

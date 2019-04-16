@@ -1,15 +1,12 @@
 #! /usr/bin/env python
 
-import os
-
-import libwise
 from libwise import nputils
 import libwise.scriptshelper as sh
 
 import wise
 import actions
 
-USAGE = '''Plot all features location on the reference image. 
+USAGE = '''Plot all features location on the reference image.
 
 Usage: wise view_features NAME SCALES
 
@@ -19,7 +16,7 @@ SCALES: coma separated list of scales to plot.
 
 
 def main():
-    sh.init(libwise.get_version(), USAGE)
+    sh.init(wise.get_version(), USAGE)
 
     args = sh.get_args(min_nargs=2)
     name = args[0]
@@ -33,7 +30,7 @@ def main():
 
     try:
         scales = nputils.str2floatlist(scales)
-    except:
+    except Exception:
         print "Error: invalid scales. Availables scales: %s" % ctx.result.get_scales()
         sh.usage(True)
 

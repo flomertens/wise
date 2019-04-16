@@ -1,8 +1,5 @@
 #! /usr/bin/env python
 
-import os
-
-import libwise
 from libwise import nputils
 import libwise.scriptshelper as sh
 
@@ -22,7 +19,7 @@ Additional options:
 
 
 def main():
-    sh.init(libwise.get_version(), USAGE)
+    sh.init(wise.get_version(), USAGE)
 
     pa = sh.get_opt_bool('pa', 'p')
 
@@ -38,7 +35,7 @@ def main():
 
     try:
         scales = nputils.str2floatlist(scales)
-    except:
+    except Exception:
         print "Error: invalid scales. Available scales: %s" % ctx.result.get_scales()
         sh.usage(True)
 

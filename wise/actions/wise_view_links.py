@@ -1,8 +1,5 @@
 #! /usr/bin/env python
 
-import os
-
-import libwise
 from libwise import nputils
 import libwise.scriptshelper as sh
 
@@ -20,13 +17,14 @@ Additional options:
 --min-link-size=INT, -m INT: Filter out links with size < min_link_size (default=2)
 '''
 
+
 def main():
-    sh.init(libwise.get_version(), USAGE)
+    sh.init(wise.get_version(), USAGE)
 
     min_link_size = sh.get_opt_value('min-link-size', 'm', default=2)
     sh.check(min_link_size, nputils.is_str_number, "min-link-size must be an integer")
     min_link_size = float(min_link_size)
-    
+
     args = sh.get_args(min_nargs=2)
     name = args[0]
     ctx = actions.load(name)
@@ -39,7 +37,7 @@ def main():
 
     try:
         scales = nputils.str2floatlist(scales)
-    except:
+    except Exception:
         print "Error: invalid scales. Available scales: %s" % ctx.result.get_scales()
         sh.usage(True)
 

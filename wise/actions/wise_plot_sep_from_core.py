@@ -1,8 +1,5 @@
 #! /usr/bin/env python
 
-import os
-
-import libwise
 from libwise import nputils
 import libwise.scriptshelper as sh
 
@@ -19,13 +16,13 @@ SCALES: coma separated list of scales to plot.
 Additional options:
 --pa, -p: Additionally plot the features positional angle vs epoch
 --fit, -f: fit each links with a linear fct
---num, -n: Annotate each links 
+--num, -n: Annotate each links
 --min-link-size=INT, -m INT: Filter out links with size < min_link_size (default=2)
 '''
 
 
 def main():
-    sh.init(libwise.get_version(), USAGE)
+    sh.init(wise.get_version(), USAGE)
 
     pa = sh.get_opt_bool('pa', 'p')
     fit = sh.get_opt_bool('fit', 'f')
@@ -33,7 +30,7 @@ def main():
     min_link_size = sh.get_opt_value('min-link-size', 'm', default=2)
     sh.check(min_link_size, nputils.is_str_number, "min-link-size must be an integer")
     min_link_size = float(min_link_size)
-    
+
     args = sh.get_args(min_nargs=2)
     name = args[0]
     ctx = actions.load(name)
@@ -46,7 +43,7 @@ def main():
 
     try:
         scales = nputils.str2floatlist(scales)
-    except:
+    except Exception:
         print "Error: invalid scales. Available scales: %s" % ctx.result.get_scales()
         sh.usage(True)
 
@@ -54,7 +51,7 @@ def main():
     if fit:
         fit_fct = nputils.LinearFct
     fit_result = wise.tasks.plot_separation_from_core(ctx, scales=scales, num=num,
-                        min_link_size=min_link_size, fit_fct=fit_fct, pa=pa)
+                                                      min_link_size=min_link_size, fit_fct=fit_fct, pa=pa)
 
     if fit:
         for link, fit_fct in fit_result.items():

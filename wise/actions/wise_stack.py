@@ -1,8 +1,5 @@
 #! /usr/bin/env python
 
-import os
-
-import libwise
 import libwise.scriptshelper as sh
 
 import wise
@@ -20,7 +17,7 @@ Additional options:
 
 
 def main():
-    sh.init(libwise.get_version(), USAGE)
+    sh.init(wise.get_version(), USAGE)
 
     nsigma = float(sh.get_opt_value('nsigma', 'n', default=0))
     nsigma_connected = sh.get_opt_bool('nsigma_connected', 'c')
@@ -36,6 +33,7 @@ def main():
     stack_img.save(output_filename)
 
     print "Stacked images save to %s" % output_filename
+
 
 if __name__ == '__main__':
     main()
