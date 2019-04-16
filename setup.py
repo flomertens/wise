@@ -21,7 +21,7 @@ setup(
     packages=find_packages(),
     scripts=glob.glob('scripts/*'),
     install_requires=[
-        'liwise',
+        'libwise',
         'numpy',
         'scipy',
         'scikit-image',
