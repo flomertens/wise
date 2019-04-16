@@ -10,11 +10,11 @@ Installation
 
 You should be able to install WISE using pip or conda:
 
-    pip install wise
+    pip install wisetool
 
 or
 
-    conda install -c flomertens wise
+    conda install -c flomertens -c conda-forge wise
 
 Alternatively, to install WISE globally:
 

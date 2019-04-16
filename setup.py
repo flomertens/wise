@@ -9,13 +9,14 @@ from setuptools import setup, find_packages
 
 
 setup(
-    name='wise',
+    name='wisetool',
     version='0.4.7',
     description='Wavelet Image Segmentation and Evaluation',
     url='https://github.com/flomertens/wise',
     author='Florent Mertens',
     author_email='flomertens@gmail.com',
     license='GPL2',
+    zip_safe=False,
 
     include_package_data=True,
     packages=find_packages(),
