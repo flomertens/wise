@@ -8,7 +8,7 @@ Please check https://flomertens.github.io/wise/ for more information, documentat
 Installation
 ------------
 
-You should be able to install WISE using pip or conda:
+You should be able to install WISE using pip or conda (note that wise/libwise is python 2 only):
 
     pip install wisetool
 
