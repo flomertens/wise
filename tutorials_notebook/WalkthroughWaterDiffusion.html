@@ -1,34 +1,24 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Walkthrough particle diffusing in water &mdash; WISE 0.1 documentation</title>
-    
+    <title>Walkthrough particle diffusing in water &#8212; WISE 0.1 documentation</title>
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="WISE 0.1 documentation" href="../index.html" />
-    <link rel="up" title="Tutorials using the IPython Notebook" href="index.html" />
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Documentation" href="../docs/index.html" />
     <link rel="prev" title="Walkthrough 3C120" href="Walkthrough3C120.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -44,8 +34,8 @@
         <li class="right" >
           <a href="Walkthrough3C120.html" title="Walkthrough 3C120"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">WISE 0.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials using the IPython Notebook</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WISE 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials using the IPython Notebook</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -64,7 +54,7 @@ and track the particles, and compare our result to the one obtained by
 the trackpy team.</p>
 <div class="section" id="setup">
 <h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
@@ -77,7 +67,7 @@ the trackpy team.</p>
 <span class="o">%</span><span class="n">matplotlib</span> <span class="n">gtk</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ctx</span> <span class="o">=</span> <span class="n">wise</span><span class="o">.</span><span class="n">AnalysisContext</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ctx</span> <span class="o">=</span> <span class="n">wise</span><span class="o">.</span><span class="n">AnalysisContext</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -86,7 +76,7 @@ the trackpy team.</p>
 <p>The full data set is composed of 300 images. We will first analyse only
 part of it. We use a k sigma estimator to estimate the noise level in
 the images:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/data/bulk_water&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/data/bulk_water&quot;</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">get_bg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">nputils</span><span class="o">.</span><span class="n">k_sigma_noise_estimation</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
@@ -103,10 +93,10 @@ the images:</p>
 <span class="n">ctx</span><span class="o">.</span><span class="n">select_files</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s1">&#39;data/*0[0-9][0-9].png&#39;</span><span class="p">),</span> <span class="n">step</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Number of files selected: 20
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Number</span> <span class="n">of</span> <span class="n">files</span> <span class="n">selected</span><span class="p">:</span> <span class="mi">20</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">view_all</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plotutils</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;winter_r&#39;</span><span class="p">))</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">view_all</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plotutils</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;winter_r&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/view_all1.png"><img alt="../_images/view_all1.png" src="../_images/view_all1.png" style="width: 500px;" /></a>
@@ -118,7 +108,7 @@ we set an high value for alpha_detection. Also the particles are
 typically all of the same sizes, and the displacement from image to
 image is small, so we can perform the analysis only on one scale of the
 wavelet decomposition:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">finder</span><span class="o">.</span><span class="n">min_scale</span> <span class="o">=</span> <span class="mi">2</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">finder</span><span class="o">.</span><span class="n">min_scale</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">finder</span><span class="o">.</span><span class="n">max_scale</span> <span class="o">=</span> <span class="mi">3</span>
 <span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">finder</span><span class="o">.</span><span class="n">exclude_noise</span> <span class="o">=</span> <span class="bp">False</span>
 <span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">finder</span><span class="o">.</span><span class="n">alpha_detection</span> <span class="o">=</span> <span class="mi">15</span>
@@ -126,10 +116,10 @@ wavelet decomposition:</p>
 <span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">finder</span><span class="o">.</span><span class="n">ms_dec_klass</span> <span class="o">=</span> <span class="n">wise</span><span class="o">.</span><span class="n">WaveletMultiscaleDecomposition</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">detection_all</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">detection_all</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">view_wds</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">view_wds</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/view_wds1.png"><img alt="../_images/view_wds1.png" src="../_images/view_wds1.png" style="width: 500px;" /></a>
@@ -139,21 +129,21 @@ wavelet decomposition:</p>
 <p>A reasonable maximum displacement from image to image is 5 pixels. For
 this tests, we do not needs the extra features of ScaleMatcherMSCSC2,
 and we can use the more simple and faster ScaleMatcherMSCI matcher:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">matcher</span><span class="o">.</span><span class="n">maximum_delta</span> <span class="o">=</span> <span class="mi">5</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">matcher</span><span class="o">.</span><span class="n">maximum_delta</span> <span class="o">=</span> <span class="mi">5</span>
 <span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">matcher</span><span class="o">.</span><span class="n">mscsc2_smooth</span> <span class="o">=</span> <span class="bp">False</span>
 <span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">matcher</span><span class="o">.</span><span class="n">ignore_features_at_border</span> <span class="o">=</span> <span class="bp">True</span>
 <span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">matcher</span><span class="o">.</span><span class="n">method_klass</span> <span class="o">=</span> <span class="n">wise</span><span class="o">.</span><span class="n">ScaleMatcherMSCI</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">view_displacements</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">view_displacements</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/view_displacements_0.png"><img alt="../_images/view_displacements_0.png" src="../_images/view_displacements_0.png" style="width: 500px;" /></a>
 <a class="reference internal image-reference" href="../_images/view_displacements_1.png"><img alt="../_images/view_displacements_1.png" src="../_images/view_displacements_1.png" style="width: 500px;" /></a>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">view_links</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">map_cmap</span><span class="o">=</span><span class="s1">&#39;winter_r&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">view_links</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">map_cmap</span><span class="o">=</span><span class="s1">&#39;winter_r&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/view_links1.png"><img alt="../_images/view_links1.png" src="../_images/view_links1.png" style="width: 500px;" /></a>
@@ -163,7 +153,7 @@ and we can use the more simple and faster ScaleMatcherMSCI matcher:</p>
 <p>To assess the performance of WISE, we will now compare our results to
 the one obtain by trackpy. We will first re run the matching with a more
 complete data set:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">pre_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">pre_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
     <span class="n">img</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="mi">255</span> <span class="o">-</span> <span class="n">img</span><span class="o">.</span><span class="n">data</span>
 
 <span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">pre_process_fct</span> <span class="o">=</span> <span class="n">pre_process</span>
@@ -171,15 +161,15 @@ complete data set:</p>
 <span class="n">ctx</span><span class="o">.</span><span class="n">select_files</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s1">&#39;data/*.png&#39;</span><span class="p">),</span> <span class="n">step</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Number of files selected: 60
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Number</span> <span class="n">of</span> <span class="n">files</span> <span class="n">selected</span><span class="p">:</span> <span class="mi">60</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The different plotting tasks of WISE all have an option to save the plot
 in a file. We will use it to view the trajectories of all the particles:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">presetutils</span><span class="o">.</span><span class="n">set_rc_preset</span><span class="p">(</span><span class="s1">&#39;presentation&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">)})</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">presetutils</span><span class="o">.</span><span class="n">set_rc_preset</span><span class="p">(</span><span class="s1">&#39;presentation&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">)})</span>
 <span class="n">tasks</span><span class="o">.</span><span class="n">view_links</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">save_filename</span><span class="o">=</span><span class="s1">&#39;view_links_full.png&#39;</span><span class="p">,</span> <span class="n">min_link_size</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">map_cmap</span><span class="o">=</span><span class="s1">&#39;winter_r&#39;</span><span class="p">)</span>
 <span class="n">presetutils</span><span class="o">.</span><span class="n">set_rc_preset</span><span class="p">(</span><span class="s1">&#39;display&#39;</span><span class="p">)</span>
 </pre></div>
@@ -189,7 +179,7 @@ in a file. We will use it to view the trajectories of all the particles:</p>
 trackpy to obtain the mean square displacement of the particles. The
 following will convert WISE result data structure into one compatible
 with trackpy:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">trackpy</span> <span class="kn">as</span> <span class="nn">tp</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">trackpy</span> <span class="kn">as</span> <span class="nn">tp</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">uncertainties</span> <span class="kn">import</span> <span class="n">ufloat</span>
 
@@ -208,29 +198,29 @@ with trackpy:</p>
 </div>
 <p>To make sure that the conversion was correctly done, we first plot the
 particle trajectories:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tp</span><span class="o">.</span><span class="n">plot_traj</span><span class="p">(</span><span class="n">data_tp</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span><span class="o">.</span><span class="n">plot_traj</span><span class="p">(</span><span class="n">data_tp</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../_images/WalkthroughWaterDiffusion_34_0.png" src="../_images/WalkthroughWaterDiffusion_34_0.png" />
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f96185c9290&gt;
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">_subplots</span><span class="o">.</span><span class="n">AxesSubplot</span> <span class="n">at</span> <span class="mh">0x7f96185c9290</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>This will remove the overall drift:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">compute_drift</span><span class="p">(</span><span class="n">data_tp</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">compute_drift</span><span class="p">(</span><span class="n">data_tp</span><span class="p">)</span>
 <span class="n">tm</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">subtract_drift</span><span class="p">(</span><span class="n">data_tp</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This will compute the mean squared displacement of each particle and
 plot MSD vs. lag time:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">im</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">imsd</span><span class="p">(</span><span class="n">tm</span><span class="p">,</span> <span class="mi">100</span><span class="o">/</span><span class="mf">285.</span><span class="p">,</span> <span class="mi">24</span><span class="o">/</span><span class="mf">5.</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">im</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">imsd</span><span class="p">(</span><span class="n">tm</span><span class="p">,</span> <span class="mi">100</span><span class="o">/</span><span class="mf">285.</span><span class="p">,</span> <span class="mi">24</span><span class="o">/</span><span class="mf">5.</span><span class="p">)</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">loglog</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;k-&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">r&#39;$\langle \Delta r^2 \rangle$ [$\mu$m$^2$]&#39;</span><span class="p">);</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\langle \Delta r^2 \rangle$ [$\mu$m$^2$]&#39;</span><span class="p">);</span>
 </pre></div>
 </div>
 <img alt="../_images/WalkthroughWaterDiffusion_38_0.png" src="../_images/WalkthroughWaterDiffusion_38_0.png" />
 <p>And now we can compute the ensemble mean squared displacement and
 compare it with the theoretical one:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#em = tp.emsd(tm, 100/285., 24/5.)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#em = tp.emsd(tm, 100/285., 24/5.)</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">em</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">loglog</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;ro&#39;</span><span class="p">)</span>
 
 <span class="n">fit_fct</span> <span class="o">=</span> <span class="n">nputils</span><span class="o">.</span><span class="n">PowerFct1</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">em</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">em</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
@@ -240,8 +230,8 @@ compare it with the theoretical one:</p>
 <span class="k">print</span> <span class="s2">&quot;A = &quot;</span><span class="p">,</span> <span class="n">ufloat</span><span class="p">(</span><span class="n">fit_fct</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">fit_fct</span><span class="o">.</span><span class="n">eb</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>n =  1.0636+/-0.0024
-A =  1.734+/-0.007
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span>  <span class="mf">1.0636</span><span class="o">+/-</span><span class="mf">0.0024</span>
+<span class="n">A</span> <span class="o">=</span>  <span class="mf">1.734</span><span class="o">+/-</span><span class="mf">0.007</span>
 </pre></div>
 </div>
 <img alt="../_images/WalkthroughWaterDiffusion_40_1.png" src="../_images/WalkthroughWaterDiffusion_40_1.png" />
@@ -255,7 +245,7 @@ A =  1.734+/-0.007
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Walkthrough particle diffusing in water</a><ul>
 <li><a class="reference internal" href="#setup">Setup</a></li>
@@ -276,21 +266,20 @@ A =  1.734+/-0.007
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/tutorials_notebook/WalkthroughWaterDiffusion.txt"
+      <li><a href="../_sources/tutorials_notebook/WalkthroughWaterDiffusion.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -312,13 +301,13 @@ A =  1.734+/-0.007
         <li class="right" >
           <a href="Walkthrough3C120.html" title="Walkthrough 3C120"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">WISE 0.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials using the IPython Notebook</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WISE 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials using the IPython Notebook</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Florent Mertens.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 2015, Florent Mertens.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

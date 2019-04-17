@@ -52,7 +52,13 @@ Once done, you can install WISE in just one command line:
 
 ::
 
-    conda install --channel https://conda.anaconda.org/flomertens wise
+    conda install -c flomertens wise cython dask
+
+It is also possible to install WISE using pip:
+
+::
+
+    pip install wisetool
 
 
 Alternative manual installation:

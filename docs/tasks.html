@@ -1,34 +1,24 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Wise tasks module &mdash; WISE 0.1 documentation</title>
-    
+    <title>Wise tasks module &#8212; WISE 0.1 documentation</title>
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="WISE 0.1 documentation" href="../index.html" />
-    <link rel="up" title="Documentation" href="index.html" />
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Wise utilities module" href="wiseutils.html" />
     <link rel="prev" title="Wise project module" href="project.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -44,8 +34,8 @@
         <li class="right" >
           <a href="project.html" title="Wise project module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">WISE 0.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WISE 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -61,15 +51,15 @@
 <code class="descclassname">wise.tasks.</code><code class="descname">build_final_dfc</code><span class="sig-paren">(</span><em>ctx</em>, <em>merge_file</em>, <em>final_sep</em><span class="sig-paren">)</span><a class="headerlink" href="#wise.tasks.build_final_dfc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build a final separation file from a merge file.</p>
 <p>Merge file shall be located in ctx.get_data_dir().
-One final component per line, described by a list of link id separated by a &#8216;,&#8217;.</p>
+One final component per line, described by a list of link id separated by a ‘,’.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>merge_file</strong> (<em>str</em>) &#8211; Merge file name.</li>
-<li><strong>final_sep</strong> (<em>str</em>) &#8211; Name of the final separation file.</li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>merge_file</strong> (<em>str</em>) – Merge file name.</li>
+<li><strong>final_sep</strong> (<em>str</em>) – Name of the final separation file.</li>
 </ul>
 </td>
 </tr>
@@ -85,7 +75,7 @@ One final component per line, described by a list of link id separated by a &#82
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </td>
 </tr>
 </tbody>
 </table>
@@ -100,9 +90,9 @@ One final component per line, described by a list of link id separated by a &#82
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>nsigma</strong> (<em>int, optional</em>) &#8211; Clip data below nsigma time the background level.</li>
-<li><strong>nsigma_connected</strong> (<em>bool, optional</em>) &#8211; Keep only the brightest isolated structure.</li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>nsigma</strong> (<em>int</em><em>, </em><em>optional</em>) – Clip data below nsigma time the background level.</li>
+<li><strong>nsigma_connected</strong> (<em>bool</em><em>, </em><em>optional</em>) – Keep only the brightest isolated structure.</li>
 </ul>
 </td>
 </tr>
@@ -119,9 +109,9 @@ One final component per line, described by a list of link id separated by a &#82
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>nsigma</strong> (<em>int, optional</em>) &#8211; Clip data below nsigma time the background level.</li>
-<li><strong>nsigma_connected</strong> (<em>bool, optional</em>) &#8211; Keep only the brightest isolated structure.</li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>nsigma</strong> (<em>int</em><em>, </em><em>optional</em>) – Clip data below nsigma time the background level.</li>
+<li><strong>nsigma_connected</strong> (<em>bool</em><em>, </em><em>optional</em>) – Keep only the brightest isolated structure.</li>
 </ul>
 </td>
 </tr>
@@ -138,10 +128,10 @@ One final component per line, described by a list of link id separated by a &#82
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>delta_time_unit</strong> (<code class="xref py py-class docutils literal"><span class="pre">astropy.units.Unit</span></code>, optional) &#8211; </li>
-<li><strong>angular_velocity_unit</strong> (<code class="xref py py-class docutils literal"><span class="pre">astropy.units.Unit</span></code>, optional) &#8211; </li>
-<li><strong>proper_velocity_unit</strong> (<code class="xref py py-class docutils literal"><span class="pre">astropy.units.Unit</span></code>, optional) &#8211; </li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>delta_time_unit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">astropy.units.Unit</span></code>, optional) – </li>
+<li><strong>angular_velocity_unit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">astropy.units.Unit</span></code>, optional) – </li>
+<li><strong>proper_velocity_unit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">astropy.units.Unit</span></code>, optional) – </li>
 </ul>
 </td>
 </tr>
@@ -158,8 +148,8 @@ One final component per line, described by a list of link id separated by a &#82
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>filter</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.features.FeatureFilter</span></code>, optional) &#8211; </li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>filter</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">wise.features.FeatureFilter</span></code>, optional) – </li>
 </ul>
 </td>
 </tr>
@@ -176,8 +166,8 @@ One final component per line, described by a list of link id separated by a &#82
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>filter</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.features.FeatureFilter</span></code>, optional) &#8211; </li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>filter</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">wise.features.FeatureFilter</span></code>, optional) – </li>
 </ul>
 </td>
 </tr>
@@ -194,10 +184,10 @@ One final component per line, described by a list of link id separated by a &#82
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>name</strong> (<em>str</em>) &#8211; Prefix name for the save files</li>
-<li><strong>coord_mode</strong> (<em>str, optional</em>) &#8211; </li>
-<li><strong>measured_delta</strong> (<em>bool, optional</em>) &#8211; </li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>name</strong> (<em>str</em>) – Prefix name for the save files</li>
+<li><strong>coord_mode</strong> (<em>str</em><em>, </em><em>optional</em>) – </li>
+<li><strong>measured_delta</strong> (<em>bool</em><em>, </em><em>optional</em>) – </li>
 </ul>
 </td>
 </tr>
@@ -214,11 +204,11 @@ One final component per line, described by a list of link id separated by a &#82
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>name</strong> (<em>str</em>) &#8211; Prefix name of the saved files</li>
-<li><strong>projection</strong> (<code class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></code>, optional) &#8211; If not provided, default Projection will be used</li>
-<li><strong>merge_with_previous</strong> (<em>bool, optional</em>) &#8211; If True, this result will be added to current result</li>
-<li><strong>min_link_size</strong> (<em>int, optional</em>) &#8211; Filter out links with size &lt; min_link_size</li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>name</strong> (<em>str</em>) – Prefix name of the saved files</li>
+<li><strong>projection</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">libwise.imgutils.Projection</span></code>, optional) – If not provided, default Projection will be used</li>
+<li><strong>merge_with_previous</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, this result will be added to current result</li>
+<li><strong>min_link_size</strong> (<em>int</em><em>, </em><em>optional</em>) – Filter out links with size &lt; min_link_size</li>
 </ul>
 </td>
 </tr>
@@ -235,14 +225,13 @@ One final component per line, described by a list of link id separated by a &#82
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>preprocess</strong> (<em>bool, optional</em>) &#8211; If True, run the pre_process fct on each images</li>
-<li><strong>show_mask</strong> (<em>bool, optional</em>) &#8211; If True, show the saved mask in the map</li>
-<li><strong>show_regions</strong> (list of <code class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Region</span></code>, optional) &#8211; Plot the regions</li>
-<li><strong>save_filename</strong> (<em>str, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>preprocess</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, run the pre_process fct on each images</li>
+<li><strong>show_mask</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, show the saved mask in the map</li>
+<li><strong>show_regions</strong> (list of <code class="xref py py-class docutils literal notranslate"><span class="pre">libwise.imgutils.Region</span></code>, optional) – Plot the regions</li>
+<li><strong>save_filename</strong> (<em>str</em><em>, </em><em>optional</em>) – If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Arguments to pass to <code class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></code></p>
-</li>
+<li><strong>**kwargs</strong> – Arguments to pass to <code class="xref py py-func docutils literal notranslate"><span class="pre">libwise.plotutils.imshow_image()</span></code></li>
 </ul>
 </td>
 </tr>
@@ -259,17 +248,16 @@ with this filename.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>preprocess</strong> (<em>bool, optional</em>) &#8211; If True, run the pre_process fct on each images</li>
-<li><strong>nsigma</strong> (<em>int, optional</em>) &#8211; Clip bg below nsigma level</li>
-<li><strong>nsigma_connected</strong> (<em>bool, optional</em>) &#8211; If True, keep only the brightest connected structure</li>
-<li><strong>show_mask</strong> (<em>bool, optional</em>) &#8211; If True, show the saved mask in the map</li>
-<li><strong>show_regions</strong> (list of <code class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Region</span></code>, optional) &#8211; Plot the regions</li>
-<li><strong>intensity_colorbar</strong> (<em>bool, optional</em>) &#8211; Add an intensity colorbar</li>
-<li><strong>save_filename</strong> (<em>str, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>preprocess</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, run the pre_process fct on each images</li>
+<li><strong>nsigma</strong> (<em>int</em><em>, </em><em>optional</em>) – Clip bg below nsigma level</li>
+<li><strong>nsigma_connected</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, keep only the brightest connected structure</li>
+<li><strong>show_mask</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, show the saved mask in the map</li>
+<li><strong>show_regions</strong> (list of <code class="xref py py-class docutils literal notranslate"><span class="pre">libwise.imgutils.Region</span></code>, optional) – Plot the regions</li>
+<li><strong>intensity_colorbar</strong> (<em>bool</em><em>, </em><em>optional</em>) – Add an intensity colorbar</li>
+<li><strong>save_filename</strong> (<em>str</em><em>, </em><em>optional</em>) – If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Arguments to pass to <code class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></code></p>
-</li>
+<li><strong>**kwargs</strong> – Arguments to pass to <code class="xref py py-func docutils literal notranslate"><span class="pre">libwise.plotutils.imshow_image()</span></code></li>
 </ul>
 </td>
 </tr>
@@ -286,13 +274,12 @@ with this filename.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>title</strong> (<em>bool, optional</em>) &#8211; If True, add a title to the map</li>
-<li><strong>num</strong> (<em>bool, optional</em>) &#8211; If True, annotate each segments</li>
-<li><strong>scales</strong> (<em>list or int, optional</em>) &#8211; Plot only for scale or list of scales (in pixel)</li>
-<li><strong>save_filename</strong> (<em>TYPE, optional</em>) &#8211; Description</li>
-<li><strong>**kwargs</strong> &#8211; <p>Description</p>
-</li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>title</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, add a title to the map</li>
+<li><strong>num</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, annotate each segments</li>
+<li><strong>scales</strong> (<em>list</em><em> or </em><em>int</em><em>, </em><em>optional</em>) – Plot only for scale or list of scales (in pixel)</li>
+<li><strong>save_filename</strong> (<em>TYPE</em><em>, </em><em>optional</em>) – Description</li>
+<li><strong>**kwargs</strong> – Description</li>
 </ul>
 </td>
 </tr>
@@ -309,15 +296,14 @@ with this filename.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>scales</strong> (<em>int or list</em>) &#8211; Filter the results to scale or list of scales (in pixel)</li>
-<li><strong>region_list</strong> (list of <code class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Region</span></code>, optional) &#8211; Plot the regions, and set the features color according to the region</li>
-<li><strong>legend</strong> (<em>bool, optional</em>) &#8211; Add a legend</li>
-<li><strong>feature_filter</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.features.FeatureFilter</span></code>, optional) &#8211; Filter the results</li>
-<li><strong>save_filename</strong> (<em>TYPE, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>scales</strong> (<em>int</em><em> or </em><em>list</em>) – Filter the results to scale or list of scales (in pixel)</li>
+<li><strong>region_list</strong> (list of <code class="xref py py-class docutils literal notranslate"><span class="pre">libwise.imgutils.Region</span></code>, optional) – Plot the regions, and set the features color according to the region</li>
+<li><strong>legend</strong> (<em>bool</em><em>, </em><em>optional</em>) – Add a legend</li>
+<li><strong>feature_filter</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">wise.features.FeatureFilter</span></code>, optional) – Filter the results</li>
+<li><strong>save_filename</strong> (<em>TYPE</em><em>, </em><em>optional</em>) – If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
-<li><strong>**img_kargs</strong> &#8211; <p>Additional arguments to pass to <code class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></code></p>
-</li>
+<li><strong>**img_kargs</strong> – Additional arguments to pass to <code class="xref py py-func docutils literal notranslate"><span class="pre">libwise.plotutils.imshow_image()</span></code></li>
 </ul>
 </td>
 </tr>
@@ -334,19 +320,18 @@ with this filename.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>scales</strong> (<em>int or list, optional</em>) &#8211; Filter the results to scale or list of scales (in pixel)</li>
-<li><strong>feature_filter</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.features.FeatureFilter</span></code>, optional) &#8211; Filter the results</li>
-<li><strong>min_link_size</strong> (<em>int, optional</em>) &#8211; Filter out links with size &lt; min_link_size</li>
-<li><strong>title</strong> (<em>bool, optional</em>) &#8211; </li>
-<li><strong>pa</strong> (<em>bool, optional</em>) &#8211; Additionaly plot the PA vs epoch (only pa or snr)</li>
-<li><strong>snr</strong> (<em>bool, optional</em>) &#8211; Additionaly plot the snr vs epoch (only pa or snr)</li>
-<li><strong>num</strong> (<em>bool, optional</em>) &#8211; Annotate each links</li>
-<li><strong>fit_fct</strong> (<code class="xref py py-class docutils literal"><span class="pre">libwise.nputils.AbstractFct</span></code>, optional) &#8211; Fit each links with provided fct</li>
-<li><strong>save_filename</strong> (<em>str, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>scales</strong> (<em>int</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – Filter the results to scale or list of scales (in pixel)</li>
+<li><strong>feature_filter</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">wise.features.FeatureFilter</span></code>, optional) – Filter the results</li>
+<li><strong>min_link_size</strong> (<em>int</em><em>, </em><em>optional</em>) – Filter out links with size &lt; min_link_size</li>
+<li><strong>title</strong> (<em>bool</em><em>, </em><em>optional</em>) – </li>
+<li><strong>pa</strong> (<em>bool</em><em>, </em><em>optional</em>) – Additionaly plot the PA vs epoch (only pa or snr)</li>
+<li><strong>snr</strong> (<em>bool</em><em>, </em><em>optional</em>) – Additionaly plot the snr vs epoch (only pa or snr)</li>
+<li><strong>num</strong> (<em>bool</em><em>, </em><em>optional</em>) – Annotate each links</li>
+<li><strong>fit_fct</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">libwise.nputils.AbstractFct</span></code>, optional) – Fit each links with provided fct</li>
+<li><strong>save_filename</strong> (<em>str</em><em>, </em><em>optional</em>) – If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to pass to <a class="reference internal" href="wiseutils.html#wise.wiseutils.plot_links_dfc" title="wise.wiseutils.plot_links_dfc"><code class="xref py py-func docutils literal"><span class="pre">wise.wiseutils.plot_links_dfc()</span></code></a></p>
-</li>
+<li><strong>**kwargs</strong> – Additional arguments to pass to <a class="reference internal" href="wiseutils.html#wise.wiseutils.plot_links_dfc" title="wise.wiseutils.plot_links_dfc"><code class="xref py py-func docutils literal notranslate"><span class="pre">wise.wiseutils.plot_links_dfc()</span></code></a></li>
 </ul>
 </td>
 </tr>
@@ -363,11 +348,11 @@ with this filename.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>scales</strong> (<em>int or list, optional</em>) &#8211; Filter the results to scale or list of scales (in pixel)</li>
-<li><strong>pa</strong> (<em>bool, optional</em>) &#8211; Additionaly plot the PA vs epoch</li>
-<li><strong>feature_filter</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.features.FeatureFilter</span></code>, optional) &#8211; Filter the results</li>
-<li><strong>save_filename</strong> (<em>str, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>scales</strong> (<em>int</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – Filter the results to scale or list of scales (in pixel)</li>
+<li><strong>pa</strong> (<em>bool</em><em>, </em><em>optional</em>) – Additionaly plot the PA vs epoch</li>
+<li><strong>feature_filter</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">wise.features.FeatureFilter</span></code>, optional) – Filter the results</li>
+<li><strong>save_filename</strong> (<em>str</em><em>, </em><em>optional</em>) – If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
 </ul>
 </td>
@@ -385,12 +370,12 @@ with this filename.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; Description</li>
-<li><strong>scales</strong> (<em>int</em>) &#8211; Scale in pixel</li>
-<li><strong>feature_filter</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.features.FeatureFilter</span></code>, optional) &#8211; Filter the results</li>
-<li><strong>save_filename</strong> (<em>str, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – Description</li>
+<li><strong>scales</strong> (<em>int</em>) – Scale in pixel</li>
+<li><strong>feature_filter</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">wise.features.FeatureFilter</span></code>, optional) – Filter the results</li>
+<li><strong>save_filename</strong> (<em>str</em><em>, </em><em>optional</em>) – If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
-<li><strong>title</strong> (<em>bool, optional</em>) &#8211; </li>
+<li><strong>title</strong> (<em>bool</em><em>, </em><em>optional</em>) – </li>
 </ul>
 </td>
 </tr>
@@ -407,20 +392,19 @@ with this filename.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>scales</strong> (<em>int or list, optional</em>) &#8211; Filter the results to scale or list of scales (in pixel)</li>
-<li><strong>feature_filter</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.features.FeatureFilter</span></code>, optional) &#8211; Filter the results</li>
-<li><strong>min_link_size</strong> (<em>int, optional</em>) &#8211; Filter out links with size &lt; min_link_size</li>
-<li><strong>map_cmap</strong> (<em>str, optional</em>) &#8211; Colormap of the background map</li>
-<li><strong>vector_width</strong> (<em>int, optional</em>) &#8211; Width of the displacement vectors</li>
-<li><strong>title</strong> (<em>bool, optional</em>) &#8211; </li>
-<li><strong>color_style</strong> (<em>str, optional</em>) &#8211; &#8216;link&#8217;: one color per components
-&#8216;date&#8217;: colors correspond to the epoch
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>scales</strong> (<em>int</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – Filter the results to scale or list of scales (in pixel)</li>
+<li><strong>feature_filter</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">wise.features.FeatureFilter</span></code>, optional) – Filter the results</li>
+<li><strong>min_link_size</strong> (<em>int</em><em>, </em><em>optional</em>) – Filter out links with size &lt; min_link_size</li>
+<li><strong>map_cmap</strong> (<em>str</em><em>, </em><em>optional</em>) – Colormap of the background map</li>
+<li><strong>vector_width</strong> (<em>int</em><em>, </em><em>optional</em>) – Width of the displacement vectors</li>
+<li><strong>title</strong> (<em>bool</em><em>, </em><em>optional</em>) – </li>
+<li><strong>color_style</strong> (<em>str</em><em>, </em><em>optional</em>) – ‘link’: one color per components
+‘date’: colors correspond to the epoch
 color_str: use color_str as color for all components</li>
-<li><strong>save_filename</strong> (<em>str, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
+<li><strong>save_filename</strong> (<em>str</em><em>, </em><em>optional</em>) – If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to pass to <code class="xref py py-func docutils literal"><span class="pre">libwise.plot_links_map()</span></code></p>
-</li>
+<li><strong>**kwargs</strong> – Additional arguments to pass to <code class="xref py py-func docutils literal notranslate"><span class="pre">libwise.plot_links_map()</span></code></li>
 </ul>
 </td>
 </tr>
@@ -437,9 +421,9 @@ with this filename.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>img</strong> (<code class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Image</span></code>, optional) &#8211; Image to use as background</li>
-<li><strong>features</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.features.FeaturesGroup</span></code>, optional) &#8211; Features to plot on top of the image</li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>img</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">libwise.imgutils.Image</span></code>, optional) – Image to use as background</li>
+<li><strong>features</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">wise.features.FeaturesGroup</span></code>, optional) – Features to plot on top of the image</li>
 </ul>
 </td>
 </tr>
@@ -455,7 +439,7 @@ with this filename.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </td>
 </tr>
 </tbody>
 </table>
@@ -482,11 +466,11 @@ with this filename.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>config</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.scc.SCCConfiguration</span></code>) &#8211; </li>
-<li><strong>debug</strong> (<em>int, optional</em>) &#8211; </li>
-<li><strong>nwise</strong> (<em>int, optional</em>) &#8211; </li>
-<li><strong>stack</strong> (<code class="xref py py-class docutils literal"><span class="pre">libwise.plotutils.FigureStack</span></code>, optional) &#8211; </li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>config</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">wise.scc.SCCConfiguration</span></code>) – </li>
+<li><strong>debug</strong> (<em>int</em><em>, </em><em>optional</em>) – </li>
+<li><strong>nwise</strong> (<em>int</em><em>, </em><em>optional</em>) – </li>
+<li><strong>stack</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">libwise.plotutils.FigureStack</span></code>, optional) – </li>
 </ul>
 </td>
 </tr>
@@ -509,12 +493,12 @@ with this filename.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>config</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.scc.SCCConfiguration</span></code>) &#8211; </li>
-<li><strong>output_dir</strong> (<em>str</em>) &#8211; </li>
-<li><strong>n</strong> (<em>int</em>) &#8211; </li>
-<li><strong>append</strong> (<em>bool, optional</em>) &#8211; Append results</li>
-<li><strong>seperate_scales</strong> (<em>bool, optional</em>) &#8211; </li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>config</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">wise.scc.SCCConfiguration</span></code>) – </li>
+<li><strong>output_dir</strong> (<em>str</em>) – </li>
+<li><strong>n</strong> (<em>int</em>) – </li>
+<li><strong>append</strong> (<em>bool</em><em>, </em><em>optional</em>) – Append results</li>
+<li><strong>seperate_scales</strong> (<em>bool</em><em>, </em><em>optional</em>) – </li>
 </ul>
 </td>
 </tr>
@@ -527,15 +511,15 @@ with this filename.</li>
 <code class="descclassname">wise.tasks.</code><code class="descname">build_final_dfc</code><span class="sig-paren">(</span><em>ctx</em>, <em>merge_file</em>, <em>final_sep</em><span class="sig-paren">)</span></dt>
 <dd><p>Build a final separation file from a merge file.</p>
 <p>Merge file shall be located in ctx.get_data_dir().
-One final component per line, described by a list of link id separated by a &#8216;,&#8217;.</p>
+One final component per line, described by a list of link id separated by a ‘,’.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>merge_file</strong> (<em>str</em>) &#8211; Merge file name.</li>
-<li><strong>final_sep</strong> (<em>str</em>) &#8211; Name of the final separation file.</li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>merge_file</strong> (<em>str</em>) – Merge file name.</li>
+<li><strong>final_sep</strong> (<em>str</em>) – Name of the final separation file.</li>
 </ul>
 </td>
 </tr>
@@ -551,7 +535,7 @@ One final component per line, described by a list of link id separated by a &#82
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </td>
 </tr>
 </tbody>
 </table>
@@ -566,9 +550,9 @@ One final component per line, described by a list of link id separated by a &#82
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>nsigma</strong> (<em>int, optional</em>) &#8211; Clip data below nsigma time the background level.</li>
-<li><strong>nsigma_connected</strong> (<em>bool, optional</em>) &#8211; Keep only the brightest isolated structure.</li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>nsigma</strong> (<em>int</em><em>, </em><em>optional</em>) – Clip data below nsigma time the background level.</li>
+<li><strong>nsigma_connected</strong> (<em>bool</em><em>, </em><em>optional</em>) – Keep only the brightest isolated structure.</li>
 </ul>
 </td>
 </tr>
@@ -585,9 +569,9 @@ One final component per line, described by a list of link id separated by a &#82
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>nsigma</strong> (<em>int, optional</em>) &#8211; Clip data below nsigma time the background level.</li>
-<li><strong>nsigma_connected</strong> (<em>bool, optional</em>) &#8211; Keep only the brightest isolated structure.</li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>nsigma</strong> (<em>int</em><em>, </em><em>optional</em>) – Clip data below nsigma time the background level.</li>
+<li><strong>nsigma_connected</strong> (<em>bool</em><em>, </em><em>optional</em>) – Keep only the brightest isolated structure.</li>
 </ul>
 </td>
 </tr>
@@ -604,10 +588,10 @@ One final component per line, described by a list of link id separated by a &#82
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>delta_time_unit</strong> (<code class="xref py py-class docutils literal"><span class="pre">astropy.units.Unit</span></code>, optional) &#8211; </li>
-<li><strong>angular_velocity_unit</strong> (<code class="xref py py-class docutils literal"><span class="pre">astropy.units.Unit</span></code>, optional) &#8211; </li>
-<li><strong>proper_velocity_unit</strong> (<code class="xref py py-class docutils literal"><span class="pre">astropy.units.Unit</span></code>, optional) &#8211; </li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>delta_time_unit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">astropy.units.Unit</span></code>, optional) – </li>
+<li><strong>angular_velocity_unit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">astropy.units.Unit</span></code>, optional) – </li>
+<li><strong>proper_velocity_unit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">astropy.units.Unit</span></code>, optional) – </li>
 </ul>
 </td>
 </tr>
@@ -624,8 +608,8 @@ One final component per line, described by a list of link id separated by a &#82
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>filter</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.features.FeatureFilter</span></code>, optional) &#8211; </li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>filter</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">wise.features.FeatureFilter</span></code>, optional) – </li>
 </ul>
 </td>
 </tr>
@@ -642,8 +626,8 @@ One final component per line, described by a list of link id separated by a &#82
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>filter</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.features.FeatureFilter</span></code>, optional) &#8211; </li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>filter</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">wise.features.FeatureFilter</span></code>, optional) – </li>
 </ul>
 </td>
 </tr>
@@ -660,10 +644,10 @@ One final component per line, described by a list of link id separated by a &#82
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>name</strong> (<em>str</em>) &#8211; Prefix name for the save files</li>
-<li><strong>coord_mode</strong> (<em>str, optional</em>) &#8211; </li>
-<li><strong>measured_delta</strong> (<em>bool, optional</em>) &#8211; </li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>name</strong> (<em>str</em>) – Prefix name for the save files</li>
+<li><strong>coord_mode</strong> (<em>str</em><em>, </em><em>optional</em>) – </li>
+<li><strong>measured_delta</strong> (<em>bool</em><em>, </em><em>optional</em>) – </li>
 </ul>
 </td>
 </tr>
@@ -680,11 +664,11 @@ One final component per line, described by a list of link id separated by a &#82
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>name</strong> (<em>str</em>) &#8211; Prefix name of the saved files</li>
-<li><strong>projection</strong> (<code class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Projection</span></code>, optional) &#8211; If not provided, default Projection will be used</li>
-<li><strong>merge_with_previous</strong> (<em>bool, optional</em>) &#8211; If True, this result will be added to current result</li>
-<li><strong>min_link_size</strong> (<em>int, optional</em>) &#8211; Filter out links with size &lt; min_link_size</li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>name</strong> (<em>str</em>) – Prefix name of the saved files</li>
+<li><strong>projection</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">libwise.imgutils.Projection</span></code>, optional) – If not provided, default Projection will be used</li>
+<li><strong>merge_with_previous</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, this result will be added to current result</li>
+<li><strong>min_link_size</strong> (<em>int</em><em>, </em><em>optional</em>) – Filter out links with size &lt; min_link_size</li>
 </ul>
 </td>
 </tr>
@@ -701,14 +685,13 @@ One final component per line, described by a list of link id separated by a &#82
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>preprocess</strong> (<em>bool, optional</em>) &#8211; If True, run the pre_process fct on each images</li>
-<li><strong>show_mask</strong> (<em>bool, optional</em>) &#8211; If True, show the saved mask in the map</li>
-<li><strong>show_regions</strong> (list of <code class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Region</span></code>, optional) &#8211; Plot the regions</li>
-<li><strong>save_filename</strong> (<em>str, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>preprocess</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, run the pre_process fct on each images</li>
+<li><strong>show_mask</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, show the saved mask in the map</li>
+<li><strong>show_regions</strong> (list of <code class="xref py py-class docutils literal notranslate"><span class="pre">libwise.imgutils.Region</span></code>, optional) – Plot the regions</li>
+<li><strong>save_filename</strong> (<em>str</em><em>, </em><em>optional</em>) – If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Arguments to pass to <code class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></code></p>
-</li>
+<li><strong>**kwargs</strong> – Arguments to pass to <code class="xref py py-func docutils literal notranslate"><span class="pre">libwise.plotutils.imshow_image()</span></code></li>
 </ul>
 </td>
 </tr>
@@ -725,17 +708,16 @@ with this filename.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>preprocess</strong> (<em>bool, optional</em>) &#8211; If True, run the pre_process fct on each images</li>
-<li><strong>nsigma</strong> (<em>int, optional</em>) &#8211; Clip bg below nsigma level</li>
-<li><strong>nsigma_connected</strong> (<em>bool, optional</em>) &#8211; If True, keep only the brightest connected structure</li>
-<li><strong>show_mask</strong> (<em>bool, optional</em>) &#8211; If True, show the saved mask in the map</li>
-<li><strong>show_regions</strong> (list of <code class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Region</span></code>, optional) &#8211; Plot the regions</li>
-<li><strong>intensity_colorbar</strong> (<em>bool, optional</em>) &#8211; Add an intensity colorbar</li>
-<li><strong>save_filename</strong> (<em>str, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>preprocess</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, run the pre_process fct on each images</li>
+<li><strong>nsigma</strong> (<em>int</em><em>, </em><em>optional</em>) – Clip bg below nsigma level</li>
+<li><strong>nsigma_connected</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, keep only the brightest connected structure</li>
+<li><strong>show_mask</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, show the saved mask in the map</li>
+<li><strong>show_regions</strong> (list of <code class="xref py py-class docutils literal notranslate"><span class="pre">libwise.imgutils.Region</span></code>, optional) – Plot the regions</li>
+<li><strong>intensity_colorbar</strong> (<em>bool</em><em>, </em><em>optional</em>) – Add an intensity colorbar</li>
+<li><strong>save_filename</strong> (<em>str</em><em>, </em><em>optional</em>) – If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Arguments to pass to <code class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></code></p>
-</li>
+<li><strong>**kwargs</strong> – Arguments to pass to <code class="xref py py-func docutils literal notranslate"><span class="pre">libwise.plotutils.imshow_image()</span></code></li>
 </ul>
 </td>
 </tr>
@@ -752,13 +734,12 @@ with this filename.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>title</strong> (<em>bool, optional</em>) &#8211; If True, add a title to the map</li>
-<li><strong>num</strong> (<em>bool, optional</em>) &#8211; If True, annotate each segments</li>
-<li><strong>scales</strong> (<em>list or int, optional</em>) &#8211; Plot only for scale or list of scales (in pixel)</li>
-<li><strong>save_filename</strong> (<em>TYPE, optional</em>) &#8211; Description</li>
-<li><strong>**kwargs</strong> &#8211; <p>Description</p>
-</li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>title</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, add a title to the map</li>
+<li><strong>num</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, annotate each segments</li>
+<li><strong>scales</strong> (<em>list</em><em> or </em><em>int</em><em>, </em><em>optional</em>) – Plot only for scale or list of scales (in pixel)</li>
+<li><strong>save_filename</strong> (<em>TYPE</em><em>, </em><em>optional</em>) – Description</li>
+<li><strong>**kwargs</strong> – Description</li>
 </ul>
 </td>
 </tr>
@@ -775,15 +756,14 @@ with this filename.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>scales</strong> (<em>int or list</em>) &#8211; Filter the results to scale or list of scales (in pixel)</li>
-<li><strong>region_list</strong> (list of <code class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Region</span></code>, optional) &#8211; Plot the regions, and set the features color according to the region</li>
-<li><strong>legend</strong> (<em>bool, optional</em>) &#8211; Add a legend</li>
-<li><strong>feature_filter</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.features.FeatureFilter</span></code>, optional) &#8211; Filter the results</li>
-<li><strong>save_filename</strong> (<em>TYPE, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>scales</strong> (<em>int</em><em> or </em><em>list</em>) – Filter the results to scale or list of scales (in pixel)</li>
+<li><strong>region_list</strong> (list of <code class="xref py py-class docutils literal notranslate"><span class="pre">libwise.imgutils.Region</span></code>, optional) – Plot the regions, and set the features color according to the region</li>
+<li><strong>legend</strong> (<em>bool</em><em>, </em><em>optional</em>) – Add a legend</li>
+<li><strong>feature_filter</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">wise.features.FeatureFilter</span></code>, optional) – Filter the results</li>
+<li><strong>save_filename</strong> (<em>TYPE</em><em>, </em><em>optional</em>) – If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
-<li><strong>**img_kargs</strong> &#8211; <p>Additional arguments to pass to <code class="xref py py-func docutils literal"><span class="pre">libwise.plotutils.imshow_image()</span></code></p>
-</li>
+<li><strong>**img_kargs</strong> – Additional arguments to pass to <code class="xref py py-func docutils literal notranslate"><span class="pre">libwise.plotutils.imshow_image()</span></code></li>
 </ul>
 </td>
 </tr>
@@ -800,19 +780,18 @@ with this filename.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>scales</strong> (<em>int or list, optional</em>) &#8211; Filter the results to scale or list of scales (in pixel)</li>
-<li><strong>feature_filter</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.features.FeatureFilter</span></code>, optional) &#8211; Filter the results</li>
-<li><strong>min_link_size</strong> (<em>int, optional</em>) &#8211; Filter out links with size &lt; min_link_size</li>
-<li><strong>title</strong> (<em>bool, optional</em>) &#8211; </li>
-<li><strong>pa</strong> (<em>bool, optional</em>) &#8211; Additionaly plot the PA vs epoch (only pa or snr)</li>
-<li><strong>snr</strong> (<em>bool, optional</em>) &#8211; Additionaly plot the snr vs epoch (only pa or snr)</li>
-<li><strong>num</strong> (<em>bool, optional</em>) &#8211; Annotate each links</li>
-<li><strong>fit_fct</strong> (<code class="xref py py-class docutils literal"><span class="pre">libwise.nputils.AbstractFct</span></code>, optional) &#8211; Fit each links with provided fct</li>
-<li><strong>save_filename</strong> (<em>str, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>scales</strong> (<em>int</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – Filter the results to scale or list of scales (in pixel)</li>
+<li><strong>feature_filter</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">wise.features.FeatureFilter</span></code>, optional) – Filter the results</li>
+<li><strong>min_link_size</strong> (<em>int</em><em>, </em><em>optional</em>) – Filter out links with size &lt; min_link_size</li>
+<li><strong>title</strong> (<em>bool</em><em>, </em><em>optional</em>) – </li>
+<li><strong>pa</strong> (<em>bool</em><em>, </em><em>optional</em>) – Additionaly plot the PA vs epoch (only pa or snr)</li>
+<li><strong>snr</strong> (<em>bool</em><em>, </em><em>optional</em>) – Additionaly plot the snr vs epoch (only pa or snr)</li>
+<li><strong>num</strong> (<em>bool</em><em>, </em><em>optional</em>) – Annotate each links</li>
+<li><strong>fit_fct</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">libwise.nputils.AbstractFct</span></code>, optional) – Fit each links with provided fct</li>
+<li><strong>save_filename</strong> (<em>str</em><em>, </em><em>optional</em>) – If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to pass to <a class="reference internal" href="wiseutils.html#wise.wiseutils.plot_links_dfc" title="wise.wiseutils.plot_links_dfc"><code class="xref py py-func docutils literal"><span class="pre">wise.wiseutils.plot_links_dfc()</span></code></a></p>
-</li>
+<li><strong>**kwargs</strong> – Additional arguments to pass to <a class="reference internal" href="wiseutils.html#wise.wiseutils.plot_links_dfc" title="wise.wiseutils.plot_links_dfc"><code class="xref py py-func docutils literal notranslate"><span class="pre">wise.wiseutils.plot_links_dfc()</span></code></a></li>
 </ul>
 </td>
 </tr>
@@ -829,11 +808,11 @@ with this filename.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>scales</strong> (<em>int or list, optional</em>) &#8211; Filter the results to scale or list of scales (in pixel)</li>
-<li><strong>pa</strong> (<em>bool, optional</em>) &#8211; Additionaly plot the PA vs epoch</li>
-<li><strong>feature_filter</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.features.FeatureFilter</span></code>, optional) &#8211; Filter the results</li>
-<li><strong>save_filename</strong> (<em>str, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>scales</strong> (<em>int</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – Filter the results to scale or list of scales (in pixel)</li>
+<li><strong>pa</strong> (<em>bool</em><em>, </em><em>optional</em>) – Additionaly plot the PA vs epoch</li>
+<li><strong>feature_filter</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">wise.features.FeatureFilter</span></code>, optional) – Filter the results</li>
+<li><strong>save_filename</strong> (<em>str</em><em>, </em><em>optional</em>) – If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
 </ul>
 </td>
@@ -851,12 +830,12 @@ with this filename.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; Description</li>
-<li><strong>scales</strong> (<em>int</em>) &#8211; Scale in pixel</li>
-<li><strong>feature_filter</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.features.FeatureFilter</span></code>, optional) &#8211; Filter the results</li>
-<li><strong>save_filename</strong> (<em>str, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – Description</li>
+<li><strong>scales</strong> (<em>int</em>) – Scale in pixel</li>
+<li><strong>feature_filter</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">wise.features.FeatureFilter</span></code>, optional) – Filter the results</li>
+<li><strong>save_filename</strong> (<em>str</em><em>, </em><em>optional</em>) – If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
-<li><strong>title</strong> (<em>bool, optional</em>) &#8211; </li>
+<li><strong>title</strong> (<em>bool</em><em>, </em><em>optional</em>) – </li>
 </ul>
 </td>
 </tr>
@@ -873,20 +852,19 @@ with this filename.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>scales</strong> (<em>int or list, optional</em>) &#8211; Filter the results to scale or list of scales (in pixel)</li>
-<li><strong>feature_filter</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.features.FeatureFilter</span></code>, optional) &#8211; Filter the results</li>
-<li><strong>min_link_size</strong> (<em>int, optional</em>) &#8211; Filter out links with size &lt; min_link_size</li>
-<li><strong>map_cmap</strong> (<em>str, optional</em>) &#8211; Colormap of the background map</li>
-<li><strong>vector_width</strong> (<em>int, optional</em>) &#8211; Width of the displacement vectors</li>
-<li><strong>title</strong> (<em>bool, optional</em>) &#8211; </li>
-<li><strong>color_style</strong> (<em>str, optional</em>) &#8211; &#8216;link&#8217;: one color per components
-&#8216;date&#8217;: colors correspond to the epoch
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>scales</strong> (<em>int</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – Filter the results to scale or list of scales (in pixel)</li>
+<li><strong>feature_filter</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">wise.features.FeatureFilter</span></code>, optional) – Filter the results</li>
+<li><strong>min_link_size</strong> (<em>int</em><em>, </em><em>optional</em>) – Filter out links with size &lt; min_link_size</li>
+<li><strong>map_cmap</strong> (<em>str</em><em>, </em><em>optional</em>) – Colormap of the background map</li>
+<li><strong>vector_width</strong> (<em>int</em><em>, </em><em>optional</em>) – Width of the displacement vectors</li>
+<li><strong>title</strong> (<em>bool</em><em>, </em><em>optional</em>) – </li>
+<li><strong>color_style</strong> (<em>str</em><em>, </em><em>optional</em>) – ‘link’: one color per components
+‘date’: colors correspond to the epoch
 color_str: use color_str as color for all components</li>
-<li><strong>save_filename</strong> (<em>str, optional</em>) &#8211; If not None, the resulting maps will be saved in the project data dir
+<li><strong>save_filename</strong> (<em>str</em><em>, </em><em>optional</em>) – If not None, the resulting maps will be saved in the project data dir
 with this filename.</li>
-<li><strong>**kwargs</strong> &#8211; <p>Additional arguments to pass to <code class="xref py py-func docutils literal"><span class="pre">libwise.plot_links_map()</span></code></p>
-</li>
+<li><strong>**kwargs</strong> – Additional arguments to pass to <code class="xref py py-func docutils literal notranslate"><span class="pre">libwise.plot_links_map()</span></code></li>
 </ul>
 </td>
 </tr>
@@ -903,9 +881,9 @@ with this filename.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>img</strong> (<code class="xref py py-class docutils literal"><span class="pre">libwise.imgutils.Image</span></code>, optional) &#8211; Image to use as background</li>
-<li><strong>features</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.features.FeaturesGroup</span></code>, optional) &#8211; Features to plot on top of the image</li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>img</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">libwise.imgutils.Image</span></code>, optional) – Image to use as background</li>
+<li><strong>features</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">wise.features.FeaturesGroup</span></code>, optional) – Features to plot on top of the image</li>
 </ul>
 </td>
 </tr>
@@ -921,7 +899,7 @@ with this filename.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </td>
 </tr>
 </tbody>
 </table>
@@ -948,11 +926,11 @@ with this filename.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>config</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.scc.SCCConfiguration</span></code>) &#8211; </li>
-<li><strong>debug</strong> (<em>int, optional</em>) &#8211; </li>
-<li><strong>nwise</strong> (<em>int, optional</em>) &#8211; </li>
-<li><strong>stack</strong> (<code class="xref py py-class docutils literal"><span class="pre">libwise.plotutils.FigureStack</span></code>, optional) &#8211; </li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>config</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">wise.scc.SCCConfiguration</span></code>) – </li>
+<li><strong>debug</strong> (<em>int</em><em>, </em><em>optional</em>) – </li>
+<li><strong>nwise</strong> (<em>int</em><em>, </em><em>optional</em>) – </li>
+<li><strong>stack</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">libwise.plotutils.FigureStack</span></code>, optional) – </li>
 </ul>
 </td>
 </tr>
@@ -975,12 +953,12 @@ with this filename.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal"><span class="pre">wise.project.AnalysisContext</span></code></a>) &#8211; </li>
-<li><strong>config</strong> (<code class="xref py py-class docutils literal"><span class="pre">wise.scc.SCCConfiguration</span></code>) &#8211; </li>
-<li><strong>output_dir</strong> (<em>str</em>) &#8211; </li>
-<li><strong>n</strong> (<em>int</em>) &#8211; </li>
-<li><strong>append</strong> (<em>bool, optional</em>) &#8211; Append results</li>
-<li><strong>seperate_scales</strong> (<em>bool, optional</em>) &#8211; </li>
+<li><strong>ctx</strong> (<a class="reference internal" href="project.html#wise.project.AnalysisContext" title="wise.project.AnalysisContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">wise.project.AnalysisContext</span></code></a>) – </li>
+<li><strong>config</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">wise.scc.SCCConfiguration</span></code>) – </li>
+<li><strong>output_dir</strong> (<em>str</em>) – </li>
+<li><strong>n</strong> (<em>int</em>) – </li>
+<li><strong>append</strong> (<em>bool</em><em>, </em><em>optional</em>) – Append results</li>
+<li><strong>seperate_scales</strong> (<em>bool</em><em>, </em><em>optional</em>) – </li>
 </ul>
 </td>
 </tr>
@@ -990,9 +968,9 @@ with this filename.</li>
 
 <dl class="data">
 <dt id="wise.tasks.test">
-<code class="descclassname">wise.tasks.</code><code class="descname">test</code><em class="property"> = [&lt;function bootstrap_scc at 0x7fabb7160848&gt;, &lt;function stack_cross_correlation at 0x7fabb71607d0&gt;]</em><a class="headerlink" href="#wise.tasks.test" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">wise.tasks.</code><code class="descname">test</code><em class="property"> = [&lt;function bootstrap_scc&gt;, &lt;function stack_cross_correlation&gt;]</em><a class="headerlink" href="#wise.tasks.test" title="Permalink to this definition">¶</a></dt>
 <dd><p>list() -&gt; new empty list
-list(iterable) -&gt; new list initialized from iterable&#8217;s items</p>
+list(iterable) -&gt; new list initialized from iterable’s items</p>
 </dd></dl>
 
 </div>
@@ -1012,21 +990,20 @@ list(iterable) -&gt; new list initialized from iterable&#8217;s items</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/docs/tasks.txt"
+      <li><a href="../_sources/docs/tasks.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -1048,13 +1025,13 @@ list(iterable) -&gt; new list initialized from iterable&#8217;s items</p>
         <li class="right" >
           <a href="project.html" title="Wise project module"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">WISE 0.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" >Documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WISE 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Florent Mertens.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 2015, Florent Mertens.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

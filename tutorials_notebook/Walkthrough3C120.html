@@ -1,34 +1,24 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Walkthrough 3C120 &mdash; WISE 0.1 documentation</title>
-    
+    <title>Walkthrough 3C120 &#8212; WISE 0.1 documentation</title>
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="WISE 0.1 documentation" href="../index.html" />
-    <link rel="up" title="Tutorials using the IPython Notebook" href="index.html" />
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Walkthrough particle diffusing in water" href="WalkthroughWaterDiffusion.html" />
     <link rel="prev" title="Tutorials using the IPython Notebook" href="index.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -44,8 +34,8 @@
         <li class="right" >
           <a href="index.html" title="Tutorials using the IPython Notebook"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">WISE 0.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials using the IPython Notebook</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WISE 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials using the IPython Notebook</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -57,7 +47,7 @@
   <div class="section" id="walkthrough-3c120">
 <h1>Walkthrough 3C120<a class="headerlink" href="#walkthrough-3c120" title="Permalink to this headline">¶</a></h1>
 <p>In this walkthrough, I will show the basics of WISE analysis, by
-investigating the kinematic in the 3C120 jet. The original notebook can be downloaded <a class="reference download internal" href="../_downloads/Walkthrough_3C120.ipynb"><code class="xref download docutils literal"><span class="pre">here</span></code></a>.</p>
+investigating the kinematic in the 3C120 jet. The original notebook can be downloaded <a class="reference download internal" download="" href="../_downloads/b3ac7ae011a69712d5fca77b5e23427e/Walkthrough_3C120.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a>.</p>
 <div class="section" id="setup">
 <h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
 <p>We will analyse maps of the 3C120 jet observed with VLBA at 15 GHZ as
@@ -65,7 +55,7 @@ part of the MOJAVE project. They can be obtained from
 <a class="reference external" href="http://www.physics.purdue.edu/MOJAVE/sourcepages/0430+052.shtml">http://www.physics.purdue.edu/MOJAVE/sourcepages/0430+052.shtml</a> (FITS I
 image).</p>
 <p>The first step is to import the required python library:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
@@ -78,12 +68,12 @@ image).</p>
 <span class="o">%</span><span class="n">matplotlib</span> <span class="n">qt4</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Applying preset: display
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Applying</span> <span class="n">preset</span><span class="p">:</span> <span class="n">display</span>
 </pre></div>
 </div>
 <p>We then initialize an AnalysisContext object that will handle the
 configurations and store the results:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ctx</span> <span class="o">=</span> <span class="n">wise</span><span class="o">.</span><span class="n">AnalysisContext</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ctx</span> <span class="o">=</span> <span class="n">wise</span><span class="o">.</span><span class="n">AnalysisContext</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -92,33 +82,33 @@ configurations and store the results:</p>
 <p>The project configuration is separated into a data, detection and matcher configuration
 retrospectively stored in ctx.config.data, ctx.config.finder and ctx.config.matcher.
 To list the default configuration, we simply execute:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">doc</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">doc</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Documentation for:Data configuration
-Option               |Documentation                     |Default         |
---------------------------------------------------------------------------
-data_dir             |Base data directory               |None            |
-fits_extension       |Extension index                   |0               |
-ref_image_filename   |Reference image filename          |reference_image |
-mask_filename        |Mask filename                     |mask.fits       |
-bg_coords            |Background region in coordinates  |None            |
-                     |[Xa,Ya,Xb,Yb]                     |                |
-bg_use_ksigma_method |Use ksigma method to estimate the |False           |
-                     |background level                  |                |
-roi_coords           |Region of interest in coordinates |None            |
-                     |[Xa,Ya,Xb,Yb]                     |                |
-core_offset_filename |Core offset filename              |core.dat        |
-projection_unit      |Unit used for the projection      |mas             |
-projection_relative  |Use relative projection           |True            |
-projection_center    |Method used to get the center     |pix_ref         |
-object_distance      |Object distance                   |None            |
-object_z             |Object z                          |0               |
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Documentation</span> <span class="k">for</span><span class="p">:</span><span class="n">Data</span> <span class="n">configuration</span>
+<span class="n">Option</span>               <span class="o">|</span><span class="n">Documentation</span>                     <span class="o">|</span><span class="n">Default</span>         <span class="o">|</span>
+<span class="o">--------------------------------------------------------------------------</span>
+<span class="n">data_dir</span>             <span class="o">|</span><span class="n">Base</span> <span class="n">data</span> <span class="n">directory</span>               <span class="o">|</span><span class="kc">None</span>            <span class="o">|</span>
+<span class="n">fits_extension</span>       <span class="o">|</span><span class="n">Extension</span> <span class="n">index</span>                   <span class="o">|</span><span class="mi">0</span>               <span class="o">|</span>
+<span class="n">ref_image_filename</span>   <span class="o">|</span><span class="n">Reference</span> <span class="n">image</span> <span class="n">filename</span>          <span class="o">|</span><span class="n">reference_image</span> <span class="o">|</span>
+<span class="n">mask_filename</span>        <span class="o">|</span><span class="n">Mask</span> <span class="n">filename</span>                     <span class="o">|</span><span class="n">mask</span><span class="o">.</span><span class="n">fits</span>       <span class="o">|</span>
+<span class="n">bg_coords</span>            <span class="o">|</span><span class="n">Background</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">coordinates</span>  <span class="o">|</span><span class="kc">None</span>            <span class="o">|</span>
+                     <span class="o">|</span><span class="p">[</span><span class="n">Xa</span><span class="p">,</span><span class="n">Ya</span><span class="p">,</span><span class="n">Xb</span><span class="p">,</span><span class="n">Yb</span><span class="p">]</span>                     <span class="o">|</span>                <span class="o">|</span>
+<span class="n">bg_use_ksigma_method</span> <span class="o">|</span><span class="n">Use</span> <span class="n">ksigma</span> <span class="n">method</span> <span class="n">to</span> <span class="n">estimate</span> <span class="n">the</span> <span class="o">|</span><span class="kc">False</span>           <span class="o">|</span>
+                     <span class="o">|</span><span class="n">background</span> <span class="n">level</span>                  <span class="o">|</span>                <span class="o">|</span>
+<span class="n">roi_coords</span>           <span class="o">|</span><span class="n">Region</span> <span class="n">of</span> <span class="n">interest</span> <span class="ow">in</span> <span class="n">coordinates</span> <span class="o">|</span><span class="kc">None</span>            <span class="o">|</span>
+                     <span class="o">|</span><span class="p">[</span><span class="n">Xa</span><span class="p">,</span><span class="n">Ya</span><span class="p">,</span><span class="n">Xb</span><span class="p">,</span><span class="n">Yb</span><span class="p">]</span>                     <span class="o">|</span>                <span class="o">|</span>
+<span class="n">core_offset_filename</span> <span class="o">|</span><span class="n">Core</span> <span class="n">offset</span> <span class="n">filename</span>              <span class="o">|</span><span class="n">core</span><span class="o">.</span><span class="n">dat</span>        <span class="o">|</span>
+<span class="n">projection_unit</span>      <span class="o">|</span><span class="n">Unit</span> <span class="n">used</span> <span class="k">for</span> <span class="n">the</span> <span class="n">projection</span>      <span class="o">|</span><span class="n">mas</span>             <span class="o">|</span>
+<span class="n">projection_relative</span>  <span class="o">|</span><span class="n">Use</span> <span class="n">relative</span> <span class="n">projection</span>           <span class="o">|</span><span class="kc">True</span>            <span class="o">|</span>
+<span class="n">projection_center</span>    <span class="o">|</span><span class="n">Method</span> <span class="n">used</span> <span class="n">to</span> <span class="n">get</span> <span class="n">the</span> <span class="n">center</span>     <span class="o">|</span><span class="n">pix_ref</span>         <span class="o">|</span>
+<span class="n">object_distance</span>      <span class="o">|</span><span class="n">Object</span> <span class="n">distance</span>                   <span class="o">|</span><span class="kc">None</span>            <span class="o">|</span>
+<span class="n">object_z</span>             <span class="o">|</span><span class="n">Object</span> <span class="n">z</span>                          <span class="o">|</span><span class="mi">0</span>               <span class="o">|</span>
 </pre></div>
 </div>
 <p>data_dir is the directory where the results will be store. Setting a
 configuration is as simple as assigning a new value to it:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/data/3c120/mojave&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/data/3c120/mojave&quot;</span><span class="p">)</span>
 
 <span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s2">&quot;run001&quot;</span><span class="p">)</span>
 <span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">object_z</span> <span class="o">=</span> <span class="mf">0.033</span>
@@ -129,10 +119,10 @@ configuration is as simple as assigning a new value to it:</p>
 This function accept shell like wildcards, and it is possible to filter
 files by dates. For this walkthrough, we will only analyse images
 starting from January 2012:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ctx</span><span class="o">.</span><span class="n">select_files</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s2">&quot;icn/*.icn.fits&quot;</span><span class="p">),</span> <span class="n">start_date</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2012</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ctx</span><span class="o">.</span><span class="n">select_files</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s2">&quot;icn/*.icn.fits&quot;</span><span class="p">),</span> <span class="n">start_date</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2012</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Number of files selected: 13
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Number</span> <span class="n">of</span> <span class="n">files</span> <span class="n">selected</span><span class="p">:</span> <span class="mi">13</span>
 </pre></div>
 </div>
 <p>Now that we have selected our files, we want to preview them, in order
@@ -140,86 +130,86 @@ to select the region that we will investigate. For that, we will execute
 a tasks called tasks.view_all(). A task is a small function that
 will execute a particular job. To list all currently available tasks,
 we can run:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">list_tasks</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">list_tasks</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Name                      |Description                                                                     |
-------------------------------------------------------------------------------------------------------------
-bootstrap_scc             |Perform Stack Cross Correlation analysis n time and store results in output_dir |
-build_final_dfc           |Build a final separation file from a merge file                                 |
-create_poly_region        |Create a region file                                                            |
-detection_all             |Run wds on all selected files                                                   |
-info_files                |Print List of selected files with information on beam and pixel scales          |
-info_files_delta          |Print List of selected pair of files with information on velocity resolution    |
-list_saved_results        |List all saved results                                                          |
-list_tasks                |Lists all WISE tasks                                                            |
-load                      |Load result from files                                                          |
-match_all                 |Run matching on all selected files                                              |
-plot_all_features         |Plot all features distance from core with time                                  |
-plot_separation_from_core |Plot separation from core with time                                             |
-preview_detection_stack   |Plot detection in stack                                                         |
-save                      |Save current result to disk                                                     |
-stack_cross_correlation   |Perform a Stack Cross Correlation analysis                                      |
-view_all                  |Preview all images                                                              |
-view_all_features         |Plot all features location                                                      |
-view_displacements        |Plot individual match results at specified scale                                |
-view_links                |Plot all components trajectories on a map                                       |
-view_stack                |Preview the stack image                                                         |
-view_wds                  |Plot WDS decomposition                                                          |
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Name</span>                      <span class="o">|</span><span class="n">Description</span>                                                                     <span class="o">|</span>
+<span class="o">------------------------------------------------------------------------------------------------------------</span>
+<span class="n">bootstrap_scc</span>             <span class="o">|</span><span class="n">Perform</span> <span class="n">Stack</span> <span class="n">Cross</span> <span class="n">Correlation</span> <span class="n">analysis</span> <span class="n">n</span> <span class="n">time</span> <span class="ow">and</span> <span class="n">store</span> <span class="n">results</span> <span class="ow">in</span> <span class="n">output_dir</span> <span class="o">|</span>
+<span class="n">build_final_dfc</span>           <span class="o">|</span><span class="n">Build</span> <span class="n">a</span> <span class="n">final</span> <span class="n">separation</span> <span class="n">file</span> <span class="kn">from</span> <span class="nn">a</span> <span class="n">merge</span> <span class="n">file</span>                                 <span class="o">|</span>
+<span class="n">create_poly_region</span>        <span class="o">|</span><span class="n">Create</span> <span class="n">a</span> <span class="n">region</span> <span class="n">file</span>                                                            <span class="o">|</span>
+<span class="n">detection_all</span>             <span class="o">|</span><span class="n">Run</span> <span class="n">wds</span> <span class="n">on</span> <span class="nb">all</span> <span class="n">selected</span> <span class="n">files</span>                                                   <span class="o">|</span>
+<span class="n">info_files</span>                <span class="o">|</span><span class="n">Print</span> <span class="n">List</span> <span class="n">of</span> <span class="n">selected</span> <span class="n">files</span> <span class="k">with</span> <span class="n">information</span> <span class="n">on</span> <span class="n">beam</span> <span class="ow">and</span> <span class="n">pixel</span> <span class="n">scales</span>          <span class="o">|</span>
+<span class="n">info_files_delta</span>          <span class="o">|</span><span class="n">Print</span> <span class="n">List</span> <span class="n">of</span> <span class="n">selected</span> <span class="n">pair</span> <span class="n">of</span> <span class="n">files</span> <span class="k">with</span> <span class="n">information</span> <span class="n">on</span> <span class="n">velocity</span> <span class="n">resolution</span>    <span class="o">|</span>
+<span class="n">list_saved_results</span>        <span class="o">|</span><span class="n">List</span> <span class="nb">all</span> <span class="n">saved</span> <span class="n">results</span>                                                          <span class="o">|</span>
+<span class="n">list_tasks</span>                <span class="o">|</span><span class="n">Lists</span> <span class="nb">all</span> <span class="n">WISE</span> <span class="n">tasks</span>                                                            <span class="o">|</span>
+<span class="n">load</span>                      <span class="o">|</span><span class="n">Load</span> <span class="n">result</span> <span class="kn">from</span> <span class="nn">files</span>                                                          <span class="o">|</span>
+<span class="n">match_all</span>                 <span class="o">|</span><span class="n">Run</span> <span class="n">matching</span> <span class="n">on</span> <span class="nb">all</span> <span class="n">selected</span> <span class="n">files</span>                                              <span class="o">|</span>
+<span class="n">plot_all_features</span>         <span class="o">|</span><span class="n">Plot</span> <span class="nb">all</span> <span class="n">features</span> <span class="n">distance</span> <span class="kn">from</span> <span class="nn">core</span> <span class="k">with</span> <span class="n">time</span>                                  <span class="o">|</span>
+<span class="n">plot_separation_from_core</span> <span class="o">|</span><span class="n">Plot</span> <span class="n">separation</span> <span class="kn">from</span> <span class="nn">core</span> <span class="k">with</span> <span class="n">time</span>                                             <span class="o">|</span>
+<span class="n">preview_detection_stack</span>   <span class="o">|</span><span class="n">Plot</span> <span class="n">detection</span> <span class="ow">in</span> <span class="n">stack</span>                                                         <span class="o">|</span>
+<span class="n">save</span>                      <span class="o">|</span><span class="n">Save</span> <span class="n">current</span> <span class="n">result</span> <span class="n">to</span> <span class="n">disk</span>                                                     <span class="o">|</span>
+<span class="n">stack_cross_correlation</span>   <span class="o">|</span><span class="n">Perform</span> <span class="n">a</span> <span class="n">Stack</span> <span class="n">Cross</span> <span class="n">Correlation</span> <span class="n">analysis</span>                                      <span class="o">|</span>
+<span class="n">view_all</span>                  <span class="o">|</span><span class="n">Preview</span> <span class="nb">all</span> <span class="n">images</span>                                                              <span class="o">|</span>
+<span class="n">view_all_features</span>         <span class="o">|</span><span class="n">Plot</span> <span class="nb">all</span> <span class="n">features</span> <span class="n">location</span>                                                      <span class="o">|</span>
+<span class="n">view_displacements</span>        <span class="o">|</span><span class="n">Plot</span> <span class="n">individual</span> <span class="n">match</span> <span class="n">results</span> <span class="n">at</span> <span class="n">specified</span> <span class="n">scale</span>                                <span class="o">|</span>
+<span class="n">view_links</span>                <span class="o">|</span><span class="n">Plot</span> <span class="nb">all</span> <span class="n">components</span> <span class="n">trajectories</span> <span class="n">on</span> <span class="n">a</span> <span class="nb">map</span>                                       <span class="o">|</span>
+<span class="n">view_stack</span>                <span class="o">|</span><span class="n">Preview</span> <span class="n">the</span> <span class="n">stack</span> <span class="n">image</span>                                                         <span class="o">|</span>
+<span class="n">view_wds</span>                  <span class="o">|</span><span class="n">Plot</span> <span class="n">WDS</span> <span class="n">decomposition</span>                                                          <span class="o">|</span>
 </pre></div>
 </div>
 <p>The task tasks.info_files() will list some information about the
 currently selected files:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">info_files</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">info_files</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>File                           |Date                |Shape     |Pixel scale |Beam                        |
-----------------------------------------------------------------------------------------------------------
-0430+052.u.2012_01_14.icn.fits |2012-01-14 00:00:00 |2048x2048 |0.100 mas   |0.595 mas, 1.255 mas, -0.07 |
-0430+052.u.2012_03_04.icn.fits |2012-03-04 00:00:00 |2048x2048 |0.100 mas   |0.699 mas, 1.444 mas, 0.20  |
-0430+052.u.2012_04_29.icn.fits |2012-04-30 00:00:00 |2048x2048 |0.100 mas   |0.576 mas, 1.325 mas, -0.15 |
-0430+052.u.2012_05_24.icn.fits |2012-05-24 00:00:00 |2048x2048 |0.100 mas   |0.528 mas, 1.188 mas, -0.02 |
-0430+052.u.2012_07_12.icn.fits |2012-07-12 00:00:00 |2048x2048 |0.100 mas   |0.503 mas, 1.415 mas, -0.24 |
-0430+052.u.2012_08_03.icn.fits |2012-08-03 00:00:00 |2048x2048 |0.100 mas   |0.521 mas, 1.262 mas, -0.11 |
-0430+052.u.2012_09_02.icn.fits |2012-09-02 00:00:00 |2048x2048 |0.100 mas   |0.533 mas, 1.257 mas, -0.07 |
-0430+052.u.2012_11_02.icn.fits |2012-11-02 00:00:00 |2048x2048 |0.100 mas   |0.516 mas, 1.224 mas, -0.13 |
-0430+052.u.2012_11_28.icn.fits |2012-11-29 00:00:00 |2048x2048 |0.100 mas   |0.524 mas, 1.350 mas, -0.14 |
-0430+052.u.2012_12_23.icn.fits |2012-12-23 00:00:00 |2048x2048 |0.100 mas   |0.679 mas, 1.523 mas, 0.11  |
-0430+052.u.2013_01_21.icn.fits |2013-01-21 00:00:00 |2048x2048 |0.100 mas   |0.522 mas, 1.186 mas, -0.11 |
-0430+052.u.2013_02_10.icn.fits |2013-02-10 00:00:00 |2048x2048 |0.100 mas   |0.503 mas, 1.139 mas, -0.13 |
-0430+052.u.2013_02_28.icn.fits |2013-02-28 00:00:00 |2048x2048 |0.100 mas   |0.546 mas, 1.209 mas, -0.06 |
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">File</span>                           <span class="o">|</span><span class="n">Date</span>                <span class="o">|</span><span class="n">Shape</span>     <span class="o">|</span><span class="n">Pixel</span> <span class="n">scale</span> <span class="o">|</span><span class="n">Beam</span>                        <span class="o">|</span>
+<span class="o">----------------------------------------------------------------------------------------------------------</span>
+<span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2012_01_14.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span> <span class="o">|</span><span class="mi">2012</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">14</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2048</span><span class="n">x2048</span> <span class="o">|</span><span class="mf">0.100</span> <span class="n">mas</span>   <span class="o">|</span><span class="mf">0.595</span> <span class="n">mas</span><span class="p">,</span> <span class="mf">1.255</span> <span class="n">mas</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.07</span> <span class="o">|</span>
+<span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2012_03_04.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span> <span class="o">|</span><span class="mi">2012</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">04</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2048</span><span class="n">x2048</span> <span class="o">|</span><span class="mf">0.100</span> <span class="n">mas</span>   <span class="o">|</span><span class="mf">0.699</span> <span class="n">mas</span><span class="p">,</span> <span class="mf">1.444</span> <span class="n">mas</span><span class="p">,</span> <span class="mf">0.20</span>  <span class="o">|</span>
+<span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2012_04_29.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span> <span class="o">|</span><span class="mi">2012</span><span class="o">-</span><span class="mi">04</span><span class="o">-</span><span class="mi">30</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2048</span><span class="n">x2048</span> <span class="o">|</span><span class="mf">0.100</span> <span class="n">mas</span>   <span class="o">|</span><span class="mf">0.576</span> <span class="n">mas</span><span class="p">,</span> <span class="mf">1.325</span> <span class="n">mas</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.15</span> <span class="o">|</span>
+<span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2012_05_24.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span> <span class="o">|</span><span class="mi">2012</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">24</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2048</span><span class="n">x2048</span> <span class="o">|</span><span class="mf">0.100</span> <span class="n">mas</span>   <span class="o">|</span><span class="mf">0.528</span> <span class="n">mas</span><span class="p">,</span> <span class="mf">1.188</span> <span class="n">mas</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.02</span> <span class="o">|</span>
+<span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2012_07_12.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span> <span class="o">|</span><span class="mi">2012</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">12</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2048</span><span class="n">x2048</span> <span class="o">|</span><span class="mf">0.100</span> <span class="n">mas</span>   <span class="o">|</span><span class="mf">0.503</span> <span class="n">mas</span><span class="p">,</span> <span class="mf">1.415</span> <span class="n">mas</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.24</span> <span class="o">|</span>
+<span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2012_08_03.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span> <span class="o">|</span><span class="mi">2012</span><span class="o">-</span><span class="mi">08</span><span class="o">-</span><span class="mi">03</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2048</span><span class="n">x2048</span> <span class="o">|</span><span class="mf">0.100</span> <span class="n">mas</span>   <span class="o">|</span><span class="mf">0.521</span> <span class="n">mas</span><span class="p">,</span> <span class="mf">1.262</span> <span class="n">mas</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.11</span> <span class="o">|</span>
+<span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2012_09_02.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span> <span class="o">|</span><span class="mi">2012</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">02</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2048</span><span class="n">x2048</span> <span class="o">|</span><span class="mf">0.100</span> <span class="n">mas</span>   <span class="o">|</span><span class="mf">0.533</span> <span class="n">mas</span><span class="p">,</span> <span class="mf">1.257</span> <span class="n">mas</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.07</span> <span class="o">|</span>
+<span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2012_11_02.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span> <span class="o">|</span><span class="mi">2012</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">02</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2048</span><span class="n">x2048</span> <span class="o">|</span><span class="mf">0.100</span> <span class="n">mas</span>   <span class="o">|</span><span class="mf">0.516</span> <span class="n">mas</span><span class="p">,</span> <span class="mf">1.224</span> <span class="n">mas</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.13</span> <span class="o">|</span>
+<span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2012_11_28.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span> <span class="o">|</span><span class="mi">2012</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">29</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2048</span><span class="n">x2048</span> <span class="o">|</span><span class="mf">0.100</span> <span class="n">mas</span>   <span class="o">|</span><span class="mf">0.524</span> <span class="n">mas</span><span class="p">,</span> <span class="mf">1.350</span> <span class="n">mas</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.14</span> <span class="o">|</span>
+<span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2012_12_23.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span> <span class="o">|</span><span class="mi">2012</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">23</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2048</span><span class="n">x2048</span> <span class="o">|</span><span class="mf">0.100</span> <span class="n">mas</span>   <span class="o">|</span><span class="mf">0.679</span> <span class="n">mas</span><span class="p">,</span> <span class="mf">1.523</span> <span class="n">mas</span><span class="p">,</span> <span class="mf">0.11</span>  <span class="o">|</span>
+<span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2013_01_21.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span> <span class="o">|</span><span class="mi">2013</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">21</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2048</span><span class="n">x2048</span> <span class="o">|</span><span class="mf">0.100</span> <span class="n">mas</span>   <span class="o">|</span><span class="mf">0.522</span> <span class="n">mas</span><span class="p">,</span> <span class="mf">1.186</span> <span class="n">mas</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.11</span> <span class="o">|</span>
+<span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2013_02_10.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span> <span class="o">|</span><span class="mi">2013</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">10</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2048</span><span class="n">x2048</span> <span class="o">|</span><span class="mf">0.100</span> <span class="n">mas</span>   <span class="o">|</span><span class="mf">0.503</span> <span class="n">mas</span><span class="p">,</span> <span class="mf">1.139</span> <span class="n">mas</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.13</span> <span class="o">|</span>
+<span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2013_02_28.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span> <span class="o">|</span><span class="mi">2013</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">28</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2048</span><span class="n">x2048</span> <span class="o">|</span><span class="mf">0.100</span> <span class="n">mas</span>   <span class="o">|</span><span class="mf">0.546</span> <span class="n">mas</span><span class="p">,</span> <span class="mf">1.209</span> <span class="n">mas</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.06</span> <span class="o">|</span>
 
-Number of files: 13
-Mean beam: Bmin: 0.557, Bmaj: 1.291, Angle:-0.07
+<span class="n">Number</span> <span class="n">of</span> <span class="n">files</span><span class="p">:</span> <span class="mi">13</span>
+<span class="n">Mean</span> <span class="n">beam</span><span class="p">:</span> <span class="n">Bmin</span><span class="p">:</span> <span class="mf">0.557</span><span class="p">,</span> <span class="n">Bmaj</span><span class="p">:</span> <span class="mf">1.291</span><span class="p">,</span> <span class="n">Angle</span><span class="p">:</span><span class="o">-</span><span class="mf">0.07</span>
 </pre></div>
 </div>
 <p>while tasks.info_files_delta() gives information about the
 velocity resolution:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">info_files_delta</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">info_files_delta</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Date 1              |Date 2              |Delta (d) |Angular vel. res. (mas / yr) |Proper vel. res. (c) |
----------------------------------------------------------------------------------------------------------
-2012-01-14 00:00:00 |2012-03-04 00:00:00 |50.0      |0.730499803077               |1.7063071511         |
-2012-03-04 00:00:00 |2012-04-30 00:00:00 |57.0      |0.640789300944               |1.49676065886        |
-2012-04-30 00:00:00 |2012-05-24 00:00:00 |24.0      |1.52187458974                |3.5548065648         |
-2012-05-24 00:00:00 |2012-07-12 00:00:00 |49.0      |0.745407962323               |1.74112974602        |
-2012-07-12 00:00:00 |2012-08-03 00:00:00 |22.0      |1.66022682517                |3.87797079796        |
-2012-08-03 00:00:00 |2012-09-02 00:00:00 |30.0      |1.21749970665                |2.84384522331        |
-2012-09-02 00:00:00 |2012-11-02 00:00:00 |61.0      |0.59877034753                |1.39861240491        |
-2012-11-02 00:00:00 |2012-11-29 00:00:00 |27.0      |1.35277745183                |3.1598280259         |
-2012-11-29 00:00:00 |2012-12-23 00:00:00 |24.0      |1.52187463331                |3.55480652913        |
-2012-12-23 00:00:00 |2013-01-21 00:00:00 |29.0      |1.25948245515                |2.9419088517         |
-2013-01-21 00:00:00 |2013-02-10 00:00:00 |20.0      |1.82624955997                |4.26576783496        |
-2013-02-10 00:00:00 |2013-02-28 00:00:00 |18.0      |2.02916617774                |4.73974203885        |
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Date</span> <span class="mi">1</span>              <span class="o">|</span><span class="n">Date</span> <span class="mi">2</span>              <span class="o">|</span><span class="n">Delta</span> <span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">|</span><span class="n">Angular</span> <span class="n">vel</span><span class="o">.</span> <span class="n">res</span><span class="o">.</span> <span class="p">(</span><span class="n">mas</span> <span class="o">/</span> <span class="n">yr</span><span class="p">)</span> <span class="o">|</span><span class="n">Proper</span> <span class="n">vel</span><span class="o">.</span> <span class="n">res</span><span class="o">.</span> <span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">|</span>
+<span class="o">---------------------------------------------------------------------------------------------------------</span>
+<span class="mi">2012</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">14</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2012</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">04</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mf">50.0</span>      <span class="o">|</span><span class="mf">0.730499803077</span>               <span class="o">|</span><span class="mf">1.7063071511</span>         <span class="o">|</span>
+<span class="mi">2012</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">04</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2012</span><span class="o">-</span><span class="mi">04</span><span class="o">-</span><span class="mi">30</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mf">57.0</span>      <span class="o">|</span><span class="mf">0.640789300944</span>               <span class="o">|</span><span class="mf">1.49676065886</span>        <span class="o">|</span>
+<span class="mi">2012</span><span class="o">-</span><span class="mi">04</span><span class="o">-</span><span class="mi">30</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2012</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">24</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mf">24.0</span>      <span class="o">|</span><span class="mf">1.52187458974</span>                <span class="o">|</span><span class="mf">3.5548065648</span>         <span class="o">|</span>
+<span class="mi">2012</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">24</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2012</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">12</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mf">49.0</span>      <span class="o">|</span><span class="mf">0.745407962323</span>               <span class="o">|</span><span class="mf">1.74112974602</span>        <span class="o">|</span>
+<span class="mi">2012</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">12</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2012</span><span class="o">-</span><span class="mi">08</span><span class="o">-</span><span class="mi">03</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mf">22.0</span>      <span class="o">|</span><span class="mf">1.66022682517</span>                <span class="o">|</span><span class="mf">3.87797079796</span>        <span class="o">|</span>
+<span class="mi">2012</span><span class="o">-</span><span class="mi">08</span><span class="o">-</span><span class="mi">03</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2012</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">02</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mf">30.0</span>      <span class="o">|</span><span class="mf">1.21749970665</span>                <span class="o">|</span><span class="mf">2.84384522331</span>        <span class="o">|</span>
+<span class="mi">2012</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">02</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2012</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">02</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mf">61.0</span>      <span class="o">|</span><span class="mf">0.59877034753</span>                <span class="o">|</span><span class="mf">1.39861240491</span>        <span class="o">|</span>
+<span class="mi">2012</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">02</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2012</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">29</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mf">27.0</span>      <span class="o">|</span><span class="mf">1.35277745183</span>                <span class="o">|</span><span class="mf">3.1598280259</span>         <span class="o">|</span>
+<span class="mi">2012</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">29</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2012</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">23</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mf">24.0</span>      <span class="o">|</span><span class="mf">1.52187463331</span>                <span class="o">|</span><span class="mf">3.55480652913</span>        <span class="o">|</span>
+<span class="mi">2012</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">23</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2013</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">21</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mf">29.0</span>      <span class="o">|</span><span class="mf">1.25948245515</span>                <span class="o">|</span><span class="mf">2.9419088517</span>         <span class="o">|</span>
+<span class="mi">2013</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">21</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2013</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">10</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mf">20.0</span>      <span class="o">|</span><span class="mf">1.82624955997</span>                <span class="o">|</span><span class="mf">4.26576783496</span>        <span class="o">|</span>
+<span class="mi">2013</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">10</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mi">2013</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">28</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">|</span><span class="mf">18.0</span>      <span class="o">|</span><span class="mf">2.02916617774</span>                <span class="o">|</span><span class="mf">4.73974203885</span>        <span class="o">|</span>
 
-Mean Delta time: 34.25 d +- 14.7880864212 d
-Mean Velocity resolution: 1.25871823445 mas / yr +- 0.46420269991 mas / yr
-Mean Velocity resolution: 2.94012381896 c +- 1.08428825211 c
+<span class="n">Mean</span> <span class="n">Delta</span> <span class="n">time</span><span class="p">:</span> <span class="mf">34.25</span> <span class="n">d</span> <span class="o">+-</span> <span class="mf">14.7880864212</span> <span class="n">d</span>
+<span class="n">Mean</span> <span class="n">Velocity</span> <span class="n">resolution</span><span class="p">:</span> <span class="mf">1.25871823445</span> <span class="n">mas</span> <span class="o">/</span> <span class="n">yr</span> <span class="o">+-</span> <span class="mf">0.46420269991</span> <span class="n">mas</span> <span class="o">/</span> <span class="n">yr</span>
+<span class="n">Mean</span> <span class="n">Velocity</span> <span class="n">resolution</span><span class="p">:</span> <span class="mf">2.94012381896</span> <span class="n">c</span> <span class="o">+-</span> <span class="mf">1.08428825211</span> <span class="n">c</span>
 </pre></div>
 </div>
 <p>And to view all currently selected images, we run:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">view_all</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">view_all</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This will open a separate window in which you can walk through all the
@@ -228,7 +218,7 @@ images.</p>
 <p>To define our region of interest, we need to set a pre_process
 function. We will do similarly to define also a background region in the
 image:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">pre_process</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">pre_process</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
     <span class="n">img</span><span class="o">.</span><span class="n">crop</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">15</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="n">projection</span><span class="o">=</span><span class="n">ctx</span><span class="o">.</span><span class="n">get_projection</span><span class="p">(</span><span class="n">img</span><span class="p">))</span>
 
 <span class="k">def</span> <span class="nf">get_bg</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
@@ -241,10 +231,10 @@ image:</p>
 <p>We can also define a mask. We will use for that a convenient task that
 set the mask as the brightest connected structure above a certain
 threshold of the stacked image:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">set_mask_from_stack_img</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">nsigma</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">set_mask_from_stack_img</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">nsigma</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">view_all</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">view_all</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/view_all_crop_mask2.png"><img alt="../_images/view_all_crop_mask2.png" src="../_images/view_all_crop_mask2.png" style="width: 500px;" /></a>
@@ -253,23 +243,23 @@ threshold of the stacked image:</p>
 <h2>Setting up the detection configuration:<a class="headerlink" href="#setting-up-the-detection-configuration" title="Permalink to this headline">¶</a></h2>
 <p>Similarly to the data configuration, the detection configuration is
 stored in ctx.config.finder:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">finder</span><span class="o">.</span><span class="n">doc</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">finder</span><span class="o">.</span><span class="n">doc</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Documentation for:Finder configuration
-Option              |Documentation                          |Default   |
-------------------------------------------------------------------------
-alpha_threashold    |Significance threshold                 |3         |
-alpha_detection     |Detection threshold                    |4         |
-min_scale           |Minimum Wavelet scale                  |1         |
-max_scale           |Maximum Wavelet scale                  |4         |
-use_iwd             |Use Intermediate Wavelet Decomposition |False     |
-exclude_border_dist |Number of pixel from border to exclude |1         |
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Documentation</span> <span class="k">for</span><span class="p">:</span><span class="n">Finder</span> <span class="n">configuration</span>
+<span class="n">Option</span>              <span class="o">|</span><span class="n">Documentation</span>                          <span class="o">|</span><span class="n">Default</span>   <span class="o">|</span>
+<span class="o">------------------------------------------------------------------------</span>
+<span class="n">alpha_threashold</span>    <span class="o">|</span><span class="n">Significance</span> <span class="n">threshold</span>                 <span class="o">|</span><span class="mi">3</span>         <span class="o">|</span>
+<span class="n">alpha_detection</span>     <span class="o">|</span><span class="n">Detection</span> <span class="n">threshold</span>                    <span class="o">|</span><span class="mi">4</span>         <span class="o">|</span>
+<span class="n">min_scale</span>           <span class="o">|</span><span class="n">Minimum</span> <span class="n">Wavelet</span> <span class="n">scale</span>                  <span class="o">|</span><span class="mi">1</span>         <span class="o">|</span>
+<span class="n">max_scale</span>           <span class="o">|</span><span class="n">Maximum</span> <span class="n">Wavelet</span> <span class="n">scale</span>                  <span class="o">|</span><span class="mi">4</span>         <span class="o">|</span>
+<span class="n">use_iwd</span>             <span class="o">|</span><span class="n">Use</span> <span class="n">Intermediate</span> <span class="n">Wavelet</span> <span class="n">Decomposition</span> <span class="o">|</span><span class="kc">False</span>     <span class="o">|</span>
+<span class="n">exclude_border_dist</span> <span class="o">|</span><span class="n">Number</span> <span class="n">of</span> <span class="n">pixel</span> <span class="kn">from</span> <span class="nn">border</span> <span class="n">to</span> <span class="n">exclude</span> <span class="o">|</span><span class="mi">1</span>         <span class="o">|</span>
 </pre></div>
 </div>
 <p>We will perform the analysis for scales 2 and 3, with intermediate scale
 wavelet decomposition:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">finder</span><span class="o">.</span><span class="n">min_scale</span> <span class="o">=</span> <span class="mi">2</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">finder</span><span class="o">.</span><span class="n">min_scale</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">finder</span><span class="o">.</span><span class="n">max_scale</span> <span class="o">=</span> <span class="mi">4</span>
 <span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">finder</span><span class="o">.</span><span class="n">use_iwd</span> <span class="o">=</span> <span class="bp">True</span>
 </pre></div>
@@ -278,30 +268,30 @@ wavelet decomposition:</p>
 <div class="section" id="running-the-detection-task">
 <h2>Running the detection task<a class="headerlink" href="#running-the-detection-task" title="Permalink to this headline">¶</a></h2>
 <p>Starting the detection is done with a task:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">detection_all</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">detection_all</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Start detection on: FitsImage(0430+052.u.2012_01_14.icn.fits)
-Start detection on: FitsImage(0430+052.u.2012_03_04.icn.fits)
-Start detection on: FitsImage(0430+052.u.2012_04_29.icn.fits)
-Start detection on: FitsImage(0430+052.u.2012_05_24.icn.fits)
-Start detection on: FitsImage(0430+052.u.2012_07_12.icn.fits)
-Start detection on: FitsImage(0430+052.u.2012_08_03.icn.fits)
-Start detection on: FitsImage(0430+052.u.2012_09_02.icn.fits)
-Start detection on: FitsImage(0430+052.u.2012_11_02.icn.fits)
-Start detection on: FitsImage(0430+052.u.2012_11_28.icn.fits)
-Start detection on: FitsImage(0430+052.u.2012_12_23.icn.fits)
-Start detection on: FitsImage(0430+052.u.2013_01_21.icn.fits)
-Start detection on: FitsImage(0430+052.u.2013_02_10.icn.fits)
-Start detection on: FitsImage(0430+052.u.2013_02_28.icn.fits)
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Start</span> <span class="n">detection</span> <span class="n">on</span><span class="p">:</span> <span class="n">FitsImage</span><span class="p">(</span><span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2012_01_14.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span><span class="p">)</span>
+<span class="n">Start</span> <span class="n">detection</span> <span class="n">on</span><span class="p">:</span> <span class="n">FitsImage</span><span class="p">(</span><span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2012_03_04.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span><span class="p">)</span>
+<span class="n">Start</span> <span class="n">detection</span> <span class="n">on</span><span class="p">:</span> <span class="n">FitsImage</span><span class="p">(</span><span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2012_04_29.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span><span class="p">)</span>
+<span class="n">Start</span> <span class="n">detection</span> <span class="n">on</span><span class="p">:</span> <span class="n">FitsImage</span><span class="p">(</span><span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2012_05_24.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span><span class="p">)</span>
+<span class="n">Start</span> <span class="n">detection</span> <span class="n">on</span><span class="p">:</span> <span class="n">FitsImage</span><span class="p">(</span><span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2012_07_12.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span><span class="p">)</span>
+<span class="n">Start</span> <span class="n">detection</span> <span class="n">on</span><span class="p">:</span> <span class="n">FitsImage</span><span class="p">(</span><span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2012_08_03.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span><span class="p">)</span>
+<span class="n">Start</span> <span class="n">detection</span> <span class="n">on</span><span class="p">:</span> <span class="n">FitsImage</span><span class="p">(</span><span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2012_09_02.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span><span class="p">)</span>
+<span class="n">Start</span> <span class="n">detection</span> <span class="n">on</span><span class="p">:</span> <span class="n">FitsImage</span><span class="p">(</span><span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2012_11_02.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span><span class="p">)</span>
+<span class="n">Start</span> <span class="n">detection</span> <span class="n">on</span><span class="p">:</span> <span class="n">FitsImage</span><span class="p">(</span><span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2012_11_28.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span><span class="p">)</span>
+<span class="n">Start</span> <span class="n">detection</span> <span class="n">on</span><span class="p">:</span> <span class="n">FitsImage</span><span class="p">(</span><span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2012_12_23.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span><span class="p">)</span>
+<span class="n">Start</span> <span class="n">detection</span> <span class="n">on</span><span class="p">:</span> <span class="n">FitsImage</span><span class="p">(</span><span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2013_01_21.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span><span class="p">)</span>
+<span class="n">Start</span> <span class="n">detection</span> <span class="n">on</span><span class="p">:</span> <span class="n">FitsImage</span><span class="p">(</span><span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2013_02_10.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span><span class="p">)</span>
+<span class="n">Start</span> <span class="n">detection</span> <span class="n">on</span><span class="p">:</span> <span class="n">FitsImage</span><span class="p">(</span><span class="mi">0430</span><span class="o">+</span><span class="mf">052.</span><span class="n">u</span><span class="o">.</span><span class="mf">2013_02_28.</span><span class="n">icn</span><span class="o">.</span><span class="n">fits</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Different tasks can be used to look at the results:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">view_wds</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">scales</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">view_wds</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">scales</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/view_wds.png"><img alt="../_images/view_wds.png" src="../_images/view_wds.png" style="width: 500px;" /></a>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">plot_all_features</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">scales</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="n">pa</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">feature_filter</span><span class="o">=</span><span class="n">wise</span><span class="o">.</span><span class="n">DfcFilter</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">mas</span><span class="p">))</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">plot_all_features</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">scales</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="n">pa</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">feature_filter</span><span class="o">=</span><span class="n">wise</span><span class="o">.</span><span class="n">DfcFilter</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">mas</span><span class="p">))</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/plot_all_features.png"><img alt="../_images/plot_all_features.png" src="../_images/plot_all_features.png" style="width: 500px;" /></a>
@@ -309,10 +299,10 @@ Start detection on: FitsImage(0430+052.u.2013_02_28.icn.fits)
 <div class="section" id="setting-up-the-matching-configuration">
 <h2>Setting up the matching configuration:<a class="headerlink" href="#setting-up-the-matching-configuration" title="Permalink to this headline">¶</a></h2>
 <p>The matching configuration is stored in ctx.config.matcher:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">matcher</span><span class="o">.</span><span class="n">doc</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">matcher</span><span class="o">.</span><span class="n">doc</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Documentation for:Matcher configuration
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Documentation for:Matcher configuration
 Option                          |Documentation                            |Default                                 |
 --------------------------------------------------------------------------------------------------------------------
 use_upper_info                  |Use Pyramidal scheme for matching        |True                                    |
@@ -345,7 +335,7 @@ mscsc2_smooth                   |Apply smooth on merged features before   |True 
 </div>
 <p>We will use the method ScaleMatcherMSCSC2 for the matching job. We also
 restrict the range of allowed displacement with a DeltaRangeFilter:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">JET_ANGLE</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.4</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">rad</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">JET_ANGLE</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.4</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">rad</span>
 <span class="n">direction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">JET_ANGLE</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">JET_ANGLE</span><span class="p">)])</span>
 
 <span class="n">delta_filter</span> <span class="o">=</span> <span class="n">wise</span><span class="o">.</span><span class="n">DeltaRangeFilter</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">mas</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">x_dir</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span> <span class="n">pix_limit</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
@@ -360,83 +350,83 @@ restrict the range of allowed displacement with a DeltaRangeFilter:</p>
 <div class="section" id="running-the-matching-task">
 <h2>Running the matching task<a class="headerlink" href="#running-the-matching-task" title="Permalink to this headline">¶</a></h2>
 <p>Starting the matching is also done with a task:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Several tasks are available to view the results.</p>
 <p>We can look displacements from epoch to epoch individually at a specified
 scale. The scale parameter in all tasks is in pixel.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">view_displacements</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">view_displacements</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/view_displacements.png"><img alt="../_images/view_displacements.png" src="../_images/view_displacements.png" style="width: 500px;" /></a>
 <a class="reference internal image-reference" href="../_images/view_displacements2.png"><img alt="../_images/view_displacements2.png" src="../_images/view_displacements2.png" style="width: 500px;" /></a>
 <p>We can also view how the different components evolve as the travel away
 from the core:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">plot_separation_from_core</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">plot_separation_from_core</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/plot_separation_from_core_scale4.png"><img alt="../_images/plot_separation_from_core_scale4.png" src="../_images/plot_separation_from_core_scale4.png" style="width: 500px;" /></a>
 <a class="reference internal image-reference" href="../_images/plot_separation_from_core_scale8.png"><img alt="../_images/plot_separation_from_core_scale8.png" src="../_images/plot_separation_from_core_scale8.png" style="width: 500px;" /></a>
 <p>plot_separation_from_core() have several options. It is possible to
 additionally plot the position angle of the features, and filter them:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">plot_separation_from_core</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">min_link_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">pa</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">feature_filter</span><span class="o">=</span><span class="n">wise</span><span class="o">.</span><span class="n">DfcFilter</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">mas</span><span class="p">))</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">plot_separation_from_core</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">min_link_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">pa</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">feature_filter</span><span class="o">=</span><span class="n">wise</span><span class="o">.</span><span class="n">DfcFilter</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">mas</span><span class="p">))</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/plot_separation_from_core_pa_scale4.png"><img alt="../_images/plot_separation_from_core_pa_scale4.png" src="../_images/plot_separation_from_core_pa_scale4.png" style="width: 500px;" /></a>
 <a class="reference internal image-reference" href="../_images/plot_separation_from_core_pa_scale8.png"><img alt="../_images/plot_separation_from_core_pa_scale8.png" src="../_images/plot_separation_from_core_pa_scale8.png" style="width: 500px;" /></a>
 <p>We can also fit a fct to the trajectory. The task then return a
 dictionary with all the fit result:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">fit_result</span> <span class="o">=</span> <span class="n">tasks</span><span class="o">.</span><span class="n">plot_separation_from_core</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">scales</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">fit_fct</span><span class="o">=</span><span class="n">nputils</span><span class="o">.</span><span class="n">LinearFct</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fit_result</span> <span class="o">=</span> <span class="n">tasks</span><span class="o">.</span><span class="n">plot_separation_from_core</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">scales</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">fit_fct</span><span class="o">=</span><span class="n">nputils</span><span class="o">.</span><span class="n">LinearFct</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                                                  <span class="n">min_link_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">feature_filter</span><span class="o">=</span><span class="n">wise</span><span class="o">.</span><span class="n">DfcFilter</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">mas</span><span class="p">))</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/plot_separation_from_core_fit_scale4.png"><img alt="../_images/plot_separation_from_core_fit_scale4.png" src="../_images/plot_separation_from_core_fit_scale4.png" style="width: 500px;" /></a>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">link</span><span class="p">,</span> <span class="n">fit_fct</span> <span class="ow">in</span> <span class="n">fit_result</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">link</span><span class="p">,</span> <span class="n">fit_fct</span> <span class="ow">in</span> <span class="n">fit_result</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
     <span class="k">print</span> <span class="s2">&quot;Fit result for link </span><span class="si">%s</span><span class="s2">: </span><span class="si">%.2f</span><span class="s2"> +- </span><span class="si">%.2f</span><span class="s2"> mas / year&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">link</span><span class="o">.</span><span class="n">get_id</span><span class="p">(),</span> <span class="n">fit_fct</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">fit_fct</span><span class="o">.</span><span class="n">ea</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Fit result for link 4:5: 1.74 +- 0.12 mas / year
-Fit result for link 4:7: 2.50 +- 0.09 mas / year
-Fit result for link 4:8: 2.99 +- 0.03 mas / year
-Fit result for link 4:4: 2.21 +- 0.81 mas / year
-Fit result for link 4:14: 0.56 +- 0.28 mas / year
-Fit result for link 4:9: 2.64 +- 0.08 mas / year
-Fit result for link 4:6: 2.40 +- 0.08 mas / year
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Fit</span> <span class="n">result</span> <span class="k">for</span> <span class="n">link</span> <span class="mi">4</span><span class="p">:</span><span class="mi">5</span><span class="p">:</span> <span class="mf">1.74</span> <span class="o">+-</span> <span class="mf">0.12</span> <span class="n">mas</span> <span class="o">/</span> <span class="n">year</span>
+<span class="n">Fit</span> <span class="n">result</span> <span class="k">for</span> <span class="n">link</span> <span class="mi">4</span><span class="p">:</span><span class="mi">7</span><span class="p">:</span> <span class="mf">2.50</span> <span class="o">+-</span> <span class="mf">0.09</span> <span class="n">mas</span> <span class="o">/</span> <span class="n">year</span>
+<span class="n">Fit</span> <span class="n">result</span> <span class="k">for</span> <span class="n">link</span> <span class="mi">4</span><span class="p">:</span><span class="mi">8</span><span class="p">:</span> <span class="mf">2.99</span> <span class="o">+-</span> <span class="mf">0.03</span> <span class="n">mas</span> <span class="o">/</span> <span class="n">year</span>
+<span class="n">Fit</span> <span class="n">result</span> <span class="k">for</span> <span class="n">link</span> <span class="mi">4</span><span class="p">:</span><span class="mi">4</span><span class="p">:</span> <span class="mf">2.21</span> <span class="o">+-</span> <span class="mf">0.81</span> <span class="n">mas</span> <span class="o">/</span> <span class="n">year</span>
+<span class="n">Fit</span> <span class="n">result</span> <span class="k">for</span> <span class="n">link</span> <span class="mi">4</span><span class="p">:</span><span class="mi">14</span><span class="p">:</span> <span class="mf">0.56</span> <span class="o">+-</span> <span class="mf">0.28</span> <span class="n">mas</span> <span class="o">/</span> <span class="n">year</span>
+<span class="n">Fit</span> <span class="n">result</span> <span class="k">for</span> <span class="n">link</span> <span class="mi">4</span><span class="p">:</span><span class="mi">9</span><span class="p">:</span> <span class="mf">2.64</span> <span class="o">+-</span> <span class="mf">0.08</span> <span class="n">mas</span> <span class="o">/</span> <span class="n">year</span>
+<span class="n">Fit</span> <span class="n">result</span> <span class="k">for</span> <span class="n">link</span> <span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">:</span> <span class="mf">2.40</span> <span class="o">+-</span> <span class="mf">0.08</span> <span class="n">mas</span> <span class="o">/</span> <span class="n">year</span>
 </pre></div>
 </div>
 <p>To view the trajectories on a map, we can set first a reference image
 that will be used as background. We will use a stacked image of the all
 set using a convenient tasks for that:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">set_stack_image_as_ref</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">set_stack_image_as_ref</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">view_links</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">contour</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="n">map_cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">view_links</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">contour</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="n">map_cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/view_links.png"><img alt="../_images/view_links.png" src="../_images/view_links.png" style="width: 500px;" /></a>
 <p>The result can be saved on disk using the save() task:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="s2">&quot;walkthrough_test&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="s2">&quot;walkthrough_test&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Saved MultiScaleImageSet @ /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test.ms.dat
-Saved link builder @ /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test_4.ms.dfc.dat
-Saved link builder @ /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test_6.ms.dfc.dat
-Saved link builder @ /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test_8.ms.dfc.dat
-Saved link builder @ /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test_12.ms.dfc.dat
-Saved image set @ /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test.set.dat
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Saved</span> <span class="n">MultiScaleImageSet</span> <span class="o">@</span> <span class="o">/</span><span class="n">homes</span><span class="o">/</span><span class="n">fmertens</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="mi">3</span><span class="n">c120</span><span class="o">/</span><span class="n">mojave</span><span class="o">/</span><span class="n">run001</span><span class="o">/</span><span class="n">walkthrough_test</span><span class="o">/</span><span class="n">walkthrough_test</span><span class="o">.</span><span class="n">ms</span><span class="o">.</span><span class="n">dat</span>
+<span class="n">Saved</span> <span class="n">link</span> <span class="n">builder</span> <span class="o">@</span> <span class="o">/</span><span class="n">homes</span><span class="o">/</span><span class="n">fmertens</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="mi">3</span><span class="n">c120</span><span class="o">/</span><span class="n">mojave</span><span class="o">/</span><span class="n">run001</span><span class="o">/</span><span class="n">walkthrough_test</span><span class="o">/</span><span class="n">walkthrough_test_4</span><span class="o">.</span><span class="n">ms</span><span class="o">.</span><span class="n">dfc</span><span class="o">.</span><span class="n">dat</span>
+<span class="n">Saved</span> <span class="n">link</span> <span class="n">builder</span> <span class="o">@</span> <span class="o">/</span><span class="n">homes</span><span class="o">/</span><span class="n">fmertens</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="mi">3</span><span class="n">c120</span><span class="o">/</span><span class="n">mojave</span><span class="o">/</span><span class="n">run001</span><span class="o">/</span><span class="n">walkthrough_test</span><span class="o">/</span><span class="n">walkthrough_test_6</span><span class="o">.</span><span class="n">ms</span><span class="o">.</span><span class="n">dfc</span><span class="o">.</span><span class="n">dat</span>
+<span class="n">Saved</span> <span class="n">link</span> <span class="n">builder</span> <span class="o">@</span> <span class="o">/</span><span class="n">homes</span><span class="o">/</span><span class="n">fmertens</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="mi">3</span><span class="n">c120</span><span class="o">/</span><span class="n">mojave</span><span class="o">/</span><span class="n">run001</span><span class="o">/</span><span class="n">walkthrough_test</span><span class="o">/</span><span class="n">walkthrough_test_8</span><span class="o">.</span><span class="n">ms</span><span class="o">.</span><span class="n">dfc</span><span class="o">.</span><span class="n">dat</span>
+<span class="n">Saved</span> <span class="n">link</span> <span class="n">builder</span> <span class="o">@</span> <span class="o">/</span><span class="n">homes</span><span class="o">/</span><span class="n">fmertens</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="mi">3</span><span class="n">c120</span><span class="o">/</span><span class="n">mojave</span><span class="o">/</span><span class="n">run001</span><span class="o">/</span><span class="n">walkthrough_test</span><span class="o">/</span><span class="n">walkthrough_test_12</span><span class="o">.</span><span class="n">ms</span><span class="o">.</span><span class="n">dfc</span><span class="o">.</span><span class="n">dat</span>
+<span class="n">Saved</span> <span class="n">image</span> <span class="nb">set</span> <span class="o">@</span> <span class="o">/</span><span class="n">homes</span><span class="o">/</span><span class="n">fmertens</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="mi">3</span><span class="n">c120</span><span class="o">/</span><span class="n">mojave</span><span class="o">/</span><span class="n">run001</span><span class="o">/</span><span class="n">walkthrough_test</span><span class="o">/</span><span class="n">walkthrough_test</span><span class="o">.</span><span class="n">set</span><span class="o">.</span><span class="n">dat</span>
 </pre></div>
 </div>
 <p>And can later be loaded using the load() task:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="s2">&quot;walkthrough_test&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="s2">&quot;walkthrough_test&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Loaded image set from /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test.set.dat
-Loaded MultiScaleImageSet from /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test.ms.dat
-Loaded link builder from /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test_4.ms.dfc.dat
-Loaded link builder from /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test_6.ms.dfc.dat
-Loaded link builder from /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test_8.ms.dfc.dat
-Loaded link builder from /homes/fmertens/data/3c120/mojave/run001/walkthrough_test/walkthrough_test_12.ms.dfc.dat
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Loaded</span> <span class="n">image</span> <span class="nb">set</span> <span class="kn">from</span> <span class="o">/</span><span class="n">homes</span><span class="o">/</span><span class="n">fmertens</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="mi">3</span><span class="n">c120</span><span class="o">/</span><span class="n">mojave</span><span class="o">/</span><span class="n">run001</span><span class="o">/</span><span class="n">walkthrough_test</span><span class="o">/</span><span class="n">walkthrough_test</span><span class="o">.</span><span class="n">set</span><span class="o">.</span><span class="n">dat</span>
+<span class="n">Loaded</span> <span class="n">MultiScaleImageSet</span> <span class="kn">from</span> <span class="o">/</span><span class="n">homes</span><span class="o">/</span><span class="n">fmertens</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="mi">3</span><span class="n">c120</span><span class="o">/</span><span class="n">mojave</span><span class="o">/</span><span class="n">run001</span><span class="o">/</span><span class="n">walkthrough_test</span><span class="o">/</span><span class="n">walkthrough_test</span><span class="o">.</span><span class="n">ms</span><span class="o">.</span><span class="n">dat</span>
+<span class="n">Loaded</span> <span class="n">link</span> <span class="n">builder</span> <span class="kn">from</span> <span class="o">/</span><span class="n">homes</span><span class="o">/</span><span class="n">fmertens</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="mi">3</span><span class="n">c120</span><span class="o">/</span><span class="n">mojave</span><span class="o">/</span><span class="n">run001</span><span class="o">/</span><span class="n">walkthrough_test</span><span class="o">/</span><span class="n">walkthrough_test_4</span><span class="o">.</span><span class="n">ms</span><span class="o">.</span><span class="n">dfc</span><span class="o">.</span><span class="n">dat</span>
+<span class="n">Loaded</span> <span class="n">link</span> <span class="n">builder</span> <span class="kn">from</span> <span class="o">/</span><span class="n">homes</span><span class="o">/</span><span class="n">fmertens</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="mi">3</span><span class="n">c120</span><span class="o">/</span><span class="n">mojave</span><span class="o">/</span><span class="n">run001</span><span class="o">/</span><span class="n">walkthrough_test</span><span class="o">/</span><span class="n">walkthrough_test_6</span><span class="o">.</span><span class="n">ms</span><span class="o">.</span><span class="n">dfc</span><span class="o">.</span><span class="n">dat</span>
+<span class="n">Loaded</span> <span class="n">link</span> <span class="n">builder</span> <span class="kn">from</span> <span class="o">/</span><span class="n">homes</span><span class="o">/</span><span class="n">fmertens</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="mi">3</span><span class="n">c120</span><span class="o">/</span><span class="n">mojave</span><span class="o">/</span><span class="n">run001</span><span class="o">/</span><span class="n">walkthrough_test</span><span class="o">/</span><span class="n">walkthrough_test_8</span><span class="o">.</span><span class="n">ms</span><span class="o">.</span><span class="n">dfc</span><span class="o">.</span><span class="n">dat</span>
+<span class="n">Loaded</span> <span class="n">link</span> <span class="n">builder</span> <span class="kn">from</span> <span class="o">/</span><span class="n">homes</span><span class="o">/</span><span class="n">fmertens</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="mi">3</span><span class="n">c120</span><span class="o">/</span><span class="n">mojave</span><span class="o">/</span><span class="n">run001</span><span class="o">/</span><span class="n">walkthrough_test</span><span class="o">/</span><span class="n">walkthrough_test_12</span><span class="o">.</span><span class="n">ms</span><span class="o">.</span><span class="n">dfc</span><span class="o">.</span><span class="n">dat</span>
 </pre></div>
 </div>
 </div>
@@ -450,7 +440,7 @@ ctx.get_detection_result() or ctx.get_match_result() depending on
 your need. This later function return a MultiScaleMatchResultSet and a
 MultiScaleFeaturesLinkBuilder:</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ms_result_set</span><span class="p">,</span> <span class="n">ms_link_builder</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">get_match_result</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ms_result_set</span><span class="p">,</span> <span class="n">ms_link_builder</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">get_match_result</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>This is two different and compatible data structures that handle the
@@ -464,20 +454,20 @@ scales.</p>
 <li>The results can also be loaded into a pandas data structure
 (<a class="reference external" href="http://pandas.pydata.org/">http://pandas.pydata.org/</a>):</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">tasks</span><span class="o">.</span><span class="n">get_velocities_data</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">min_link_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">scales</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">tasks</span><span class="o">.</span><span class="n">get_velocities_data</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">min_link_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">scales</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>data is a spreadsheet like object with attributes as columns. The
 following attributes are provided:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;angular_sep&#39;</span><span class="p">,</span> <span class="s1">&#39;angular_velocity&#39;</span><span class="p">,</span> <span class="s1">&#39;angular_velocity_error&#39;</span><span class="p">,</span> <span class="s1">&#39;angular_velocity_error_dec&#39;</span><span class="p">,</span> <span class="s1">&#39;angular_velocity_error_ra&#39;</span><span class="p">,</span> <span class="s1">&#39;dec&#39;</span><span class="p">,</span> <span class="s1">&#39;dec_error&#39;</span><span class="p">,</span> <span class="s1">&#39;delta_dec&#39;</span><span class="p">,</span> <span class="s1">&#39;delta_ra&#39;</span><span class="p">,</span> <span class="s1">&#39;delta_time&#39;</span><span class="p">,</span> <span class="s1">&#39;dfc&#39;</span><span class="p">,</span> <span class="s1">&#39;epoch&#39;</span><span class="p">,</span> <span class="s1">&#39;features&#39;</span><span class="p">,</span> <span class="s1">&#39;intensity&#39;</span><span class="p">,</span> <span class="s1">&#39;link_id&#39;</span><span class="p">,</span> <span class="s1">&#39;match&#39;</span><span class="p">,</span> <span class="s1">&#39;pa&#39;</span><span class="p">,</span> <span class="s1">&#39;proper_velocity&#39;</span><span class="p">,</span> <span class="s1">&#39;proper_velocity_error&#39;</span><span class="p">,</span> <span class="s1">&#39;proper_velocity_error_dec&#39;</span><span class="p">,</span> <span class="s1">&#39;proper_velocity_error_ra&#39;</span><span class="p">,</span> <span class="s1">&#39;ra&#39;</span><span class="p">,</span> <span class="s1">&#39;ra_error&#39;</span><span class="p">,</span> <span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="s1">&#39;sep_pa&#39;</span><span class="p">,</span> <span class="s1">&#39;snr&#39;</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;angular_sep&#39;</span><span class="p">,</span> <span class="s1">&#39;angular_velocity&#39;</span><span class="p">,</span> <span class="s1">&#39;angular_velocity_error&#39;</span><span class="p">,</span> <span class="s1">&#39;angular_velocity_error_dec&#39;</span><span class="p">,</span> <span class="s1">&#39;angular_velocity_error_ra&#39;</span><span class="p">,</span> <span class="s1">&#39;dec&#39;</span><span class="p">,</span> <span class="s1">&#39;dec_error&#39;</span><span class="p">,</span> <span class="s1">&#39;delta_dec&#39;</span><span class="p">,</span> <span class="s1">&#39;delta_ra&#39;</span><span class="p">,</span> <span class="s1">&#39;delta_time&#39;</span><span class="p">,</span> <span class="s1">&#39;dfc&#39;</span><span class="p">,</span> <span class="s1">&#39;epoch&#39;</span><span class="p">,</span> <span class="s1">&#39;features&#39;</span><span class="p">,</span> <span class="s1">&#39;intensity&#39;</span><span class="p">,</span> <span class="s1">&#39;link_id&#39;</span><span class="p">,</span> <span class="s1">&#39;match&#39;</span><span class="p">,</span> <span class="s1">&#39;pa&#39;</span><span class="p">,</span> <span class="s1">&#39;proper_velocity&#39;</span><span class="p">,</span> <span class="s1">&#39;proper_velocity_error&#39;</span><span class="p">,</span> <span class="s1">&#39;proper_velocity_error_dec&#39;</span><span class="p">,</span> <span class="s1">&#39;proper_velocity_error_ra&#39;</span><span class="p">,</span> <span class="s1">&#39;ra&#39;</span><span class="p">,</span> <span class="s1">&#39;ra_error&#39;</span><span class="p">,</span> <span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="s1">&#39;sep_pa&#39;</span><span class="p">,</span> <span class="s1">&#39;snr&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>One can for example group the result by link_id and display the
 proper_velocity with distance from the core for each detected segments:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">plotutils</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">plotutils</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
 <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">data_epoch</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;link_id&#39;</span><span class="p">):</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">data_epoch</span><span class="o">.</span><span class="n">dfc</span><span class="p">,</span> <span class="n">data_epoch</span><span class="o">.</span><span class="n">proper_velocity</span><span class="p">,</span> <span class="n">yerr</span><span class="o">=</span><span class="n">data_epoch</span><span class="o">.</span><span class="n">proper_velocity_error</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
@@ -495,7 +485,7 @@ proper_velocity with distance from the core for each detected segments:</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Walkthrough 3C120</a><ul>
 <li><a class="reference internal" href="#setup">Setup</a></li>
@@ -518,21 +508,20 @@ proper_velocity with distance from the core for each detected segments:</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/tutorials_notebook/Walkthrough3C120.txt"
+      <li><a href="../_sources/tutorials_notebook/Walkthrough3C120.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -554,13 +543,13 @@ proper_velocity with distance from the core for each detected segments:</p>
         <li class="right" >
           <a href="index.html" title="Tutorials using the IPython Notebook"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">WISE 0.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials using the IPython Notebook</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WISE 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials using the IPython Notebook</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Florent Mertens.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 2015, Florent Mertens.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>
